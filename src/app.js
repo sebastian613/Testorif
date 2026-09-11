@@ -16,11 +16,13 @@ const PAGE_SIZE = 100;
 // item's occurrence list reaches this length we show "N+" instead of "N".
 const OCC_CAP = 8;
 
+// All instructional copy is in English regardless of mode; `contentDir` is
+// only the direction of the actual Hebrew/English text being matched
+// (the input box, result headlines, and cited verse text).
 const MODES = {
   hebrew: {
     key: "hebrew",
-    dir: "rtl",
-    lang: "he",
+    contentDir: "rtl",
     ciphers: HE_CIPHERS,
     cipherKeys: HE_CIPHER_KEYS,
     computeAll: computeAllHebrewCiphers,
@@ -30,15 +32,15 @@ const MODES = {
       phrases: "data/hebrew-phrases.json",
       verses: "data/tanakh.json",
     },
-    loadingLabel: "טוען מילון עברי, ביטויים, ותנ״ך…",
-    indexingLabel: "בונה אינדקס גימטרי…",
-    inputLabel: "שם או מילה",
-    inputPlaceholder: "לדוגמה: דוד",
+    loadingLabel: "Loading the Hebrew word list and the Tanakh…",
+    indexingLabel: "Building the gematria index…",
+    inputLabel: "Name or word (in Hebrew letters)",
+    inputPlaceholder: "e.g. דוד",
     defaultValue: "דוד",
-    filterPlaceholder: "סינון תוצאות…",
-    tabLabels: { words: "מילים", phrases: "צירופים", verses: "פסוקי תנ״ך" },
-    emptyText: "לא נמצאו התאמות.",
-    metaTemplate: (count, value) => `${count} התאמות לערך ${value}`,
+    filterPlaceholder: "Filter these results…",
+    tabLabels: { words: "Words", phrases: "Phrases", verses: "Verses (Tanakh)" },
+    emptyText: "No matches found.",
+    metaTemplate: (count, value) => `${count} match${count === 1 ? "" : "es"} for value ${value}`,
     textOf: {
       words: (item) => item[0],
       phrases: (item) => item[0],
@@ -48,20 +50,20 @@ const MODES = {
       words: (item) => item[1],
       phrases: (item) => item[1],
     },
-    occurrenceLabel: (count, capped) => (capped ? `${count}+ מופעים בתנ״ך` : count === 1 ? "מופע יחיד בתנ״ך" : `${count} מופעים בתנ״ך`),
+    occurrenceLabel: (count, capped) =>
+      capped ? `${count}+ occurrences in the Tanakh` : count === 1 ? "Only occurrence in the Tanakh" : `${count} occurrences in the Tanakh`,
     verseRef: (v) => v.ref,
     verseBody: (v) => v.text,
-    eyebrow: "גימטריה עברית · מקרא",
-    title: "מחשבון גימטריה",
+    eyebrow: "Hebrew Gematria · Tanakh",
+    title: "Gematria Calculator",
     subtitle:
-      "הזינו שם או מילה בעברית כדי לחשב את ערכו הגימטרי בכמה שיטות מסורתיות, ולמצוא כל מילה, ביטוי ופסוק בתנ״ך שמקבלים אותו ערך בדיוק.",
+      "Enter a name or word in Hebrew letters to calculate its gematria across five traditional systems, then see every word, phrase, and Tanakh verse that shares that value — each one grounded in the pasuk (verse) it's drawn from, with an English translation alongside.",
     footer:
-      "שיטות: מספר הכרחי (הערך הרגיל), מספר גדול (אותיות סופיות מקבלות ערך גדול), מספר סידורי (מיקום באלף-בית), מספר קטן (צמצום כל אות לספרה בודדת), ומספר קטן מספרי (צמצום סכום המילה כולה לספרה בודדת). מאגר הפסוקים הוא נוסח המסורה (כתר לנינגרד) של כל ספרי התנ״ך.",
+      "Systems: Standard Value (Mispar Hechrachi), Full/Final Value (Mispar Gadol — final letters take large values), Ordinal Value (Mispar Siduri — position in the alphabet), Reduced Value (Mispar Katan — each letter reduced to one digit), and Integral Reduced (Mispar Katan Mispari — the whole word's total reduced to one digit). Every word and phrase is matched directly against the Masoretic Text (Leningrad Codex) of the Tanakh. English translations are word-for-word and aligned automatically, so a small number of verses don't have one available.",
   },
   english: {
     key: "english",
-    dir: "ltr",
-    lang: "en",
+    contentDir: "ltr",
     ciphers: EN_CIPHERS,
     cipherKeys: EN_CIPHER_KEYS,
     computeAll: computeAllEnglishCiphers,
@@ -87,7 +89,7 @@ const MODES = {
     },
     verseRef: (v) => v.ref,
     verseBody: (v) => v.text,
-    eyebrow: "English gematria · bonus feature",
+    eyebrow: "English Gematria · bonus feature",
     title: "Gematria Calculator",
     subtitle:
       "Enter a name or phrase to calculate its gematria across six standard English ciphers, then browse every word, phrase, and Bible verse (KJV) that shares that value.",
@@ -99,7 +101,6 @@ const MODES = {
 const state = {
   modeKey: "hebrew",
   datasets: {}, // modeKey -> loaded datasets
-  loading: {}, // modeKey -> boolean
   inputValues: {},
   activeCipher: {},
   activeTab: { hebrew: "words", english: "words" },
@@ -110,8 +111,6 @@ const state = {
 };
 
 const el = {
-  html: document.documentElement,
-  pageRoot: document.querySelector(".page"),
   eyebrow: document.getElementById("eyebrow"),
   title: document.getElementById("title"),
   subtitle: document.getElementById("subtitle"),
@@ -176,20 +175,15 @@ async function switchMode(modeKey, { initial = false } = {}) {
     btn.setAttribute("aria-selected", String(active));
   });
 
-  el.html.lang = mode.lang;
-  el.html.dir = mode.dir;
-  if (el.pageRoot) {
-    el.pageRoot.lang = mode.lang;
-    el.pageRoot.dir = mode.dir;
-  }
   el.eyebrow.textContent = mode.eyebrow;
   el.title.textContent = mode.title;
   el.subtitle.textContent = mode.subtitle;
   el.inputLabel.textContent = mode.inputLabel;
   el.nameInput.placeholder = mode.inputPlaceholder;
-  el.nameInput.dir = mode.dir;
+  el.nameInput.dir = mode.contentDir;
   el.filterInput.placeholder = mode.filterPlaceholder;
-  el.loadMoreBtn.textContent = mode.dir === "rtl" ? "עוד תוצאות" : "Load more";
+  el.filterInput.dir = mode.contentDir;
+  el.loadMoreBtn.textContent = "Load more";
   el.footerText.textContent = mode.footer;
 
   if (!(modeKey in state.activeCipher)) {
@@ -222,13 +216,7 @@ async function switchMode(modeKey, { initial = false } = {}) {
       setStatus("", false);
     } catch (err) {
       console.error(err);
-      setStatus(
-        mode.dir === "rtl"
-          ? "טעינת הנתונים נכשלה. נסו לרענן, או להפעיל את הדף דרך שרת HTTP."
-          : "Failed to load data. Try refreshing, or serve this app over HTTP.",
-        false,
-        true
-      );
+      setStatus("Failed to load data. Try refreshing, or serve this app over HTTP.", false, true);
       return;
     }
     el.nameInput.disabled = false;
@@ -263,7 +251,7 @@ function renderCipherBadges() {
     btn.className = "cipher-badge" + (cipher.key === state.activeCipher[mode.key] ? " active" : "");
     const value = values ? values[cipher.key] : null;
     btn.innerHTML = `<span class="cipher-label">${cipher.label}</span>${
-      cipher.sub ? `<span class="cipher-sub">${cipher.sub}</span>` : ""
+      cipher.sub ? `<span class="cipher-sub" dir="rtl">${cipher.sub}</span>` : ""
     }<span class="cipher-value">${value === null ? "–" : value}</span>`;
     btn.disabled = !values;
     btn.addEventListener("click", () => {
@@ -352,26 +340,34 @@ function renderResultsList() {
       const li = document.createElement("li");
       const item = dataset.items[i];
       if (tab === "verses") {
-        li.innerHTML = `<span class="verse-ref">${escapeHtml(mode.verseRef(item))}</span><span class="verse-text">${escapeHtml(
-          mode.verseBody(item)
-        )}</span>`;
+        li.innerHTML =
+          `<span class="verse-ref">${escapeHtml(mode.verseRef(item))}</span>` +
+          `<span class="verse-text" dir="${mode.contentDir}">${escapeHtml(mode.verseBody(item))}</span>`;
       } else {
         const headline = document.createElement("div");
         headline.className = "result-headline";
+        headline.dir = mode.contentDir;
         headline.textContent = mode.textOf[tab](item);
         li.appendChild(headline);
 
         const occurrences = mode.occurrencesOf && mode.occurrencesOf[tab] ? mode.occurrencesOf[tab](item) : null;
         if (occurrences && occurrences.length && verseDataset) {
-          const [verseIndex, start, end] = occurrences[0];
+          const [verseIndex, heStart, heEnd, enStart, enEnd] = occurrences[0];
           const verse = verseDataset.items[verseIndex];
           const capped = occurrences.length >= OCC_CAP;
           const citation = document.createElement("div");
           citation.className = "result-citation";
-          citation.innerHTML =
+
+          let html =
             `<span class="verse-ref">${escapeHtml(mode.verseRef(verse))}` +
             `<span class="occurrence-count"> · ${escapeHtml(mode.occurrenceLabel(occurrences.length, capped))}</span></span>` +
-            `<span class="verse-text">${highlightSpan(verse.text, start, end)}</span>`;
+            `<span class="verse-text" dir="rtl">${highlightSpan(verse.text, heStart, heEnd)}</span>`;
+
+          if (enStart !== -1 && verse.en) {
+            html += `<span class="verse-text verse-text-en" dir="ltr">${highlightSpan(verse.en, enStart, enEnd)}</span>`;
+          }
+
+          citation.innerHTML = html;
           li.appendChild(citation);
         }
       }
@@ -390,6 +386,7 @@ function setStatus(message, loading, isError = false) {
 }
 
 function highlightSpan(text, start, end) {
+  if (start === end) return escapeHtml(text);
   return `${escapeHtml(text.slice(0, start))}<mark>${escapeHtml(text.slice(start, end))}</mark>${escapeHtml(
     text.slice(end)
   )}`;

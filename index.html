@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="he" dir="rtl">
+<html lang="en" dir="ltr">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>מחשבון גימטריה · Gematria Calculator</title>
+  <title>Gematria Calculator</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link
@@ -15,18 +15,20 @@
 <body>
   <main class="page">
     <header>
-      <p class="eyebrow" id="eyebrow">גימטריה עברית · מקרא</p>
-      <h1 id="title">מחשבון גימטריה</h1>
+      <p class="eyebrow" id="eyebrow">Hebrew Gematria · Tanakh</p>
+      <h1 id="title">Gematria Calculator</h1>
       <p class="subtitle" id="subtitle">
-        הזינו שם או מילה בעברית כדי לחשב את ערכו הגימטרי בכמה שיטות מסורתיות, ולמצוא
-        כל מילה, ביטוי ופסוק בתנ״ך שמקבלים אותו ערך בדיוק.
+        Enter a name or word in Hebrew letters to calculate its gematria across five
+        traditional systems, then see every word, phrase, and Tanakh verse that shares
+        that value — each one grounded in the pasuk (verse) it's drawn from, with an
+        English translation alongside.
       </p>
     </header>
 
     <div id="mode-switch" class="mode-switch" role="tablist" aria-label="Gematria system">
       <button type="button" class="mode-tab active" data-mode="hebrew" role="tab" aria-selected="true">
-        <span class="mode-tab-main">עברית</span>
-        <span class="mode-tab-sub">Hebrew · Tanakh</span>
+        <span class="mode-tab-main">Hebrew</span>
+        <span class="mode-tab-sub" dir="rtl">עברית · Tanakh</span>
       </button>
       <button type="button" class="mode-tab" data-mode="english" role="tab" aria-selected="false">
         <span class="mode-tab-main">English</span>
@@ -35,8 +37,8 @@
     </div>
 
     <section class="input-section">
-      <label for="name-input" id="input-label">שם או מילה</label>
-      <input id="name-input" type="text" autocomplete="off" disabled />
+      <label for="name-input" id="input-label">Name or word (in Hebrew letters)</label>
+      <input id="name-input" type="text" autocomplete="off" dir="rtl" disabled />
       <p id="status" class="status" hidden></p>
     </section>
 
@@ -46,20 +48,23 @@
       <div id="tabs" class="tabs"></div>
 
       <div class="results-toolbar">
-        <input id="filter-input" type="text" class="filter-input" />
+        <input id="filter-input" type="text" class="filter-input" dir="rtl" />
         <span id="results-meta" class="results-meta"></span>
       </div>
 
       <ul id="results-list" class="results-list"></ul>
-      <button id="load-more" type="button" class="load-more" hidden>עוד תוצאות</button>
+      <button id="load-more" type="button" class="load-more" hidden>Load more</button>
     </section>
 
     <footer id="footer">
       <p id="footer-text">
-        שיטות: מספר הכרחי (הערך הרגיל), מספר גדול (אותיות סופיות מקבלות ערך גדול),
-        מספר סידורי (מיקום באלף-בית), מספר קטן (צמצום כל אות לספרה בודדת), ומספר קטן
-        מספרי (צמצום סכום המילה כולה לספרה בודדת). מאגר הפסוקים הוא נוסח המסורה
-        (כתר לנינגרד) של כל ספרי התנ״ך.
+        Systems: Standard Value (Mispar Hechrachi), Full/Final Value (Mispar Gadol —
+        final letters take large values), Ordinal Value (Mispar Siduri — position in
+        the alphabet), Reduced Value (Mispar Katan — each letter reduced to one digit),
+        and Integral Reduced (Mispar Katan Mispari — the whole word's total reduced to
+        one digit). Every word and phrase is matched directly against the Masoretic
+        Text (Leningrad Codex) of the Tanakh. English translations are word-for-word
+        and aligned automatically, so a small number of verses don't have one available.
       </p>
     </footer>
   </main>

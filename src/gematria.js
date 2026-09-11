@@ -3,11 +3,11 @@
 // always ignored — only the consonantal letters of a word carry a value.
 
 export const HE_CIPHERS = [
-  { key: "hechrachi", label: "מספר הכרחי", sub: "Standard Value" },
-  { key: "gadol", label: "מספר גדול", sub: "Full/Final Value" },
-  { key: "siduri", label: "מספר סידורי", sub: "Ordinal Value" },
-  { key: "katan", label: "מספר קטן", sub: "Reduced Value" },
-  { key: "katanMispari", label: "מספר קטן מספרי", sub: "Integral Reduced" },
+  { key: "hechrachi", label: "Standard Value", sub: "מספר הכרחי" },
+  { key: "gadol", label: "Full/Final Value", sub: "מספר גדול" },
+  { key: "siduri", label: "Ordinal Value", sub: "מספר סידורי" },
+  { key: "katan", label: "Reduced Value", sub: "מספר קטן" },
+  { key: "katanMispari", label: "Integral Reduced", sub: "מספר קטן מספרי" },
 ];
 
 export const EN_CIPHERS = [
