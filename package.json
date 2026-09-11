@@ -1,0 +1,9 @@
+{
+  "name": "gematria-calculator",
+  "version": "1.0.0",
+  "description": "Calculates the gematria of a name or phrase and finds matching words, phrases, and Bible verses.",
+  "private": true,
+  "scripts": {
+    "start": "npx --yes http-server -p 8080 -c-1"
+  }
+}

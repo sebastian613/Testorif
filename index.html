@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Gematria Calculator</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <main class="page">
+    <header>
+      <h1>Gematria Calculator</h1>
+      <p class="subtitle">
+        Enter your name (or any word or phrase) to calculate its gematria value across six
+        standard ciphers, then browse every word, phrase, and Bible verse (KJV) that shares
+        that same value.
+      </p>
+    </header>
+
+    <section class="input-section">
+      <label for="name-input">Name or phrase</label>
+      <input
+        id="name-input"
+        type="text"
+        placeholder="e.g. John Smith"
+        autocomplete="off"
+        disabled
+      />
+      <p id="status" class="status" hidden></p>
+    </section>
+
+    <section id="cipher-badges" class="cipher-badges" aria-label="Gematria values by cipher"></section>
+
+    <section id="results-section" class="results-section" hidden>
+      <div id="tabs" class="tabs"></div>
+
+      <div class="results-toolbar">
+        <input
+          id="filter-input"
+          type="text"
+          class="filter-input"
+          placeholder="Filter these results…"
+        />
+        <span id="results-meta" class="results-meta"></span>
+      </div>
+
+      <ul id="results-list" class="results-list"></ul>
+      <button id="load-more" type="button" class="load-more" hidden>Load more</button>
+    </section>
+
+    <footer>
+      <p>
+        Ciphers: English Ordinal (A=1…Z=26), Full Reduction, Reverse Ordinal (Z=1…A=26),
+        Reverse Reduction, Sumerian (Ordinal ×6), and Reverse Sumerian. Only letters A–Z are
+        counted; spaces and punctuation are ignored, matching standard English gematria
+        calculators.
+      </p>
+    </footer>
+  </main>
+
+  <script type="module" src="src/app.js"></script>
+</body>
+</html>
