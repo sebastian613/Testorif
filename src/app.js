@@ -7,10 +7,14 @@ import {
   computeHebrewCipherVector,
   computeAllEnglishCiphers,
   computeEnglishCipherVector,
+  stripToHebrewLetters,
 } from "./gematria.js";
 import { loadModeDatasets, findMatches } from "./data.js";
 
 const PAGE_SIZE = 100;
+// Must match MAX_OCC used when the Hebrew data files were generated — once an
+// item's occurrence list reaches this length we show "N+" instead of "N".
+const OCC_CAP = 8;
 
 const MODES = {
   hebrew: {
@@ -32,10 +36,19 @@ const MODES = {
     inputPlaceholder: "לדוגמה: דוד",
     defaultValue: "דוד",
     filterPlaceholder: "סינון תוצאות…",
-    tabLabels: { words: "מילים", phrases: "ביטויים", verses: "פסוקי תנ״ך" },
+    tabLabels: { words: "מילים", phrases: "צירופים", verses: "פסוקי תנ״ך" },
     emptyText: "לא נמצאו התאמות.",
     metaTemplate: (count, value) => `${count} התאמות לערך ${value}`,
-    verseText: (v) => `${v.text} — ${v.ref}`,
+    textOf: {
+      words: (item) => item[0],
+      phrases: (item) => item[0],
+      verses: (v) => v.text,
+    },
+    occurrencesOf: {
+      words: (item) => item[1],
+      phrases: (item) => item[1],
+    },
+    occurrenceLabel: (count, capped) => (capped ? `${count}+ מופעים בתנ״ך` : count === 1 ? "מופע יחיד בתנ״ך" : `${count} מופעים בתנ״ך`),
     verseRef: (v) => v.ref,
     verseBody: (v) => v.text,
     eyebrow: "גימטריה עברית · מקרא",
@@ -67,6 +80,11 @@ const MODES = {
     tabLabels: { words: "Words", phrases: "Phrases", verses: "Bible Verses (KJV)" },
     emptyText: "No matches found.",
     metaTemplate: (count, value) => `${count} match${count === 1 ? "" : "es"} for value ${value}`,
+    textOf: {
+      words: (item) => item,
+      phrases: (item) => item,
+      verses: (v) => v.text,
+    },
     verseRef: (v) => v.ref,
     verseBody: (v) => v.text,
     eyebrow: "English gematria · bonus feature",
@@ -195,6 +213,7 @@ async function switchMode(modeKey, { initial = false } = {}) {
           files: mode.files,
           cipherKeys: mode.cipherKeys,
           computeVector: mode.computeVector,
+          textOf: mode.textOf,
           loadingLabel: mode.loadingLabel,
           indexingLabel: mode.indexingLabel,
         },
@@ -265,13 +284,14 @@ function recomputeMatches() {
   const cipherKey = state.activeCipher[mode.key];
   const target = values[cipherKey];
   const { words, phrases, verses } = datasets;
-  const nameNormalized = el.nameInput.value.trim();
+  const rawInput = el.nameInput.value.trim();
+  const selfKey = mode.key === "hebrew" ? stripToHebrewLetters(rawInput) : rawInput;
 
   state.matches.words = findMatches(words, cipherKey, target).filter(
-    (i) => words.items[i] !== nameNormalized
+    (i) => mode.textOf.words(words.items[i]) !== selfKey
   );
   state.matches.phrases = findMatches(phrases, cipherKey, target).filter(
-    (i) => phrases.items[i] !== nameNormalized
+    (i) => mode.textOf.phrases(phrases.items[i]) !== selfKey
   );
   state.matches.verses = findMatches(verses, cipherKey, target);
 
@@ -310,10 +330,7 @@ function renderResultsList() {
   let indices = state.matches[tab];
 
   if (state.filterText) {
-    indices = indices.filter((i) => {
-      const text = tab === "verses" ? dataset.items[i].text : dataset.items[i];
-      return text.toLowerCase().includes(state.filterText);
-    });
+    indices = indices.filter((i) => mode.textOf[tab](dataset.items[i]).toLowerCase().includes(state.filterText));
   }
 
   const values = state.values[mode.key];
@@ -330,15 +347,33 @@ function renderResultsList() {
     empty.textContent = mode.emptyText;
     el.resultsList.appendChild(empty);
   } else {
+    const verseDataset = state.datasets[mode.key].verses;
     for (const i of visible) {
       const li = document.createElement("li");
+      const item = dataset.items[i];
       if (tab === "verses") {
-        const v = dataset.items[i];
-        li.innerHTML = `<span class="verse-ref">${escapeHtml(mode.verseRef(v))}</span><span class="verse-text">${escapeHtml(
-          mode.verseBody(v)
+        li.innerHTML = `<span class="verse-ref">${escapeHtml(mode.verseRef(item))}</span><span class="verse-text">${escapeHtml(
+          mode.verseBody(item)
         )}</span>`;
       } else {
-        li.textContent = dataset.items[i];
+        const headline = document.createElement("div");
+        headline.className = "result-headline";
+        headline.textContent = mode.textOf[tab](item);
+        li.appendChild(headline);
+
+        const occurrences = mode.occurrencesOf && mode.occurrencesOf[tab] ? mode.occurrencesOf[tab](item) : null;
+        if (occurrences && occurrences.length && verseDataset) {
+          const [verseIndex, start, end] = occurrences[0];
+          const verse = verseDataset.items[verseIndex];
+          const capped = occurrences.length >= OCC_CAP;
+          const citation = document.createElement("div");
+          citation.className = "result-citation";
+          citation.innerHTML =
+            `<span class="verse-ref">${escapeHtml(mode.verseRef(verse))}` +
+            `<span class="occurrence-count"> · ${escapeHtml(mode.occurrenceLabel(occurrences.length, capped))}</span></span>` +
+            `<span class="verse-text">${highlightSpan(verse.text, start, end)}</span>`;
+          li.appendChild(citation);
+        }
       }
       el.resultsList.appendChild(li);
     }
@@ -352,6 +387,12 @@ function setStatus(message, loading, isError = false) {
   el.status.classList.toggle("loading", !!loading);
   el.status.classList.toggle("error", !!isError);
   el.status.hidden = !message;
+}
+
+function highlightSpan(text, start, end) {
+  return `${escapeHtml(text.slice(0, start))}<mark>${escapeHtml(text.slice(start, end))}</mark>${escapeHtml(
+    text.slice(end)
+  )}`;
 }
 
 function escapeHtml(str) {

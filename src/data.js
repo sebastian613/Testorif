@@ -7,7 +7,7 @@
  */
 
 export async function loadModeDatasets(modeConfig, onProgress) {
-  const { files, cipherKeys, computeVector } = modeConfig;
+  const { files, cipherKeys, computeVector, textOf } = modeConfig;
   const report = (msg) => onProgress && onProgress(msg);
 
   report(modeConfig.loadingLabel || "Loading data…");
@@ -18,9 +18,9 @@ export async function loadModeDatasets(modeConfig, onProgress) {
   ]);
 
   report(modeConfig.indexingLabel || "Indexing…");
-  const wordIndex = buildIndex(words, (w) => w, cipherKeys, computeVector);
-  const phraseIndex = buildIndex(phrases, (p) => p, cipherKeys, computeVector);
-  const verseIndex = buildIndex(verses, (v) => v.text, cipherKeys, computeVector);
+  const wordIndex = buildIndex(words, textOf.words, cipherKeys, computeVector);
+  const phraseIndex = buildIndex(phrases, textOf.phrases, cipherKeys, computeVector);
+  const verseIndex = buildIndex(verses, textOf.verses, cipherKeys, computeVector);
 
   return {
     words: { items: words, ...wordIndex },

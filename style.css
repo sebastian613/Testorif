@@ -300,6 +300,37 @@ header h1 {
   letter-spacing: 0.02em;
 }
 
+.result-headline {
+  font-size: 1.15rem;
+  font-weight: 700;
+}
+
+.result-citation {
+  margin-top: 8px;
+  padding-inline-start: 12px;
+  border-inline-start: 2px solid var(--border);
+}
+
+.result-citation .verse-text {
+  font-size: 0.95rem;
+  color: var(--muted);
+}
+
+.occurrence-count {
+  font-weight: 400;
+  color: var(--muted);
+  text-transform: none;
+  letter-spacing: 0;
+}
+
+.result-citation mark {
+  background: var(--accent-soft);
+  color: var(--fg);
+  border-radius: 4px;
+  padding: 0 2px;
+  font-weight: 700;
+}
+
 .load-more {
   display: block;
   margin: 14px auto 0;
