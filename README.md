@@ -1,20 +1,41 @@
 # Gematria Calculator
 
-A static, browser-based app that calculates the gematria value of a name or
-phrase and finds every word, phrase, and King James Bible verse that shares
-the same value.
+A static, browser-based app that calculates the **Hebrew gematria** of a name
+or word and finds every word, phrase, and Tanakh (Hebrew Bible) verse that
+shares the same value — with English gematria included as a secondary,
+bonus mode.
 
 ## How it works
 
+### Hebrew (primary)
+
+- **Systems**: Mispar Hechrachi (standard value), Mispar Gadol (final letters
+  get large values 500–900), Mispar Siduri (ordinal position in the alphabet),
+  Mispar Katan (each letter reduced to a single digit), and Mispar Katan
+  Mispari (the word's total reduced to a single digit). Only the 22 Hebrew
+  letters count; niqqud (vowel points), cantillation marks, and punctuation
+  are ignored.
+- **Matching**: `data/hebrew-words.json` (~39,500 distinct word forms),
+  `data/hebrew-phrases.json` (a curated set of blessings, idioms, and names),
+  and `data/tanakh.json` (all 23,213 verses of the Masoretic Text) are
+  indexed against all five systems on load.
+- **Text source**: the Westminster Leningrad Codex, via the
+  [Open Scriptures Hebrew Bible](https://github.com/openscriptures/morphhb)
+  project (public domain). Verses use the Qere (traditional spoken reading)
+  wherever the text has a Ketiv/Qere variant. The word list is derived from
+  every distinct word form in that text, stripped to its bare consonants.
+
+### English (secondary/bonus)
+
 - **Ciphers**: English Ordinal (A=1…Z=26), Full Reduction, Reverse Ordinal
-  (Z=1…A=26), Reverse Reduction, Sumerian (Ordinal ×6), and Reverse Sumerian —
-  the same six ciphers used by common online gematria calculators. Only
-  letters A–Z are counted; spaces, punctuation, and digits are ignored.
+  (Z=1…A=26), Reverse Reduction, Sumerian (Ordinal ×6), and Reverse Sumerian.
 - **Matching**: `data/words.json` (~370k English words), `data/phrases.json`
-  (a curated set of idioms, famous quotes, and names), and `data/kjv.json`
-  (all ~31,100 verses of the King James Bible) are loaded in the browser and
-  indexed against all six ciphers on startup. Typing a name instantly looks
-  up every item that shares its value for the selected cipher.
+  (curated idioms/quotes/names), and `data/kjv.json` (King James Bible).
+
+Each mode loads its own datasets on demand (Hebrew loads immediately;
+English loads the first time you switch to it) and precomputes every
+cipher/system value once, so typing a name is an instant lookup rather than
+a live recomputation.
 
 ## Running it
 
@@ -32,19 +53,22 @@ server works equally well, e.g. `python3 -m http.server 8080`.
 ## Project layout
 
 ```
-index.html        # page shell
-style.css          # styling (light/dark aware)
-src/gematria.js    # cipher math
-src/data.js        # dataset loading + precomputed per-cipher indexes
-src/app.js         # UI wiring
-data/words.json    # English word list
-data/phrases.json  # curated idioms, quotes, and names
-data/kjv.json      # King James Bible, flattened to {ref, b, text} per verse
+index.html               # page shell (RTL by default, Hebrew UI)
+style.css                 # styling (light/dark aware)
+src/gematria.js            # Hebrew + English cipher math
+src/data.js                # dataset loading + precomputed per-cipher indexes
+src/app.js                 # UI wiring, mode switching (Hebrew/English)
+data/tanakh.json           # Tanakh (WLC), flattened to {ref, he, text} per verse
+data/hebrew-words.json     # distinct Hebrew word forms (consonantal)
+data/hebrew-phrases.json   # curated Hebrew blessings, idioms, and names
+data/words.json            # English word list
+data/phrases.json          # curated English idioms, quotes, and names
+data/kjv.json              # King James Bible, flattened to {ref, b, text} per verse
 ```
 
 ## Extending
 
-- Add more entries to `data/phrases.json` (a plain JSON array of strings) to
-  broaden phrase matches.
-- Add another cipher by extending `CIPHERS` in `src/gematria.js` and the sum
-  loop in `computeAllCiphers`.
+- Add more entries to `data/hebrew-phrases.json` or `data/phrases.json`
+  (plain JSON arrays of strings) to broaden phrase matches.
+- Add another gematria system by extending `HE_CIPHERS`/`EN_CIPHERS` in
+  `src/gematria.js` and the corresponding compute function.

@@ -1,23 +1,27 @@
 :root {
   color-scheme: light dark;
-  --bg: #f7f6f2;
-  --fg: #1c1b19;
-  --muted: #6b6862;
-  --accent: #7a4de8;
-  --accent-fg: #ffffff;
-  --card: #ffffff;
-  --border: #e3e0d8;
+  --bg: #f6f1e4;
+  --bg-alt: #efe7d3;
+  --fg: #2a2013;
+  --muted: #857a5f;
+  --accent: #1f5c86;
+  --accent-fg: #f6f1e4;
+  --accent-soft: #dce9f0;
+  --card: #fffdf7;
+  --border: #e2d6b8;
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --bg: #16151a;
-    --fg: #eeece6;
-    --muted: #9a978f;
-    --accent: #9c7bf0;
-    --accent-fg: #16151a;
-    --card: #201f26;
-    --border: #34323b;
+    --bg: #1b160f;
+    --bg-alt: #241d13;
+    --fg: #ece3cd;
+    --muted: #a89a78;
+    --accent: #6fa8cf;
+    --accent-fg: #14202a;
+    --accent-soft: #24374a;
+    --card: #241d13;
+    --border: #3c3220;
   }
 }
 
@@ -29,38 +33,104 @@ body {
   margin: 0;
   background: var(--bg);
   color: var(--fg);
-  font-family: "Segoe UI", system-ui, -apple-system, sans-serif;
+  font-family: "Assistant", "Segoe UI", system-ui, -apple-system, sans-serif;
 }
 
 .page {
-  max-width: 860px;
+  max-width: 880px;
   margin: 0 auto;
-  padding: 32px 20px 64px;
+  padding: 40px 20px 64px;
+}
+
+header {
+  text-align: center;
+  margin-bottom: 28px;
+}
+
+.eyebrow {
+  margin: 0 0 10px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  color: var(--accent);
+  text-transform: uppercase;
 }
 
 header h1 {
-  margin: 0 0 8px;
-  font-size: 2rem;
+  font-family: "Frank Ruhl Libre", "Assistant", serif;
+  font-weight: 900;
+  margin: 0 0 12px;
+  font-size: 2.4rem;
+  text-wrap: balance;
 }
 
 .subtitle {
   color: var(--muted);
-  line-height: 1.5;
-  margin: 0 0 24px;
+  line-height: 1.7;
+  margin: 0 auto;
+  max-width: 60ch;
+  font-size: 1.02rem;
+}
+
+.mode-switch {
+  display: flex;
+  gap: 8px;
+  background: var(--bg-alt);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 6px;
+  margin: 0 0 28px;
+}
+
+.mode-tab {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  padding: 10px 12px;
+  border: none;
+  border-radius: 10px;
+  background: transparent;
+  color: var(--fg);
+  cursor: pointer;
+  font-family: inherit;
+}
+
+.mode-tab-main {
+  font-family: "Frank Ruhl Libre", serif;
+  font-weight: 700;
+  font-size: 1.1rem;
+}
+
+.mode-tab-sub {
+  font-size: 0.72rem;
+  color: var(--muted);
+  letter-spacing: 0.02em;
+}
+
+.mode-tab.active {
+  background: var(--card);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+}
+
+.mode-tab.active .mode-tab-main {
+  color: var(--accent);
 }
 
 .input-section label {
   display: block;
   font-weight: 600;
-  margin-bottom: 6px;
+  margin-bottom: 8px;
 }
 
 #name-input {
   width: 100%;
-  padding: 12px 14px;
-  font-size: 1.1rem;
+  padding: 14px 16px;
+  font-size: 1.3rem;
+  font-family: "Frank Ruhl Libre", "Assistant", serif;
   border: 1px solid var(--border);
-  border-radius: 10px;
+  border-radius: 12px;
   background: var(--card);
   color: var(--fg);
 }
@@ -80,7 +150,7 @@ header h1 {
 }
 
 .status.error {
-  color: #d0473e;
+  color: #b5482f;
 }
 
 .cipher-badges {
@@ -94,15 +164,16 @@ header h1 {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  gap: 4px;
+  gap: 3px;
   padding: 12px 14px;
   border: 1px solid var(--border);
-  border-radius: 10px;
+  border-radius: 12px;
   background: var(--card);
   color: var(--fg);
   cursor: pointer;
-  text-align: left;
-  transition: border-color 0.15s ease, transform 0.1s ease;
+  text-align: start;
+  font-family: inherit;
+  transition: border-color 0.15s ease;
 }
 
 .cipher-badge:disabled {
@@ -121,16 +192,22 @@ header h1 {
 }
 
 .cipher-label {
-  font-size: 0.75rem;
+  font-size: 0.85rem;
+  font-weight: 700;
+}
+
+.cipher-sub {
+  font-size: 0.7rem;
   text-transform: uppercase;
   letter-spacing: 0.03em;
-  opacity: 0.8;
+  opacity: 0.75;
 }
 
 .cipher-value {
-  font-size: 1.4rem;
+  font-size: 1.5rem;
   font-weight: 700;
   font-variant-numeric: tabular-nums;
+  font-family: "Assistant", sans-serif;
 }
 
 .results-section {
@@ -152,6 +229,7 @@ header h1 {
   color: var(--fg);
   cursor: pointer;
   font-size: 0.9rem;
+  font-family: inherit;
 }
 
 .tab.active {
@@ -174,6 +252,7 @@ header h1 {
   border-radius: 8px;
   background: var(--card);
   color: var(--fg);
+  font-family: inherit;
 }
 
 .results-meta {
@@ -187,15 +266,17 @@ header h1 {
   margin: 0;
   padding: 0;
   border: 1px solid var(--border);
-  border-radius: 10px;
+  border-radius: 12px;
   overflow: hidden;
   background: var(--card);
 }
 
 .results-list li {
-  padding: 10px 14px;
+  padding: 12px 16px;
   border-bottom: 1px solid var(--border);
-  line-height: 1.5;
+  line-height: 1.6;
+  font-size: 1.05rem;
+  font-family: "Frank Ruhl Libre", "Assistant", serif;
 }
 
 .results-list li:last-child {
@@ -206,14 +287,17 @@ header h1 {
   color: var(--muted);
   text-align: center;
   padding: 24px;
+  font-family: "Assistant", sans-serif;
 }
 
 .verse-ref {
   display: block;
   font-weight: 700;
-  font-size: 0.8rem;
+  font-size: 0.72rem;
   color: var(--accent);
-  margin-bottom: 2px;
+  margin-bottom: 4px;
+  font-family: "Assistant", sans-serif;
+  letter-spacing: 0.02em;
 }
 
 .load-more {
@@ -225,6 +309,7 @@ header h1 {
   background: var(--card);
   color: var(--fg);
   cursor: pointer;
+  font-family: inherit;
 }
 
 .load-more:hover {
@@ -238,6 +323,7 @@ header h1 {
 footer {
   margin-top: 40px;
   color: var(--muted);
-  font-size: 0.8rem;
-  line-height: 1.5;
+  font-size: 0.82rem;
+  line-height: 1.7;
+  text-align: center;
 }

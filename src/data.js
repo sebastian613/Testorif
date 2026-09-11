@@ -1,28 +1,26 @@
-import { CIPHER_KEYS, computeCipherVector } from "./gematria.js";
-
 /**
- * Loads the word/phrase/verse datasets and precomputes gematria values for
- * every cipher so lookups are a simple array scan instead of recomputing
- * gematria on every keystroke.
+ * Generic dataset loader/indexer. A "mode" (Hebrew or English) supplies its
+ * own cipher key list and a function to compute a cipher vector for a piece
+ * of text; this module fetches the mode's word/phrase/verse JSON files and
+ * precomputes every cipher value once so lookups are a plain array scan
+ * instead of recomputing gematria on every keystroke.
  */
-export async function loadDatasets(onProgress) {
+
+export async function loadModeDatasets(modeConfig, onProgress) {
+  const { files, cipherKeys, computeVector } = modeConfig;
   const report = (msg) => onProgress && onProgress(msg);
 
-  report("Loading words…");
+  report(modeConfig.loadingLabel || "Loading data…");
   const [words, phrases, verses] = await Promise.all([
-    fetchJson("data/words.json"),
-    fetchJson("data/phrases.json"),
-    fetchJson("data/kjv.json"),
+    fetchJson(files.words),
+    fetchJson(files.phrases),
+    fetchJson(files.verses),
   ]);
 
-  report("Indexing words…");
-  const wordIndex = buildIndex(words, (w) => w);
-
-  report("Indexing phrases…");
-  const phraseIndex = buildIndex(phrases, (p) => p);
-
-  report("Indexing Bible verses…");
-  const verseIndex = buildIndex(verses, (v) => v.text);
+  report(modeConfig.indexingLabel || "Indexing…");
+  const wordIndex = buildIndex(words, (w) => w, cipherKeys, computeVector);
+  const phraseIndex = buildIndex(phrases, (p) => p, cipherKeys, computeVector);
+  const verseIndex = buildIndex(verses, (v) => v.text, cipherKeys, computeVector);
 
   return {
     words: { items: words, ...wordIndex },
@@ -41,15 +39,15 @@ async function fetchJson(path) {
  * Builds one Int32Array per cipher holding the precomputed value for every
  * item (parallel to `items`), so a match query is a single linear scan.
  */
-function buildIndex(items, getText) {
+function buildIndex(items, getText, cipherKeys, computeVector) {
   const n = items.length;
   const values = {};
-  for (const key of CIPHER_KEYS) values[key] = new Int32Array(n);
+  for (const key of cipherKeys) values[key] = new Int32Array(n);
 
   for (let i = 0; i < n; i++) {
-    const vec = computeCipherVector(getText(items[i]));
-    for (let c = 0; c < CIPHER_KEYS.length; c++) {
-      values[CIPHER_KEYS[c]][i] = vec[c];
+    const vec = computeVector(getText(items[i]));
+    for (let c = 0; c < cipherKeys.length; c++) {
+      values[cipherKeys[c]][i] = vec[c];
     }
   }
 
