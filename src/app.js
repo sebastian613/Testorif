@@ -93,6 +93,7 @@ const state = {
 
 const el = {
   html: document.documentElement,
+  pageRoot: document.querySelector(".page"),
   eyebrow: document.getElementById("eyebrow"),
   title: document.getElementById("title"),
   subtitle: document.getElementById("subtitle"),
@@ -159,6 +160,10 @@ async function switchMode(modeKey, { initial = false } = {}) {
 
   el.html.lang = mode.lang;
   el.html.dir = mode.dir;
+  if (el.pageRoot) {
+    el.pageRoot.lang = mode.lang;
+    el.pageRoot.dir = mode.dir;
+  }
   el.eyebrow.textContent = mode.eyebrow;
   el.title.textContent = mode.title;
   el.subtitle.textContent = mode.subtitle;
