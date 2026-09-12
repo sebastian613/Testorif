@@ -80,16 +80,23 @@ is no other mode.
 - **Copy button**: every result carries a small "Copy" button that puts a
   plain-text summary (the word/phrase and its value, or the verse citation,
   plus the Hebrew text and JPS translation) on the clipboard, for pasting
-  into a message, note, or email.
-- **PDF export**: the "Export as PDF" button opens the browser's print
-  dialog against a dedicated print stylesheet — pick "Save as PDF" for a
-  clean, paginated document of the current results (the value badge plus
-  the active tab's matches), with all interactive chrome hidden. Both this
-  and the Copy button detect when the page is embedded in a sandboxed
-  preview frame (where `window.print()`/clipboard access can be silently
-  blocked) and fall back accordingly — Export opens the same search in a
-  fresh top-level tab and prints there; Copy falls back to the legacy
-  `execCommand("copy")` path.
+  into a message, note, or email. Uses `navigator.clipboard.writeText()`
+  with a legacy `execCommand("copy")` fallback, since Clipboard API access
+  can itself be restricted in some embedded/sandboxed contexts.
+- **Copy as Markdown**: the toolbar button builds a full Markdown write-up
+  of the current search and the active tab's visible results — a heading
+  per result, a blockquote per citation — and copies it the same way the
+  per-result Copy button does. This replaced an earlier "Export as PDF"
+  button (`window.print()`, then a `window.open()` popup, then an
+  unconditional `<a target="_blank">` link — three different mechanisms,
+  all silently blocked or unreliable inside a sandboxed preview embed with
+  no client-side way found to detect or work around it). Markdown needs
+  only the clipboard to deliver, pastes cleanly into Notion, Obsidian,
+  GitHub, email, or Word, and converts to a PDF trivially with any
+  Markdown-to-PDF tool downstream if one is still wanted. The print
+  stylesheet (`@media print` in `style.css`) is still there for anyone
+  printing via their browser's own Ctrl+P/File→Print in a real,
+  non-embedded deployment — only the in-app button was the problem.
 
 ## Testing
 
@@ -102,7 +109,7 @@ npm run test:unit # tests/unit/*.test.mjs via node's built-in test runner —
                    # computes to the value it claims)
 npm run test:e2e  # tests/e2e/*.spec.js via Playwright — drives the real
                    # served app in a browser (search, Popular Searches,
-                   # Copy, PDF export, including the sandboxed-iframe case)
+                   # Copy, Copy as Markdown)
 ```
 
 CI (`.github/workflows/ci.yml`) runs both on every push and pull request.
@@ -132,12 +139,12 @@ server works equally well, e.g. `python3 -m http.server 8080`.
 
 ```
 index.html               # page shell (English UI, LTR; Hebrew content is RTL inline)
-style.css                 # styling (light/dark aware) + print stylesheet for PDF export
+style.css                 # styling (light/dark aware) + print stylesheet for browser printing
 src/gematria.js            # the Standard Value cipher + integer-to-Hebrew-numeral conversion
 src/data.js                # dataset loading + precomputed Standard Value index
 src/notable-values.js      # hand-verified glossary of well-known gematria values
 src/popular-searches.js    # curated quick-pick numbers/phrases for the Popular Searches panel
-src/app.js                 # UI wiring: search, tabs, recent/popular searches, copy, PDF export
+src/app.js                 # UI wiring: search, tabs, recent/popular searches, copy, copy as markdown
 assets/                    # brand mark + favicons
 data/tanakh.json           # Tanakh (WLC + JPS 1917), {ref, he, text (Hebrew), en (English)} per verse
 data/hebrew-words.json     # [bareWord, [[verseIndex, heStart, heEnd, enStart, enEnd], ...]]

@@ -39,7 +39,7 @@ const el = {
   recentSearches: document.getElementById("recent-searches"),
   popularNumbers: document.getElementById("popular-numbers"),
   popularPhrases: document.getElementById("popular-phrases"),
-  exportBtn: document.getElementById("export-pdf"),
+  exportBtn: document.getElementById("copy-markdown"),
 };
 
 init();
@@ -68,11 +68,6 @@ async function init() {
   el.nameInput.disabled = false;
   el.nameInput.focus();
   recompute();
-
-  if (params.get("print") === "1") {
-    // Give layout, fonts, and results one frame to settle before printing.
-    requestAnimationFrame(() => setTimeout(() => window.print(), 200));
-  }
 }
 
 function wireInputs() {
@@ -102,29 +97,7 @@ function wireInputs() {
     renderResultsList();
   });
 
-}
-
-/**
- * Export as PDF is a real <a target="_blank"> (see index.html), not a
- * button, and always opens a fresh tab rather than calling window.print()
- * in place. Two script-driven approaches were tried and both failed inside
- * Claude's embedded Artifact preview: window.open() is blocked as a popup,
- * and detecting the sandboxed frame via `window.self !== window.top` to
- * decide whether to call window.print() directly turned out to be
- * unreliable there too — it can evaluate as "not framed" inside a
- * sandboxed/cross-origin iframe, silently taking the window.print() branch
- * that then no-ops with zero visible feedback. A genuine, always-present
- * link the user clicks removes the guesswork: it's the browser's own
- * navigation handling every time, in every context. This function just
- * keeps that link's href pointed at the current search; the destination
- * page's own init() (see above) sees ?print=1 and calls window.print()
- * itself once loaded, in what is now unavoidably a real top-level tab.
- */
-function updateExportLink() {
-  const url = new URL(location.href);
-  url.searchParams.set("q", el.nameInput.value);
-  url.searchParams.set("print", "1");
-  el.exportBtn.href = url.toString();
+  el.exportBtn.addEventListener("click", () => copyToClipboardWithFeedback(el.exportBtn, buildMarkdownReport));
 }
 
 function recompute() {
@@ -151,7 +124,6 @@ function recompute() {
   renderValueDisplay();
   renderNotableValue();
   recomputeMatches();
-  updateExportLink();
   el.resultsSection.hidden = false;
 }
 
@@ -321,27 +293,79 @@ function buildCopyText(kind, item, verseDataset) {
   return lines.join("\n");
 }
 
+/**
+ * A full Markdown write-up of the current search and its active tab's
+ * visible results — headings, a blockquote per citation. Markdown was
+ * chosen over a "Export as PDF" button because it needs nothing but the
+ * clipboard to deliver: no window.print() dialog, no window.open()/`<a
+ * target="_blank">` new tab, both of which turned out to be silently
+ * blocked inside Claude's embedded Artifact preview with no reliable way
+ * detected to work around it there. A copied Markdown block pastes cleanly
+ * into Notion, Obsidian, GitHub, email, or Word, and converts trivially to
+ * a PDF with any Markdown-to-PDF tool if one is still wanted downstream.
+ */
+function buildMarkdownReport() {
+  const tab = state.activeTab;
+  const verseDataset = state.datasets.verses;
+  const indices = state.matches[tab].slice(0, state.visibleCount[tab]);
+  const lines = [`# ${el.nameInput.value.trim()} — ${HECHRACHI_INFO.label}: ${state.value}`, ""];
+
+  const notable = state.value !== null ? findNotableValue(state.value) : null;
+  if (notable) lines.push(`> ${notable.value} is traditionally associated with ${notable.note}`, "");
+
+  lines.push(`## ${TAB_LABELS[tab]} (${state.matches[tab].length})`, "");
+
+  if (indices.length === 0) {
+    lines.push("_No matches found._");
+  } else if (tab === "verses") {
+    for (const i of indices) lines.push(...markdownForVerse(verseDataset.items[i]), "");
+  } else {
+    const dataset = state.datasets[tab];
+    for (const i of indices) {
+      const item = dataset.items[i];
+      lines.push(`### ${textOf[tab](item)}`);
+      const occurrences = item[1];
+      if (occurrences && occurrences.length) {
+        lines.push(...markdownForVerse(verseDataset.items[occurrences[0][0]]));
+      }
+      lines.push("");
+    }
+  }
+
+  return lines.join("\n").trim() + "\n";
+}
+
+/** Renders one verse citation as a Markdown blockquote (Hebrew, then JPS). */
+function markdownForVerse(v) {
+  const lines = [`**${v.ref}**`, `> ${v.text}`];
+  if (v.en) lines.push(">", `> *JPS 1917:* ${v.en}`);
+  return lines;
+}
+
 function makeCopyButton(getText) {
   const btn = document.createElement("button");
   btn.type = "button";
   btn.className = "copy-btn";
   btn.dir = "ltr";
   btn.textContent = "Copy";
-  btn.addEventListener("click", async () => {
-    const ok = await writeClipboard(getText());
-    btn.textContent = ok ? "Copied!" : "Couldn't copy";
-    btn.disabled = true;
-    setTimeout(() => {
-      btn.textContent = "Copy";
-      btn.disabled = false;
-    }, 1500);
-  });
+  btn.addEventListener("click", () => copyToClipboardWithFeedback(btn, getText));
   return btn;
 }
 
-/** navigator.clipboard is blocked in some sandboxed embeds (same class of
- * issue as window.print() — see exportPdf) — fall back to the legacy
- * execCommand("copy") path via a temporary offscreen textarea. */
+/** Copies getText()'s result to the clipboard, flashing the button's label to confirm. */
+async function copyToClipboardWithFeedback(btn, getText) {
+  const original = btn.textContent;
+  const ok = await writeClipboard(getText());
+  btn.textContent = ok ? "Copied!" : "Couldn't copy";
+  btn.disabled = true;
+  setTimeout(() => {
+    btn.textContent = original;
+    btn.disabled = false;
+  }, 1500);
+}
+
+/** navigator.clipboard is blocked in some sandboxed embeds — fall back to
+ * the legacy execCommand("copy") path via a temporary offscreen textarea. */
 async function writeClipboard(text) {
   try {
     if (navigator.clipboard && window.isSecureContext) {
