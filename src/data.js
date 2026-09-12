@@ -1,26 +1,38 @@
-/**
- * Generic dataset loader/indexer. A "mode" (Hebrew or English) supplies its
- * own cipher key list and a function to compute a cipher vector for a piece
- * of text; this module fetches the mode's word/phrase/verse JSON files and
- * precomputes every cipher value once so lookups are a plain array scan
- * instead of recomputing gematria on every keystroke.
- */
+import { HE_CIPHER_KEYS, computeHebrewCipherVector } from "./gematria.js";
 
-export async function loadModeDatasets(modeConfig, onProgress) {
-  const { files, cipherKeys, computeVector, textOf } = modeConfig;
+const FILES = {
+  words: "data/hebrew-words.json",
+  phrases: "data/hebrew-phrases.json",
+  verses: "data/tanakh.json",
+};
+
+const TEXT_OF = {
+  words: (item) => item[0],
+  phrases: (item) => item[0],
+  verses: (v) => v.text,
+};
+
+export { TEXT_OF as textOf };
+
+/**
+ * Loads the word/phrase/verse datasets and precomputes gematria values for
+ * every cipher so lookups are a simple array scan instead of recomputing
+ * gematria on every keystroke.
+ */
+export async function loadDatasets(onProgress) {
   const report = (msg) => onProgress && onProgress(msg);
 
-  report(modeConfig.loadingLabel || "Loading data…");
+  report("Loading the Hebrew word list and the Tanakh…");
   const [words, phrases, verses] = await Promise.all([
-    fetchJson(files.words),
-    fetchJson(files.phrases),
-    fetchJson(files.verses),
+    fetchJson(FILES.words),
+    fetchJson(FILES.phrases),
+    fetchJson(FILES.verses),
   ]);
 
-  report(modeConfig.indexingLabel || "Indexing…");
-  const wordIndex = buildIndex(words, textOf.words, cipherKeys, computeVector);
-  const phraseIndex = buildIndex(phrases, textOf.phrases, cipherKeys, computeVector);
-  const verseIndex = buildIndex(verses, textOf.verses, cipherKeys, computeVector);
+  report("Building the gematria index…");
+  const wordIndex = buildIndex(words, TEXT_OF.words);
+  const phraseIndex = buildIndex(phrases, TEXT_OF.phrases);
+  const verseIndex = buildIndex(verses, TEXT_OF.verses);
 
   return {
     words: { items: words, ...wordIndex },
@@ -39,15 +51,15 @@ async function fetchJson(path) {
  * Builds one Int32Array per cipher holding the precomputed value for every
  * item (parallel to `items`), so a match query is a single linear scan.
  */
-function buildIndex(items, getText, cipherKeys, computeVector) {
+function buildIndex(items, getText) {
   const n = items.length;
   const values = {};
-  for (const key of cipherKeys) values[key] = new Int32Array(n);
+  for (const key of HE_CIPHER_KEYS) values[key] = new Int32Array(n);
 
   for (let i = 0; i < n; i++) {
-    const vec = computeVector(getText(items[i]));
-    for (let c = 0; c < cipherKeys.length; c++) {
-      values[cipherKeys[c]][i] = vec[c];
+    const vec = computeHebrewCipherVector(getText(items[i]));
+    for (let c = 0; c < HE_CIPHER_KEYS.length; c++) {
+      values[HE_CIPHER_KEYS[c]][i] = vec[c];
     }
   }
 
