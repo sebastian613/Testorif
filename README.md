@@ -4,28 +4,38 @@ A static, browser-based app — with all instructions in English — that
 calculates the **Hebrew gematria** of a name or word and finds every word,
 phrase, and Tanakh (Hebrew Bible) verse that shares the same value, each
 shown in its original pasuk with an aligned English translation. English
-gematria is included as a secondary, bonus mode.
+gematria is a full, equally-rigorous second mode: its words and phrases are
+drawn from the King James Bible the same way the Hebrew mode draws from the
+Tanakh, with the same citation-and-highlight treatment.
 
 ## How it works
 
-### Hebrew (primary)
+### Hebrew
 
-- **Systems**: Mispar Hechrachi (standard value), Mispar Gadol (final letters
-  get large values 500–900), Mispar Siduri (ordinal position in the alphabet),
-  Mispar Katan (each letter reduced to a single digit), and Mispar Katan
-  Mispari (the word's total reduced to a single digit). Only the 22 Hebrew
-  letters count; niqqud (vowel points), cantillation marks, and punctuation
-  are ignored.
+- **Systems** (11): Standard Value (Hechrachi), Full/Final Value (Gadol —
+  final letters take large values 500–900), Ordinal Value (Siduri — position
+  in the alphabet), Reduced Value (Katan — each letter reduced to a single
+  digit), Integral Reduced (Katan Mispari — the word's total reduced to a
+  single digit), Additive Value (Musafi — standard value plus letter count),
+  Cumulative Value (Kidmi — triangular alphabet-position sums), Building
+  Value (Bone'eh — a running total across the word), Squared Value (Meruba —
+  each letter's value squared), and the **Atbash** and **Albam** substitution
+  ciphers (each letter swapped for its mirror-alphabet partner before
+  valuing — Atbash is the classic cipher behind "Sheshach" for "Babel" in
+  Jeremiah). Only the 22 Hebrew letters count; niqqud (vowel points),
+  cantillation marks, and punctuation are ignored.
 - **Matching**: `data/hebrew-words.json` (~39,500 distinct word forms) and
   `data/hebrew-phrases.json` (~180,000 two-word phrases) are every word and
   adjacent word-pair that actually occurs in `data/tanakh.json` (all 23,213
-  verses of the Masoretic Text) — so every match is indexed against all five
-  systems on load, and every word/phrase result shows the pasuk (verse) it
-  comes from: the Hebrew verse with that exact occurrence highlighted, cited
-  by book/chapter/verse, plus (where available) a word-for-word English
-  translation of the same verse with the corresponding English word(s)
-  highlighted too. A word or phrase that occurs more than once shows its
-  first occurrence plus an occurrence count.
+  verses of the Masoretic Text) — so every match is indexed against all
+  eleven systems on load, and every word/phrase result shows the pasuk
+  (verse) it comes from: the Hebrew verse with that exact occurrence
+  highlighted, cited by book/chapter/verse, plus (where available) a
+  word-for-word English translation of the same verse with the corresponding
+  English word(s) highlighted too. A word or phrase that occurs more than
+  once shows its first occurrence plus an occurrence count. The Verses tab
+  (whole-verse matches) shows that same English translation under each
+  Hebrew pasuk.
 - **Text source**: the Westminster Leningrad Codex, via the
   [Open Scriptures Hebrew Bible](https://github.com/openscriptures/morphhb)
   project (public domain). Verses use the Qere (traditional spoken reading)
@@ -40,12 +50,20 @@ gematria is included as a secondary, bonus mode.
   verses differently, e.g. Psalm superscriptions) don't have a verified
   English alignment and simply show the Hebrew citation alone.
 
-### English (secondary/bonus)
+### English
 
-- **Ciphers**: English Ordinal (A=1…Z=26), Full Reduction, Reverse Ordinal
-  (Z=1…A=26), Reverse Reduction, Sumerian (Ordinal ×6), and Reverse Sumerian.
-- **Matching**: `data/words.json` (~370k English words), `data/phrases.json`
-  (curated idioms/quotes/names), and `data/kjv.json` (King James Bible).
+- **Ciphers** (9): English Ordinal (A=1…Z=26), Full Reduction, Reverse
+  Ordinal (Z=1…A=26), Reverse Reduction, Sumerian (Ordinal ×6), Reverse
+  Sumerian, English Extended (a Hebrew/Greek-style units-tens-hundreds
+  table: A-I=1-9, J-R=10-90, S-Z=100-800), the Francis Bacon cipher
+  (A=100…Z=125), and Chaldean numerology (a fixed 1-8 table with no letter
+  assigned 9). Only letters A–Z are counted.
+- **Matching**: `data/words.json` (~13,300 distinct word forms) and
+  `data/phrases.json` (~163,000 two-word phrases) are every word and
+  adjacent word-pair that actually occurs in `data/kjv.json` (the full King
+  James Bible, 31,100 verses) — the same corpus-grounded, citation-and-
+  highlight approach as the Hebrew mode, so every English match is just as
+  rigorously sourced.
 
 Each mode loads its own datasets on demand (Hebrew loads immediately;
 English loads the first time you switch to it) and precomputes every
@@ -70,35 +88,35 @@ server works equally well, e.g. `python3 -m http.server 8080`.
 ```
 index.html               # page shell (English UI, LTR; Hebrew content is RTL inline)
 style.css                 # styling (light/dark aware)
-src/gematria.js            # Hebrew + English cipher math
+src/gematria.js            # Hebrew (11 systems) + English (9 ciphers) math
 src/data.js                # dataset loading + precomputed per-cipher indexes
 src/app.js                 # UI wiring, mode switching (Hebrew/English)
 data/tanakh.json           # Tanakh (WLC), {ref, he, text (Hebrew), en (English)} per verse
 data/hebrew-words.json     # [bareWord, [[verseIndex, heStart, heEnd, enStart, enEnd], ...]]
 data/hebrew-phrases.json   # same shape, for two-word phrases from the Tanakh
-data/words.json            # English word list
-data/phrases.json          # curated English idioms, quotes, and names
-data/kjv.json              # King James Bible, flattened to {ref, b, text} per verse
+data/kjv.json              # King James Bible, {ref, b, text} per verse
+data/words.json            # [word, [[verseIndex, start, end], ...]] from the KJV text
+data/phrases.json          # same shape, for two-word phrases from the KJV text
 ```
 
-An occurrence's `enStart`/`enEnd` are `-1` when no verified English alignment
-exists for that verse — the UI simply omits the translation line in that case.
+An occurrence's `enStart`/`enEnd` (Hebrew only) are `-1` when no verified
+English alignment exists for that verse — the UI simply omits the
+translation line in that case. English occurrences are 3-element
+`[verseIndex, start, end]` since the corpus is already in English.
 
 ## Extending
 
-- Hebrew phrases are currently two-word spans; three-word (or longer) spans
-  can be added by adjusting the n-gram lengths generated from the Tanakh
-  text (see the parsing notes below) — the offset-based citation/highlight
-  scheme works for any span length.
-- Add more entries to `data/phrases.json` (a plain JSON array of strings) to
-  broaden English phrase matches.
+- Phrases (both languages) are currently two-word spans; three-word (or
+  longer) spans can be added by adjusting the n-gram lengths generated from
+  the source text — the offset-based citation/highlight scheme works for any
+  span length.
 - Add another gematria system by extending `HE_CIPHERS`/`EN_CIPHERS` in
   `src/gematria.js` and the corresponding compute function.
 
-## Regenerating the Hebrew data
+## Regenerating the data
 
-`data/tanakh.json`, `data/hebrew-words.json`, and `data/hebrew-phrases.json`
-are generated from two sources, not hand-written:
+**Hebrew** — `data/tanakh.json`, `data/hebrew-words.json`, and
+`data/hebrew-phrases.json` are generated from two sources, not hand-written:
 
 1. The Open Scriptures Hebrew Bible XML — the Westminster Leningrad Codex
    (`git clone https://github.com/openscriptures/morphhb`) — parsed verse by
@@ -118,3 +136,10 @@ Every distinct bare (niqqud-stripped) word and two-word span is then emitted
 with `[verseIndex, heStart, heEnd, enStart, enEnd]` for each of its
 occurrences (capped at 8 per entry to bound file size; `enStart`/`enEnd` are
 `-1` where no verified English alignment exists for that verse).
+
+**English** — `data/words.json` and `data/phrases.json` are generated
+directly from `data/kjv.json`: each verse's text is tokenized on `[A-Za-z]+`
+(offsets taken straight from the original string, so no reconstruction is
+needed the way Hebrew's morpheme-joined XML requires), then every distinct
+lowercased word and two-word span is emitted with
+`[verseIndex, start, end]` for each of its occurrences (capped at 8).

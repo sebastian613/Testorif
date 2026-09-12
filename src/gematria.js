@@ -8,6 +8,12 @@ export const HE_CIPHERS = [
   { key: "siduri", label: "Ordinal Value", sub: "מספר סידורי" },
   { key: "katan", label: "Reduced Value", sub: "מספר קטן" },
   { key: "katanMispari", label: "Integral Reduced", sub: "מספר קטן מספרי" },
+  { key: "musafi", label: "Additive Value", sub: "מספר מוסף" },
+  { key: "kidmi", label: "Cumulative Value", sub: "מספר קדמי" },
+  { key: "boneh", label: "Building Value", sub: "מספר בונה" },
+  { key: "meruba", label: "Squared Value", sub: "מספר מרובע" },
+  { key: "atbash", label: "Atbash Cipher", sub: "מספר אתב״ש" },
+  { key: "albam", label: "Albam Cipher", sub: "מספר אלב״ם" },
 ];
 
 export const EN_CIPHERS = [
@@ -17,12 +23,18 @@ export const EN_CIPHERS = [
   { key: "reverseReduction", label: "Reverse Reduction" },
   { key: "sumerian", label: "Sumerian" },
   { key: "reverseSumerian", label: "Reverse Sumerian" },
+  { key: "extended", label: "English Extended" },
+  { key: "bacon", label: "Francis Bacon" },
+  { key: "chaldean", label: "Chaldean" },
 ];
 
 export const HE_CIPHER_KEYS = HE_CIPHERS.map((c) => c.key);
 export const EN_CIPHER_KEYS = EN_CIPHERS.map((c) => c.key);
 
 // --- Hebrew --------------------------------------------------------------
+
+// The 22-letter alphabet in order, used for Siduri, Kidmi, Atbash, and Albam.
+const ALPHABET = ["א","ב","ג","ד","ה","ו","ז","ח","ט","י","כ","ל","מ","נ","ס","ע","פ","צ","ק","ר","ש","ת"];
 
 // Mispar Hechrachi (Standard/Absolute Value). Final letters share their
 // base letter's value, per the traditional convention.
@@ -44,6 +56,35 @@ const SIDURI = {
   "ק": 19, "ר": 20, "ש": 21, "ת": 22,
   "ך": 23, "ם": 24, "ן": 25, "ף": 26, "ץ": 27,
 };
+
+// Final letters resolve to their base letter for the alphabet-position-based
+// systems below (Kidmi, Atbash, Albam) — the same convention Hechrachi uses.
+const FINAL_TO_BASE = { "ך": "כ", "ם": "מ", "ן": "נ", "ף": "פ", "ץ": "צ" };
+
+const ALPHABET_INDEX = {};
+ALPHABET.forEach((ch, i) => (ALPHABET_INDEX[ch] = i));
+
+// Mispar Kidmi (Cumulative/Triangular Value): each letter's value is the sum
+// of every standard value up to and including its own position in the
+// alphabet (Alef=1, Bet=1+2=3, Gimel=1+2+3=6, …).
+const KIDMI_CUMULATIVE = (() => {
+  const out = [];
+  let running = 0;
+  for (const ch of ALPHABET) {
+    running += HECHRACHI[ch];
+    out.push(running);
+  }
+  return out;
+})();
+
+// Atbash: mirror the alphabet (Alef<->Tav, Bet<->Shin, …), then take the
+// substituted letter's standard value.
+const ATBASH_SUB = {};
+ALPHABET.forEach((ch, i) => (ATBASH_SUB[ch] = ALPHABET[ALPHABET.length - 1 - i]));
+
+// Albam: swap each half of the alphabet with the other (Alef<->Lamed, …).
+const ALBAM_SUB = {};
+ALPHABET.forEach((ch, i) => (ALBAM_SUB[ch] = ALPHABET[(i + 11) % 22]));
 
 function digitalRoot(n) {
   if (n <= 0) return 0;
@@ -68,17 +109,46 @@ export function computeAllHebrewCiphers(text) {
   let gadol = 0;
   let siduri = 0;
   let katan = 0;
+  let kidmi = 0;
+  let atbash = 0;
+  let albam = 0;
+  let meruba = 0;
+  let boneh = 0;
+  let runningBoneh = 0;
+  let letterCount = 0;
 
   for (const ch of text) {
     const base = HECHRACHI[ch];
     if (base === undefined) continue; // skip niqqud, spaces, punctuation, non-Hebrew
+    letterCount += 1;
     hechrachi += base;
     gadol += GADOL_FINAL[ch] ?? base;
     siduri += SIDURI[ch];
     katan += digitalRoot(base);
+    meruba += base * base;
+    runningBoneh += base;
+    boneh += runningBoneh;
+
+    const root = FINAL_TO_BASE[ch] ?? ch;
+    const idx = ALPHABET_INDEX[root];
+    kidmi += KIDMI_CUMULATIVE[idx];
+    atbash += HECHRACHI[ATBASH_SUB[root]];
+    albam += HECHRACHI[ALBAM_SUB[root]];
   }
 
-  return { hechrachi, gadol, siduri, katan, katanMispari: digitalRoot(hechrachi) };
+  return {
+    hechrachi,
+    gadol,
+    siduri,
+    katan,
+    katanMispari: digitalRoot(hechrachi),
+    musafi: hechrachi + letterCount,
+    kidmi,
+    boneh,
+    meruba,
+    atbash,
+    albam,
+  };
 }
 
 export function computeHebrewCipherVector(text) {
@@ -88,6 +158,29 @@ export function computeHebrewCipherVector(text) {
 
 // --- English (secondary feature) -----------------------------------------
 
+// English Extended: mirrors the units/tens/hundreds pattern of Hebrew and
+// Greek numerals — A-I = 1-9, J-R = 10-90 (by tens), S-Z = 100-800 (by
+// hundreds).
+const EXTENDED = {};
+"ABCDEFGHI".split("").forEach((ch, i) => (EXTENDED[ch] = i + 1));
+"JKLMNOPQR".split("").forEach((ch, i) => (EXTENDED[ch] = (i + 1) * 10));
+"STUVWXYZ".split("").forEach((ch, i) => (EXTENDED[ch] = (i + 1) * 100));
+
+// Chaldean numerology: a fixed 1-8 table (9 is traditionally never assigned).
+const CHALDEAN = {};
+[
+  [1, "AIJQY"],
+  [2, "BKR"],
+  [3, "CGLS"],
+  [4, "DMT"],
+  [5, "EHNX"],
+  [6, "UVW"],
+  [7, "OZ"],
+  [8, "FP"],
+].forEach(([value, letters]) => {
+  for (const ch of letters) CHALDEAN[ch] = value;
+});
+
 export function computeAllEnglishCiphers(text) {
   let ordinal = 0;
   let reduction = 0;
@@ -95,11 +188,15 @@ export function computeAllEnglishCiphers(text) {
   let reverseReduction = 0;
   let sumerian = 0;
   let reverseSumerian = 0;
+  let extended = 0;
+  let bacon = 0;
+  let chaldean = 0;
 
   const upper = text.toUpperCase();
   for (let i = 0; i < upper.length; i++) {
     const code = upper.charCodeAt(i);
     if (code < 65 || code > 90) continue; // skip non A-Z
+    const ch = upper[i];
     const ord = code - 64; // A=1 .. Z=26
     const rev = 27 - ord; // Z=1 .. A=26
 
@@ -109,9 +206,22 @@ export function computeAllEnglishCiphers(text) {
     reverseReduction += ((rev - 1) % 9) + 1;
     sumerian += ord * 6;
     reverseSumerian += rev * 6;
+    extended += EXTENDED[ch];
+    bacon += ord + 99;
+    chaldean += CHALDEAN[ch] ?? 0;
   }
 
-  return { ordinal, reduction, reverse, reverseReduction, sumerian, reverseSumerian };
+  return {
+    ordinal,
+    reduction,
+    reverse,
+    reverseReduction,
+    sumerian,
+    reverseSumerian,
+    extended,
+    bacon,
+    chaldean,
+  };
 }
 
 export function computeEnglishCipherVector(text) {

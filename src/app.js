@@ -54,12 +54,13 @@ const MODES = {
       capped ? `${count}+ occurrences in the Tanakh` : count === 1 ? "Only occurrence in the Tanakh" : `${count} occurrences in the Tanakh`,
     verseRef: (v) => v.ref,
     verseBody: (v) => v.text,
+    verseTranslation: (v) => v.en || null,
     eyebrow: "Hebrew Gematria · Tanakh",
     title: "Gematria Calculator",
     subtitle:
-      "Enter a name or word in Hebrew letters to calculate its gematria across five traditional systems, then see every word, phrase, and Tanakh verse that shares that value — each one grounded in the pasuk (verse) it's drawn from, with an English translation alongside.",
+      "Enter a name or word in Hebrew letters to calculate its gematria across eleven traditional systems — from the standard value to Atbash and Albam substitution ciphers — then see every word, phrase, and Tanakh verse that shares that value, each one grounded in the pasuk (verse) it's drawn from, with an English translation alongside.",
     footer:
-      "Systems: Standard Value (Mispar Hechrachi), Full/Final Value (Mispar Gadol — final letters take large values), Ordinal Value (Mispar Siduri — position in the alphabet), Reduced Value (Mispar Katan — each letter reduced to one digit), and Integral Reduced (Mispar Katan Mispari — the whole word's total reduced to one digit). Every word and phrase is matched directly against the Masoretic Text (Leningrad Codex) of the Tanakh. English translations are word-for-word and aligned automatically, so a small number of verses don't have one available.",
+      "Systems: Standard Value (Hechrachi), Full/Final Value (Gadol — final letters take large values), Ordinal Value (Siduri — position in the alphabet), Reduced Value (Katan — each letter reduced to one digit), Integral Reduced (Katan Mispari — the whole word's total reduced to one digit), Additive Value (Musafi — standard value plus letter count), Cumulative Value (Kidmi — triangular alphabet-position sums), Building Value (Bone'eh — a running total across the word), Squared Value (Meruba — each letter's value squared), and the Atbash and Albam substitution ciphers (each letter is swapped for its mirror-alphabet partner before valuing). Every word and phrase is matched directly against the Masoretic Text (Leningrad Codex) of the Tanakh. English translations are word-for-word and aligned automatically, so a small number of verses don't have one available.",
   },
   english: {
     key: "english",
@@ -83,18 +84,25 @@ const MODES = {
     emptyText: "No matches found.",
     metaTemplate: (count, value) => `${count} match${count === 1 ? "" : "es"} for value ${value}`,
     textOf: {
-      words: (item) => item,
-      phrases: (item) => item,
+      words: (item) => item[0],
+      phrases: (item) => item[0],
       verses: (v) => v.text,
     },
+    occurrencesOf: {
+      words: (item) => item[1],
+      phrases: (item) => item[1],
+    },
+    occurrenceLabel: (count, capped) =>
+      capped ? `${count}+ occurrences in the KJV` : count === 1 ? "Only occurrence in the KJV" : `${count} occurrences in the KJV`,
     verseRef: (v) => v.ref,
     verseBody: (v) => v.text,
-    eyebrow: "English Gematria · bonus feature",
+    verseTranslation: () => null,
+    eyebrow: "English Gematria · Bible",
     title: "Gematria Calculator",
     subtitle:
-      "Enter a name or phrase to calculate its gematria across six standard English ciphers, then browse every word, phrase, and Bible verse (KJV) that shares that value.",
+      "Enter a name or phrase to calculate its gematria across nine English systems — from the classic Ordinal cipher to Chaldean numerology and the Francis Bacon cipher — then see every word, phrase, and Bible verse that shares that value, each one grounded in the King James verse it's drawn from.",
     footer:
-      "Ciphers: English Ordinal (A=1…Z=26), Full Reduction, Reverse Ordinal (Z=1…A=26), Reverse Reduction, Sumerian (Ordinal ×6), and Reverse Sumerian. Only letters A–Z are counted.",
+      "Ciphers: English Ordinal (A=1…Z=26), Full Reduction, Reverse Ordinal (Z=1…A=26), Reverse Reduction, Sumerian (Ordinal ×6), Reverse Sumerian, English Extended (a Hebrew/Greek-style units-tens-hundreds table), the Francis Bacon cipher (A=100…Z=125), and Chaldean numerology (a fixed 1-8 table). Only letters A–Z are counted. Words and phrases are drawn directly from the King James Bible text — every match is cited to its verse, the same as the Hebrew mode.",
   },
 };
 
@@ -273,7 +281,7 @@ function recomputeMatches() {
   const target = values[cipherKey];
   const { words, phrases, verses } = datasets;
   const rawInput = el.nameInput.value.trim();
-  const selfKey = mode.key === "hebrew" ? stripToHebrewLetters(rawInput) : rawInput;
+  const selfKey = mode.key === "hebrew" ? stripToHebrewLetters(rawInput) : rawInput.toLowerCase();
 
   state.matches.words = findMatches(words, cipherKey, target).filter(
     (i) => mode.textOf.words(words.items[i]) !== selfKey
@@ -340,9 +348,13 @@ function renderResultsList() {
       const li = document.createElement("li");
       const item = dataset.items[i];
       if (tab === "verses") {
+        const translation = mode.verseTranslation ? mode.verseTranslation(item) : null;
         li.innerHTML =
           `<span class="verse-ref">${escapeHtml(mode.verseRef(item))}</span>` +
-          `<span class="verse-text" dir="${mode.contentDir}">${escapeHtml(mode.verseBody(item))}</span>`;
+          `<span class="verse-text" dir="${mode.contentDir}">${escapeHtml(mode.verseBody(item))}</span>` +
+          (translation
+            ? `<span class="verse-text verse-text-en" dir="ltr">${escapeHtml(translation)}</span>`
+            : "");
       } else {
         const headline = document.createElement("div");
         headline.className = "result-headline";
@@ -352,7 +364,10 @@ function renderResultsList() {
 
         const occurrences = mode.occurrencesOf && mode.occurrencesOf[tab] ? mode.occurrencesOf[tab](item) : null;
         if (occurrences && occurrences.length && verseDataset) {
-          const [verseIndex, heStart, heEnd, enStart, enEnd] = occurrences[0];
+          const occ = occurrences[0];
+          const [verseIndex, mainStart, mainEnd] = occ;
+          const enStart = occ.length > 3 ? occ[3] : -1;
+          const enEnd = occ.length > 3 ? occ[4] : -1;
           const verse = verseDataset.items[verseIndex];
           const capped = occurrences.length >= OCC_CAP;
           const citation = document.createElement("div");
@@ -361,7 +376,7 @@ function renderResultsList() {
           let html =
             `<span class="verse-ref">${escapeHtml(mode.verseRef(verse))}` +
             `<span class="occurrence-count"> · ${escapeHtml(mode.occurrenceLabel(occurrences.length, capped))}</span></span>` +
-            `<span class="verse-text" dir="rtl">${highlightSpan(verse.text, heStart, heEnd)}</span>`;
+            `<span class="verse-text" dir="${mode.contentDir}">${highlightSpan(verse.text, mainStart, mainEnd)}</span>`;
 
           if (enStart !== -1 && verse.en) {
             html += `<span class="verse-text verse-text-en" dir="ltr">${highlightSpan(verse.en, enStart, enEnd)}</span>`;
