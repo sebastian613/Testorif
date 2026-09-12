@@ -141,6 +141,7 @@ function recompute() {
     renderNumeralHint(null);
     el.resultsSection.hidden = true;
     renderValueDisplay();
+    if (state.datasets) syncShareableUrl("");
     return;
   }
 
@@ -149,6 +150,19 @@ function recompute() {
     // word's computed value would be, not spelled out and recomputed.
     state.value = parseInt(trimmed, 10);
     renderNumeralHint(numberToHebrewNumeral(state.value));
+  } else if (!stripToHebrewLetters(trimmed)) {
+    // Latin (or any non-Hebrew) text has no letters to add up, so it would
+    // otherwise compute to 0 and report "0 matches for value 0" — a dead
+    // end that reads like a broken app rather than the wrong alphabet.
+    state.value = null;
+    renderHint(
+      'Gematria adds up <em>Hebrew</em> letters — try Hebrew (like <span dir="rtl">דָּוִד</span>), or type a number.'
+    );
+    renderValueDisplay();
+    renderNotableValue();
+    el.resultsSection.hidden = true;
+    syncShareableUrl(trimmed);
+    return;
   } else {
     state.value = computeHechrachi(text);
     renderNumeralHint(null);
@@ -158,6 +172,25 @@ function recompute() {
   renderNotableValue();
   recomputeMatches();
   el.resultsSection.hidden = false;
+  syncShareableUrl(trimmed);
+}
+
+/**
+ * Keeps ?q= in the address bar in sync with the search, so a result can be
+ * copied and shared — init() already reads ?q= back on load, which until
+ * now was only half a feature. replaceState rather than pushState: typing
+ * a name shouldn't bury the previous page under a dozen history entries.
+ */
+function syncShareableUrl(query) {
+  try {
+    const url = new URL(location.href);
+    if (query) url.searchParams.set("q", query);
+    else url.searchParams.delete("q");
+    history.replaceState(null, "", url);
+  } catch {
+    // Some sandboxed embeddings disallow touching history; the search
+    // itself still works, so a shareable URL is simply not offered there.
+  }
 }
 
 function renderNotableValue() {
@@ -501,13 +534,18 @@ function renderPopularSearches() {
 
 function renderNumeralHint(hebrewNumeral) {
   if (!hebrewNumeral) {
-    el.numeralHint.hidden = true;
+    renderHint(null);
     return;
   }
-  el.numeralHint.hidden = false;
-  el.numeralHint.innerHTML = `Searching for this value directly — traditionally written <span dir="rtl">${escapeHtml(
-    hebrewNumeral
-  )}</span>`;
+  renderHint(
+    `Searching for this value directly — traditionally written <span dir="rtl">${escapeHtml(hebrewNumeral)}</span>`
+  );
+}
+
+/** Shows (or hides, when passed nothing) the note under the input. */
+function renderHint(html) {
+  el.numeralHint.hidden = !html;
+  if (html) el.numeralHint.innerHTML = html;
 }
 
 function setStatus(message, loading, isError = false) {

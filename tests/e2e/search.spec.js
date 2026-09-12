@@ -51,3 +51,43 @@ test("a known notable value shows its callout", async ({ page }) => {
   await expect(page.locator("#notable-value")).toBeVisible();
   await expect(page.locator("#notable-value")).toContainText("Tetragrammaton");
 });
+
+test("a search lands in the URL so it can be copied and shared", async ({ page }) => {
+  // The app read ?q= on load long before it ever wrote it, so copying the
+  // address bar mid-search handed someone else the default search instead
+  // of yours. This is the half that was missing.
+  await page.fill("#name-input", "חיים");
+  await expect(page.locator(".value-number")).toHaveText("68");
+  await expect(page).toHaveURL(/[?&]q=/);
+
+  // Clearing the box shouldn't leave a stale ?q= behind to be copied.
+  await page.fill("#name-input", "");
+  await expect(page).not.toHaveURL(/[?&]q=/);
+});
+
+test("a shared ?q= link reopens that search", async ({ page }) => {
+  // Loading the whole corpus takes ~20s and this test boots the app a
+  // second time (beforeEach already did one), so it legitimately needs
+  // more than the default per-test budget.
+  test.slow();
+  await page.goto(`/index.html?q=${encodeURIComponent("חיים")}`);
+  await page.waitForSelector("#name-input:not([disabled])", { timeout: 60000 });
+  await expect(page.locator("#name-input")).toHaveValue("חיים");
+  await expect(page.locator(".value-number")).toHaveText("68");
+});
+
+test("non-Hebrew input explains itself instead of reporting zero matches", async ({ page }) => {
+  // Typing a Latin name is a likely first move for someone who doesn't
+  // read Hebrew; "0 matches for value 0" reads as broken rather than as
+  // the wrong alphabet.
+  await page.fill("#name-input", "David");
+  await expect(page.locator("#numeral-hint")).toBeVisible();
+  await expect(page.locator("#numeral-hint")).toContainText("Hebrew");
+  await expect(page.locator("#results-section")).toBeHidden();
+  await expect(page.locator(".value-number")).toHaveText("–");
+
+  // Switching to real Hebrew recovers normally.
+  await page.fill("#name-input", "דוד");
+  await expect(page.locator(".value-number")).toHaveText("14");
+  await expect(page.locator("#results-section")).toBeVisible();
+});
