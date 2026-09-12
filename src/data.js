@@ -30,12 +30,12 @@ export const CORPORA = [
       passages: "data/mishneh-torah.json",
     },
     // This corpus's build script caps stored occurrences per word/phrase
-    // at 3, not the 8 every other corpus uses (Mishneh Torah's halachot
-    // are long enough that 398,000+ distinct phrases at a cap of 8 was too
+    // at 2, not the 8 every other corpus uses (Mishneh Torah's halachot
+    // are long enough that 420,000+ distinct phrases at a cap of 8 was too
     // large to publish to some hosting targets) — app.js's "N+ occurrences
     // found" display needs to know this to avoid claiming an exact count
     // past the point where more occurrences actually exist but weren't kept.
-    occCap: 3,
+    occCap: 2,
   },
 ];
 

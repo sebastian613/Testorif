@@ -36,9 +36,8 @@ translation. One thing, done thoroughly: there is no other mode.
   adjacent word-pair that actually occurs in it is indexed on load —
   ~39,500 distinct word forms and ~180,700 two-word phrases for Tanakh's
   23,213 verses; ~24,000 words and ~110,000 phrases for the Mishnah's 4,187
-  mishnayot across all 63 tractates; ~50,800 words and ~398,300 phrases for
-  Mishneh Torah's 14,622 halachot across 79 treatises (see **Licensing**
-  below for why 79 and not all 88). Every word/phrase result shows the
+  mishnayot across all 63 tractates; ~53,800 words and ~421,700 phrases for
+  Mishneh Torah's 15,895 halachot across all 88 treatises. Every word/phrase result shows the
   passage it comes from: the original text with that exact occurrence
   highlighted, cited by its reference, plus — for Tanakh citations — the
   JPS 1917 translation with the corresponding English word(s) highlighted
@@ -59,19 +58,23 @@ translation. One thing, done thoroughly: there is no other mode.
   tractates**, unlike Sefaria's own default/"merged" text for the same
   tractates, which turned out to be CC-BY-NC for 38 of them (see
   **Regenerating the data** below for how that was found and worked
-  around). Mishneh Torah turned out to be split across *two* independently
-  licensed editions, and neither covers the whole work: "Torat Emet 363"
-  is Public Domain for 72 of its 88 treatises (all of Sefer Madda, plus
-  everything from Sefer Zemanim through Sefer Shoftim), and "Torat Emet
-  370" — the edition covering Sefer Ahavah — is Public Domain for only 2 of
-  its 7 treatises (Reading the Shema; Prayer and the Priestly Blessing).
-  That leaves 9 of the 88 treatises out of this corpus entirely: 4
-  introductory list-books (Transmission of the Oral Law, Positive Mitzvot,
-  Negative Mitzvot, Overview of Contents) and 5 of Sefer Ahavah's remaining
-  6 (Tefillin/Mezuzah/Torah Scroll, Fringes, Blessings, Circumcision, The
-  Order of Prayer) — every Hebrew version Sefaria lists for those 9 is
-  either CC-BY-SA or license `"unknown"`, checked directly per treatise via
-  `scripts/build_mishneh_torah.py`, not assumed from a spot check. No
+  around). **Mishneh Torah is complete — all 88 treatises — and carries no
+  restrictively-licensed text**, which took three sources, because no
+  single Hebrew edition covers the whole work and Sefaria's per-version
+  license tags have gaps. "Torat Emet 363" is Public Domain for 72
+  treatises but doesn't cover Sefer Ahavah; "Torat Emet 370" covers Sefer
+  Ahavah but is tagged Public Domain on only 2 of its 7 treatises and left
+  `"unknown"` on the other 5 — same version title, same publisher, same
+  source URL, so that's a tagging gap rather than a real licensing
+  difference, and the build script *proves* that each run rather than
+  assuming it (see **Regenerating the data**). The 4 introductory
+  list-books come from Mechon Mamre's public domain vocalized edition
+  instead, 2 of them through Sefaria and 2 fetched directly, which avoids
+  the CC-BY-SA Wikisource transcription that was Sefaria's only Hebrew
+  option for those. Every treatise's license is checked live per treatise
+  by `scripts/build_mishneh_torah.py`, never assumed from a spot check,
+  and the result is recorded in `data/mishneh-torah-sources.json` so it's
+  auditable without re-running anything. No
   English translation is wired in for the Mishnah or Mishneh Torah yet
   either way. Talmud and Zohar are natural next corpora — their original
   text is equally public domain — but both are far larger than Mishneh
@@ -79,7 +82,7 @@ translation. One thing, done thoroughly: there is no other mode.
   complete English translation (the Steinsaltz/William Davidson Edition) is
   CC-BY-NC, meaning free to show in this app but not usable in a
   commercial/print product built from it — the same kind of per-version
-  check that solved the Mishnah's and (mostly) Mishneh Torah's licensing
+  check that solved the Mishnah's and Mishneh Torah's licensing
   may or may not turn up a public-domain Talmud translation too; that
   hasn't been checked yet.
 - **Hebrew text source**: the Westminster Leningrad Codex, via the
@@ -210,7 +213,8 @@ data/mishnah.json          # all 63 tractates, {ref, he, text} per mishnah — n
 data/mishnah-words.json    # Mishnah words: [bareWord, [[passageIndex, heStart, heEnd], ...]] — own index, not Tanakh's
 data/mishnah-phrases.json  # Mishnah two-word phrases, same shape
 scripts/build_mishnah.py   # fetches Sefaria's Torat Emet 357 Mishnah text, builds the three mishnah-*.json files
-data/mishneh-torah.json           # 79 of 88 treatises, {ref, he, text} per halacha — no `en`, see Corpora above
+data/mishneh-torah.json           # all 88 treatises, {ref, text} per halacha — no `en`, and no `he` (unused; see below)
+data/mishneh-torah-sources.json   # which edition + license each treatise came from, so the licensing is auditable
 data/mishneh-torah-words.json     # Mishneh Torah words, same shape as mishnah-words.json — own index
 data/mishneh-torah-phrases-1.json # Mishneh Torah two-word phrases, same shape, split into 2 files (see Corpora above)
 data/mishneh-torah-phrases-2.json # second half of the same phrases list
@@ -327,31 +331,57 @@ primary text — an early version of this script's TOC walk picked up 1,935
 against `/api/texts/versions/<title>` (rather than assuming Mishnah's
 single-version-covers-everything pattern would repeat) turned up a messier
 picture: the work is split across two independently-licensed Hebrew
-editions, neither complete. **"Torat Emet 363"** is Public Domain for 72
-of the 88 (all of Sefer Madda, and everything from Sefer Zemanim through
-Sefer Shoftim) but doesn't cover Sefer Ahavah at all. **"Torat Emet
-370"** covers Sefer Ahavah instead, but is only Public Domain for 2 of its
-7 treatises (Reading the Shema; Prayer and the Priestly Blessing) — the
-other 5 come back license `"unknown"`. The 4 introductory list-books have
-no Public Domain Hebrew version under either name — only a CC-BY-SA
-Wikisource transcription. The script checks both candidate version names
-per treatise, uses whichever comes back `"Public Domain"`, and skips (and
-logs) a treatise where neither does, asserting the resulting skip list
-against a hardcoded `EXCLUDED` set so a change on Sefaria's end — a newly
-freed version, or a license getting revoked — is noticed at build time
-rather than silently changing what's in the corpus. The result: 79 of 88
-treatises, 14,622 halachot.
+editions, neither complete, and it took **three** sources to assemble all
+88 treatises without pulling in restrictively-licensed text:
 
-One more difference from `build_mishnah.py`: this corpus caps stored
-occurrences per word/phrase at 3, not the 8 every other corpus uses.
-Mishneh Torah's halachot run much longer per passage than a Tanakh verse
-or a mishnah, so despite having fewer passages than either it has far more
-distinct two-word phrases — enough that even split across two files, a
-cap of 8 pushed the total published size over what some hosting targets
-allow. `src/data.js`'s `CORPORA` entry for this corpus carries a matching
-`occCap: 3` so `src/app.js`'s "N+ occurrences found" display uses the
-right threshold instead of assuming every corpus was built with the same
-cap.
+1. **"Torat Emet 363"** — Public Domain, covers 72 treatises (all of Sefer
+   Madda, and everything from Sefer Zemanim through Sefer Shoftim). It
+   doesn't cover Sefer Ahavah or the introductory list-books at all.
+2. **"Torat Emet 370"** — the edition that does cover Sefer Ahavah.
+   Sefaria tags it Public Domain on 2 of that book's 7 treatises (Reading
+   the Shema; Prayer and the Priestly Blessing) and leaves the license
+   `"unknown"` on the other 5. That's a tagging gap, not a licensing
+   difference: all 7 are the same version title from the same publisher at
+   the same `versionSource`, and a license doesn't vary book-by-book
+   within one edition. The script doesn't just assert that — it **proves
+   it every run**: an untagged version is only accepted if that exact
+   version title came back `"Public Domain"` on some other treatise in the
+   same run, so if Sefaria ever retags it the build fails loudly instead
+   of quietly shipping it.
+3. **Mechon Mamre** — a public domain, fully vocalized edition — for the 4
+   introductory list-books. Sefaria carries it for 2 of them (Transmission
+   of the Oral Law; Positive Mitzvot). For the other 2 (Negative Mitzvot;
+   Overview of Contents) Sefaria's only Hebrew version is a CC-BY-SA
+   Wikisource transcription, so the script fetches those straight from
+   mechon-mamre.org instead. That keeps share-alike text out of the corpus
+   entirely and, as a bonus, yields vocalized text where the Wikisource
+   transcription is unvocalized.
+
+The result: **88 of 88 treatises, 15,895 halachot**, with every treatise's
+edition and license recorded in `data/mishneh-torah-sources.json`.
+A first attempt at this corpus shipped only the 79 treatises Sefaria tags
+Public Domain outright; the other 9 were recovered by widening the version
+search beyond a hardcoded candidate list and by going direct to Mechon
+Mamre. Note that the two flat prefatory lists (Positive/Negative Mitzvot)
+have no chapters, so their refs are a single index — `Mishneh Torah,
+Positive Mitzvot 248` — rather than chapter:halacha.
+
+Two more differences from `build_mishnah.py`, both there to fit all three
+corpora inside a 64MB total publishing budget:
+
+- This corpus caps stored occurrences per word/phrase at 2, not the 8
+  every other corpus uses. Mishneh Torah's halachot run much longer per
+  passage than a Tanakh verse or a mishnah, so despite having fewer
+  passages than the Tanakh it has more than twice as many distinct
+  two-word phrases. `src/data.js`'s `CORPORA` entry carries a matching
+  `occCap: 2` so `src/app.js`'s "N+ occurrences found" display uses the
+  right threshold instead of assuming every corpus was built with the same
+  cap — and a unit test fails if the two ever drift apart.
+- Its passages carry no `he` field (the treatise's Hebrew title), unlike
+  `tanakh.json` and `mishnah.json`. Nothing in the app ever reads that
+  field, and repeating it across ~15,900 passages cost about 0.6MB. The
+  Hebrew title is in `mishneh-torah-sources.json` per treatise if it's
+  ever wanted.
 
 `data/tanakh.json`, `data/hebrew-words.json`, and `data/hebrew-phrases.json`
 are generated from two sources, not hand-written:

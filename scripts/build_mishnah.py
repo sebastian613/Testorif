@@ -154,7 +154,8 @@ def main():
                     "text": text,
                 })
     print(f"  {len(mishnah_passages)} mishnayot")
-    json.dump(mishnah_passages, open(os.path.join(DATA_DIR, "mishnah.json"), "w", encoding="utf-8"), ensure_ascii=False)
+    json.dump(mishnah_passages, open(os.path.join(DATA_DIR, "mishnah.json"), "w", encoding="utf-8"),
+              ensure_ascii=False, separators=(",", ":"))
 
     print("Extracting word/phrase occurrences (local indices, no Tanakh offset)...")
     word_occ, phrase_occ = {}, {}
@@ -173,9 +174,11 @@ def main():
 
     print(f"  {len(word_occ)} distinct words, {len(phrase_occ)} distinct phrases")
     json.dump([[w, o] for w, o in word_occ.items()],
-              open(os.path.join(DATA_DIR, "mishnah-words.json"), "w", encoding="utf-8"), ensure_ascii=False)
+              open(os.path.join(DATA_DIR, "mishnah-words.json"), "w", encoding="utf-8"),
+              ensure_ascii=False, separators=(",", ":"))
     json.dump([[w, o] for w, o in phrase_occ.items()],
-              open(os.path.join(DATA_DIR, "mishnah-phrases.json"), "w", encoding="utf-8"), ensure_ascii=False)
+              open(os.path.join(DATA_DIR, "mishnah-phrases.json"), "w", encoding="utf-8"),
+              ensure_ascii=False, separators=(",", ":"))
     print("Done.")
 
 
