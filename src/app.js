@@ -4,8 +4,11 @@ import { findNotableValue } from "./notable-values.js";
 import { POPULAR_NUMBERS, POPULAR_PHRASES } from "./popular-searches.js";
 
 const PAGE_SIZE = 100;
-// Must match MAX_OCC used when the Hebrew data files were generated — once an
-// item's occurrence list reaches this length we show "N+" instead of "N".
+// Default occurrence cap — must match MAX_OCC used when a corpus's data
+// files were generated, once an item's occurrence list reaches this length
+// we show "N+" instead of "N". Most corpora use this default; a corpus
+// that used a different cap (see scripts/build_mishneh_torah.py) says so
+// via its own `occCap` in data.js's CORPORA.
 const OCC_CAP = 8;
 const DEFAULT_VALUE = "יאשיהו דוד עזריאל לישאביץ";
 const RECENT_KEY = "gematria:recentSearches";
@@ -225,6 +228,8 @@ function renderTabs() {
 
 function renderResultsList() {
   const tab = state.activeTab;
+  const corpus = CORPORA.find((c) => c.key === state.corpus);
+  const occCap = corpus.occCap ?? OCC_CAP;
   const corpusData = state.datasets[state.corpus];
   const dataset = corpusData[tab];
   let indices = state.matches[tab];
@@ -268,7 +273,7 @@ function renderResultsList() {
           const enStart = occ.length > 3 ? occ[3] : -1;
           const enEnd = occ.length > 3 ? occ[4] : -1;
           const passage = passageDataset.items[passageIndex];
-          const capped = occurrences.length >= OCC_CAP;
+          const capped = occurrences.length >= occCap;
           const label =
             capped ? `${occurrences.length}+ occurrences found`
               : occurrences.length === 1 ? "Only occurrence found"

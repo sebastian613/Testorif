@@ -46,7 +46,14 @@ import urllib.request
 REPO_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 DATA_DIR = os.path.join(REPO_ROOT, "data")
 CACHE_DIR = os.path.join(REPO_ROOT, ".cache", "mishneh_torah_raw")
-MAX_OCC = 8  # matches the cap used for hebrew-words.json/mishnah-words.json
+# Lower than the 8 used for hebrew-words.json/mishnah-words.json: Mishneh
+# Torah's halachot run much longer per passage than a Tanakh verse or a
+# mishnah, so it has far more distinct two-word phrases despite fewer
+# passages — at a cap of 8 the phrases file alone was too large to publish
+# to some hosting targets even split across two files. src/data.js's
+# CORPORA entry for this corpus carries a matching `occCap: 3` so the
+# app's "N+ occurrences found" display doesn't overstate its precision.
+MAX_OCC = 3
 
 # Candidate Hebrew version titles to try per treatise, in order — the
 # first one that comes back license == "Public Domain" wins. A treatise
@@ -283,7 +290,8 @@ def main():
                     "text": text,
                 })
     print(f"  {len(passages)} halachot")
-    json.dump(passages, open(os.path.join(DATA_DIR, "mishneh-torah.json"), "w", encoding="utf-8"), ensure_ascii=False)
+    json.dump(passages, open(os.path.join(DATA_DIR, "mishneh-torah.json"), "w", encoding="utf-8"),
+              ensure_ascii=False, separators=(",", ":"))
 
     print("Extracting word/phrase occurrences (local indices, no offset against any other corpus)...")
     word_occ, phrase_occ = {}, {}
@@ -302,7 +310,8 @@ def main():
 
     print(f"  {len(word_occ)} distinct words, {len(phrase_occ)} distinct phrases")
     json.dump([[w, o] for w, o in word_occ.items()],
-              open(os.path.join(DATA_DIR, "mishneh-torah-words.json"), "w", encoding="utf-8"), ensure_ascii=False)
+              open(os.path.join(DATA_DIR, "mishneh-torah-words.json"), "w", encoding="utf-8"),
+              ensure_ascii=False, separators=(",", ":"))
 
     # The phrases list alone is too large for some hosting targets as one
     # file (Mishneh Torah's halachot run much longer per passage than a

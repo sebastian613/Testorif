@@ -342,6 +342,17 @@ freed version, or a license getting revoked — is noticed at build time
 rather than silently changing what's in the corpus. The result: 79 of 88
 treatises, 14,622 halachot.
 
+One more difference from `build_mishnah.py`: this corpus caps stored
+occurrences per word/phrase at 3, not the 8 every other corpus uses.
+Mishneh Torah's halachot run much longer per passage than a Tanakh verse
+or a mishnah, so despite having fewer passages than either it has far more
+distinct two-word phrases — enough that even split across two files, a
+cap of 8 pushed the total published size over what some hosting targets
+allow. `src/data.js`'s `CORPORA` entry for this corpus carries a matching
+`occCap: 3` so `src/app.js`'s "N+ occurrences found" display uses the
+right threshold instead of assuming every corpus was built with the same
+cap.
+
 `data/tanakh.json`, `data/hebrew-words.json`, and `data/hebrew-phrases.json`
 are generated from two sources, not hand-written:
 
