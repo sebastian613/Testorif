@@ -142,10 +142,7 @@ header h1 {
   color: var(--accent);
 }
 
-.cipher-badges {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-  gap: 10px;
+.value-display {
   margin: 24px 0;
 }
 
@@ -164,21 +161,18 @@ header h1 {
   font-variant-numeric: tabular-nums;
 }
 
-.cipher-badge {
+.value-card {
   position: relative;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
   gap: 3px;
-  padding: 12px 14px;
+  padding: 14px 16px;
   border: 1px solid var(--border);
   border-radius: 12px;
   background: var(--card);
   color: var(--fg);
-  cursor: pointer;
-  text-align: start;
-  font-family: inherit;
-  transition: border-color 0.15s ease;
+  cursor: default;
 }
 
 [data-tooltip] {
@@ -210,38 +204,24 @@ header h1 {
   direction: ltr;
 }
 
-.cipher-badge:disabled {
-  cursor: default;
-  opacity: 0.5;
-}
-
-.cipher-badge:not(:disabled):hover {
-  border-color: var(--accent);
-}
-
-.cipher-badge.active {
-  border-color: var(--accent);
-  background: var(--accent);
-  color: var(--accent-fg);
-}
-
-.cipher-label {
+.value-label {
   font-size: 0.85rem;
   font-weight: 700;
 }
 
-.cipher-sub {
+.value-sub {
   font-size: 0.7rem;
   text-transform: uppercase;
   letter-spacing: 0.03em;
   opacity: 0.75;
 }
 
-.cipher-value {
-  font-size: 1.5rem;
+.value-number {
+  font-size: 1.8rem;
   font-weight: 700;
   font-variant-numeric: tabular-nums;
   font-family: "Assistant", sans-serif;
+  color: var(--accent);
 }
 
 .results-section {
@@ -368,41 +348,6 @@ header h1 {
   flex-wrap: wrap;
 }
 
-.own-value-badge {
-  display: inline-block;
-  font-family: "Assistant", sans-serif;
-  font-size: 0.7rem;
-  font-weight: 700;
-  letter-spacing: 0.02em;
-  color: var(--accent-fg);
-  background: var(--accent);
-  border-radius: 999px;
-  padding: 2px 9px;
-  cursor: default;
-  direction: ltr;
-  font-variant-numeric: tabular-nums;
-}
-
-.connections-badge {
-  display: inline-block;
-  font-family: "Assistant", sans-serif;
-  font-size: 0.68rem;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.03em;
-  color: var(--accent);
-  background: var(--accent-soft);
-  border-radius: 999px;
-  padding: 2px 8px;
-  cursor: default;
-  direction: ltr;
-}
-
-.verse-ref .own-value-badge,
-.verse-ref .connections-badge {
-  margin-inline-start: 8px;
-}
-
 .result-citation {
   margin-top: 10px;
   padding: 10px 14px;
@@ -524,21 +469,14 @@ footer {
     white-space: normal;
   }
 
-  .cipher-badges {
-    grid-template-columns: repeat(3, 1fr);
-    gap: 6px;
+  .value-display {
     margin: 16px 0;
   }
 
-  .cipher-badge {
+  .value-card {
     break-inside: avoid;
     box-shadow: none;
-  }
-
-  .cipher-badge.active {
     border: 2px solid var(--fg);
-    background: #ffffff;
-    color: var(--fg);
   }
 
   .results-list {

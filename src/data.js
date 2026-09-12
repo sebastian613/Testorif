@@ -1,4 +1,4 @@
-import { HE_CIPHER_KEYS, computeHebrewCipherVector } from "./gematria.js";
+import { computeHechrachi } from "./gematria.js";
 
 const FILES = {
   words: "data/hebrew-words.json",
@@ -15,9 +15,9 @@ const TEXT_OF = {
 export { TEXT_OF as textOf };
 
 /**
- * Loads the word/phrase/verse datasets and precomputes gematria values for
- * every cipher so lookups are a simple array scan instead of recomputing
- * gematria on every keystroke.
+ * Loads the word/phrase/verse datasets and precomputes each item's Standard
+ * Value so lookups are a simple array scan instead of recomputing gematria
+ * on every keystroke.
  */
 export async function loadDatasets(onProgress) {
   const report = (msg) => onProgress && onProgress(msg);
@@ -30,14 +30,10 @@ export async function loadDatasets(onProgress) {
   ]);
 
   report("Building the gematria index…");
-  const wordIndex = buildIndex(words, TEXT_OF.words);
-  const phraseIndex = buildIndex(phrases, TEXT_OF.phrases);
-  const verseIndex = buildIndex(verses, TEXT_OF.verses);
-
   return {
-    words: { items: words, ...wordIndex },
-    phrases: { items: phrases, ...phraseIndex },
-    verses: { items: verses, ...verseIndex },
+    words: { items: words, values: buildIndex(words, TEXT_OF.words) },
+    phrases: { items: phrases, values: buildIndex(phrases, TEXT_OF.phrases) },
+    verses: { items: verses, values: buildIndex(verses, TEXT_OF.verses) },
   };
 }
 
@@ -48,36 +44,24 @@ async function fetchJson(path) {
 }
 
 /**
- * Builds one Float64Array per cipher holding the precomputed value for every
+ * Builds one Int32Array holding the precomputed Standard Value for every
  * item (parallel to `items`), so a match query is a single linear scan.
- * Float64 (not Int32) because systems like Total Squared (klali) can exceed
- * the 32-bit range for long search input, and JS numbers stay exact up to
- * 2^53 either way.
  */
 function buildIndex(items, getText) {
   const n = items.length;
-  const values = {};
-  for (const key of HE_CIPHER_KEYS) values[key] = new Float64Array(n);
-
-  for (let i = 0; i < n; i++) {
-    const vec = computeHebrewCipherVector(getText(items[i]));
-    for (let c = 0; c < HE_CIPHER_KEYS.length; c++) {
-      values[HE_CIPHER_KEYS[c]][i] = vec[c];
-    }
-  }
-
-  return { values };
+  const values = new Int32Array(n);
+  for (let i = 0; i < n; i++) values[i] = computeHechrachi(getText(items[i]));
+  return values;
 }
 
 /**
- * Finds every item whose precomputed value for `cipherKey` equals `target`.
+ * Finds every item whose precomputed Standard Value equals `target`.
  * @returns {number[]} matching indices into the original items array
  */
-export function findMatches(index, cipherKey, target) {
-  const arr = index.values[cipherKey];
+export function findMatches(values, target) {
   const matches = [];
-  for (let i = 0; i < arr.length; i++) {
-    if (arr[i] === target) matches.push(i);
+  for (let i = 0; i < values.length; i++) {
+    if (values[i] === target) matches.push(i);
   }
   return matches;
 }

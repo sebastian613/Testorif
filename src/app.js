@@ -1,8 +1,6 @@
-import { HE_CIPHERS, HE_CIPHER_KEYS, computeAllHebrewCiphers, stripToHebrewLetters, numberToHebrewNumeral } from "./gematria.js";
+import { HECHRACHI_INFO, computeHechrachi, stripToHebrewLetters, numberToHebrewNumeral } from "./gematria.js";
 import { loadDatasets, findMatches, textOf } from "./data.js";
 import { findNotableValue } from "./notable-values.js";
-
-const CIPHER_LABELS = Object.fromEntries(HE_CIPHERS.map((c) => [c.key, c.label]));
 
 const PAGE_SIZE = 100;
 // Must match MAX_OCC used when the Hebrew data files were generated — once an
@@ -17,9 +15,8 @@ const TAB_LABELS = { words: "Words", phrases: "Phrases", verses: "Verses (Tanakh
 const state = {
   datasets: null,
   inputValue: DEFAULT_VALUE,
-  activeCipher: HE_CIPHERS[0].key,
   activeTab: "words",
-  values: null,
+  value: null,
   matches: { words: [], phrases: [], verses: [] },
   visibleCount: { words: PAGE_SIZE, phrases: PAGE_SIZE, verses: PAGE_SIZE },
   filterText: "",
@@ -31,7 +28,7 @@ const el = {
   status: document.getElementById("status"),
   numeralHint: document.getElementById("numeral-hint"),
   notableValue: document.getElementById("notable-value"),
-  cipherBadges: document.getElementById("cipher-badges"),
+  valueDisplay: document.getElementById("value-display"),
   resultsSection: document.getElementById("results-section"),
   tabs: document.getElementById("tabs"),
   filterInput: document.getElementById("filter-input"),
@@ -95,34 +92,31 @@ function recompute() {
   const text = el.nameInput.value;
   const trimmed = text.trim();
   if (!trimmed || !state.datasets) {
-    state.values = null;
+    state.value = null;
     renderNumeralHint(null);
     el.resultsSection.hidden = true;
-    renderCipherBadges();
+    renderValueDisplay();
     return;
   }
 
   if (/^\d+$/.test(trimmed)) {
     // A plain number is the target value itself — searched the same way a
-    // word's computed value would be, under whichever system you pick, not
-    // spelled out and recomputed from letters.
-    const n = parseInt(trimmed, 10);
-    state.values = {};
-    for (const key of HE_CIPHER_KEYS) state.values[key] = n;
-    renderNumeralHint(numberToHebrewNumeral(n));
+    // word's computed value would be, not spelled out and recomputed.
+    state.value = parseInt(trimmed, 10);
+    renderNumeralHint(numberToHebrewNumeral(state.value));
   } else {
-    state.values = computeAllHebrewCiphers(text);
+    state.value = computeHechrachi(text);
     renderNumeralHint(null);
   }
 
-  renderCipherBadges();
+  renderValueDisplay();
   renderNotableValue();
   recomputeMatches();
   el.resultsSection.hidden = false;
 }
 
 function renderNotableValue() {
-  const found = state.values ? findNotableValue(state.activeCipher, state.values[state.activeCipher]) : null;
+  const found = state.value !== null ? findNotableValue(state.value) : null;
   if (!found) {
     el.notableValue.hidden = true;
     return;
@@ -131,45 +125,34 @@ function renderNotableValue() {
   el.notableValue.innerHTML = `<strong>${found.value}</strong> is traditionally associated with ${escapeHtml(found.note)}`;
 }
 
-function renderCipherBadges() {
-  el.cipherBadges.innerHTML = "";
-  for (const cipher of HE_CIPHERS) {
-    const btn = document.createElement("button");
-    btn.type = "button";
-    btn.className = "cipher-badge" + (cipher.key === state.activeCipher ? " active" : "");
-    const value = state.values ? state.values[cipher.key] : null;
-    btn.innerHTML = `<span class="cipher-label">${cipher.label}</span>` +
-      `<span class="cipher-sub" dir="rtl">${cipher.sub}</span>` +
-      `<span class="cipher-value">${value === null ? "–" : value}</span>`;
-    btn.disabled = !state.values;
-    btn.dataset.tooltip = cipher.formula;
-    btn.setAttribute("aria-label", `${cipher.label}: ${cipher.formula}`);
-    btn.addEventListener("click", () => {
-      state.activeCipher = cipher.key;
-      renderCipherBadges();
-      renderNotableValue();
-      recomputeMatches();
-    });
-    el.cipherBadges.appendChild(btn);
-  }
+function renderValueDisplay() {
+  el.valueDisplay.innerHTML = "";
+  const card = document.createElement("div");
+  card.className = "value-card";
+  card.dataset.tooltip = HECHRACHI_INFO.formula;
+  card.setAttribute("aria-label", `${HECHRACHI_INFO.label}: ${HECHRACHI_INFO.formula}`);
+  card.innerHTML =
+    `<span class="value-label">${HECHRACHI_INFO.label}</span>` +
+    `<span class="value-sub" dir="rtl">${HECHRACHI_INFO.sub}</span>` +
+    `<span class="value-number">${state.value === null ? "–" : state.value}</span>`;
+  el.valueDisplay.appendChild(card);
 }
 
 function recomputeMatches() {
   const datasets = state.datasets;
-  if (!state.values || !datasets) return;
+  if (state.value === null || !datasets) return;
 
-  const cipherKey = state.activeCipher;
-  const target = state.values[cipherKey];
+  const target = state.value;
   const { words, phrases, verses } = datasets;
   const selfKey = stripToHebrewLetters(el.nameInput.value.trim());
 
-  state.matches.words = findMatches(words, cipherKey, target).filter(
+  state.matches.words = findMatches(words.values, target).filter(
     (i) => textOf.words(words.items[i]) !== selfKey
   );
-  state.matches.phrases = findMatches(phrases, cipherKey, target).filter(
+  state.matches.phrases = findMatches(phrases.values, target).filter(
     (i) => textOf.phrases(phrases.items[i]) !== selfKey
   );
-  state.matches.verses = findMatches(verses, cipherKey, target);
+  state.matches.verses = findMatches(verses.values, target);
 
   resetVisibleCount();
   renderTabs();
@@ -207,8 +190,8 @@ function renderResultsList() {
     indices = indices.filter((i) => textOf[tab](dataset.items[i]).toLowerCase().includes(state.filterText));
   }
 
-  el.resultsMeta.textContent = state.values
-    ? `${TAB_LABELS[tab]} — ${indices.length} match${indices.length === 1 ? "" : "es"} for value ${state.values[state.activeCipher]}`
+  el.resultsMeta.textContent = state.value !== null
+    ? `${TAB_LABELS[tab]} — ${indices.length} match${indices.length === 1 ? "" : "es"} for value ${state.value}`
     : "";
 
   const visible = indices.slice(0, state.visibleCount[tab]);
@@ -221,20 +204,17 @@ function renderResultsList() {
     el.resultsList.appendChild(empty);
   } else {
     const verseDataset = state.datasets.verses;
-    const ownValueBadge = renderOwnValueBadge();
     for (const i of visible) {
       const li = document.createElement("li");
       const item = dataset.items[i];
-      const connections = renderConnectionsBadge(dataset, i);
       if (tab === "verses") {
-        li.innerHTML = renderVerseBlock(item, ownValueBadge + connections);
+        li.innerHTML = renderVerseBlock(item);
       } else {
         const headline = document.createElement("div");
         headline.className = "result-headline";
         headline.dir = "rtl";
         headline.textContent = textOf[tab](item);
         li.appendChild(headline);
-        li.insertAdjacentHTML("beforeend", ownValueBadge + connections);
 
         const occurrences = item[1];
         if (occurrences && occurrences.length) {
@@ -272,53 +252,9 @@ function renderResultsList() {
   el.loadMoreBtn.hidden = visible.length >= indices.length;
 }
 
-/**
- * Every result in the list matches the search on the active cipher by
- * definition — but nothing else on the card ever showed that number (the
- * connections badge deliberately excludes it), so a card full of *other*
- * systems' values could look like the search returned the wrong thing.
- * This makes the one number that actually matters impossible to miss.
- */
-function renderOwnValueBadge() {
-  const cipher = HE_CIPHERS.find((c) => c.key === state.activeCipher);
-  return `<span class="own-value-badge">${escapeHtml(cipher.label)}: ${state.values[state.activeCipher]}</span>`;
-}
-
-// Total Squared (klali) is hechrachi², and Integral Reduced (katanMispari)
-// is digitalRoot(hechrachi) — both are pure functions of Standard Value, and
-// klali's square is invertible (for positive integers), so within either of
-// these two systems the other two are ALWAYS also going to match: that's
-// not a coincidence worth flagging, just arithmetic. (Integral Reduced runs
-// the other way — many different Standard Values share a digital root — so
-// it doesn't force the other two, and stays a real, interesting connection.)
-const DETERMINISTIC_SIBLINGS = {
-  hechrachi: ["klali", "katanMispari"],
-  klali: ["hechrachi", "katanMispari"],
-};
-
-/**
- * A result already matches the search on the active cipher (that's why it's
- * a result) — this checks whether it *also* matches on any of the other
- * systems, which (outside the guaranteed pairs above) is a much rarer
- * coincidence worth calling out.
- */
-function renderConnectionsBadge(dataset, i) {
-  const skip = new Set([state.activeCipher, ...(DETERMINISTIC_SIBLINGS[state.activeCipher] || [])]);
-  const extra = [];
-  for (const key of HE_CIPHER_KEYS) {
-    if (skip.has(key)) continue;
-    if (dataset.values[key][i] === state.values[key]) extra.push(key);
-  }
-  if (extra.length === 0) return "";
-
-  const tooltip = extra.map((key) => `${CIPHER_LABELS[key]} (${dataset.values[key][i]})`).join(", ");
-  const label = extra.length === 1 ? "+1 system" : `+${extra.length} systems`;
-  return `<span class="connections-badge" data-tooltip="Also matches on: ${escapeHtml(tooltip)}">${label}</span>`;
-}
-
-function renderVerseBlock(v, connections = "") {
+function renderVerseBlock(v) {
   return (
-    `<span class="verse-ref">${escapeHtml(v.ref)}${connections}</span>` +
+    `<span class="verse-ref">${escapeHtml(v.ref)}</span>` +
     `<span class="verse-text" dir="rtl">${escapeHtml(v.text)}</span>` +
     (v.en
       ? `<span class="lang-label">JPS 1917 translation</span><span class="verse-text verse-text-en" dir="ltr">${escapeHtml(v.en)}</span>`
