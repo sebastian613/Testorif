@@ -4,9 +4,9 @@
   --bg-alt: #efe7d3;
   --fg: #2a2013;
   --muted: #857a5f;
-  --accent: #1f5c86;
-  --accent-fg: #f6f1e4;
-  --accent-soft: #dce9f0;
+  --accent: #a63e12;
+  --accent-fg: #fbf3e7;
+  --accent-soft: #f3dfcb;
   --card: #fffdf7;
   --border: #e2d6b8;
 }
@@ -17,9 +17,9 @@
     --bg-alt: #241d13;
     --fg: #ece3cd;
     --muted: #a89a78;
-    --accent: #6fa8cf;
-    --accent-fg: #14202a;
-    --accent-soft: #24374a;
+    --accent: #e8935a;
+    --accent-fg: #20140b;
+    --accent-soft: #3a2416;
     --card: #241d13;
     --border: #3c3220;
   }
@@ -45,6 +45,12 @@ body {
 header {
   text-align: center;
   margin-bottom: 28px;
+}
+
+.brand-mark {
+  height: 44px;
+  width: auto;
+  margin-bottom: 6px;
 }
 
 .eyebrow {
@@ -500,15 +506,24 @@ footer {
   text-align: center;
 }
 
+.brand-footer {
+  margin: 10px 0 0;
+  font-family: "Frank Ruhl Libre", serif;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  color: var(--accent);
+  font-size: 0.85rem;
+}
+
 @media print {
   :root {
     --bg: #ffffff;
     --bg-alt: #f4f1e8;
     --fg: #1a1a1a;
     --muted: #555555;
-    --accent: #1f5c86;
+    --accent: #a63e12;
     --accent-fg: #ffffff;
-    --accent-soft: #dce9f0;
+    --accent-soft: #f3dfcb;
     --card: #ffffff;
     --border: #cfc6a8;
   }

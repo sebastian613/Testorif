@@ -1,4 +1,4 @@
-# Gematria Calculator
+# Samizdaat — Gematria Calculator
 
 A static, browser-based app that calculates the **Standard Value** (Mispar
 Hechrachi) Hebrew gematria of a name or word and finds every word, phrase,
