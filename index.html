@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Torah Codes Matrix</title>
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<div class="app">
+
+  <header class="topbar">
+    <div class="brand">
+      <span class="brand-glyph">א</span>
+      <div class="brand-text">
+        <h1>Torah Codes Matrix</h1>
+        <p>Equal Letter Skip (ELS) search over the full text of the Torah</p>
+      </div>
+    </div>
+    <button id="theme-toggle" class="icon-btn" title="Toggle light/dark" aria-label="Toggle theme">◐</button>
+  </header>
+
+  <main class="layout">
+
+    <section class="panel search-panel">
+      <label class="field-label" for="term-input">Hebrew word or phrase</label>
+      <input id="term-input" class="hebrew-input" type="text" dir="rtl"
+             placeholder="לדוגמה: שלום" autocomplete="off" spellcheck="false">
+
+      <div class="gematria-row">
+        <div class="gematria-badge">
+          <span class="gematria-label">Gematria&nbsp;/&nbsp;Skip</span>
+          <span id="gematria-value" class="gematria-value">0</span>
+        </div>
+        <div class="letters-preview" id="letters-preview" aria-live="polite"></div>
+      </div>
+
+      <div class="controls-grid">
+        <div class="control">
+          <label for="rows-above">Rows above</label>
+          <input id="rows-above" type="number" min="0" max="60" value="12">
+        </div>
+        <div class="control">
+          <label for="rows-below">Rows below</label>
+          <input id="rows-below" type="number" min="0" max="60" value="12">
+        </div>
+        <div class="control">
+          <label for="min-length">Min. word length (found terms)</label>
+          <input id="min-length" type="range" min="2" max="7" value="4" step="1">
+          <span id="min-length-value" class="range-value">4</span>
+        </div>
+      </div>
+
+      <button id="search-btn" class="primary-btn">Build matrix</button>
+
+      <div id="search-status" class="search-status" role="status"></div>
+      <div id="occurrence-list" class="occurrence-list"></div>
+    </section>
+
+    <section class="panel matrix-panel">
+      <div class="matrix-toolbar">
+        <div class="legend" id="legend">
+          <label class="legend-item legend-term">
+            <span class="swatch swatch-term"></span> Your term
+          </label>
+          <label class="legend-item">
+            <input type="checkbox" data-cat="torah" checked>
+            <span class="swatch swatch-torah"></span> Torah / Biblical
+          </label>
+          <label class="legend-item">
+            <input type="checkbox" data-cat="rabbinic" checked>
+            <span class="swatch swatch-rabbinic"></span> Rabbinic
+          </label>
+          <label class="legend-item">
+            <input type="checkbox" data-cat="modern" checked>
+            <span class="swatch swatch-modern"></span> Modern
+          </label>
+        </div>
+        <div class="zoom-controls">
+          <button id="zoom-out" class="icon-btn" title="Zoom out">−</button>
+          <button id="zoom-reset" class="icon-btn" title="Reset view">⤾</button>
+          <button id="zoom-in" class="icon-btn" title="Zoom in">+</button>
+        </div>
+      </div>
+      <div class="canvas-wrap" id="canvas-wrap">
+        <canvas id="matrix-canvas"></canvas>
+        <div class="canvas-empty" id="canvas-empty">Enter a Hebrew word or phrase and press <strong>Build matrix</strong>.</div>
+        <div class="cell-tooltip" id="cell-tooltip" hidden></div>
+      </div>
+    </section>
+
+    <section class="panel found-panel">
+      <h2>Found in this matrix</h2>
+      <p class="panel-hint">Straight-line words (any of 8 directions) inside the current view.</p>
+      <div id="found-count" class="found-count"></div>
+      <ul id="found-list" class="found-list"></ul>
+    </section>
+
+  </main>
+
+  <footer class="app-footer">
+    <p>
+      Text source: Westminster Leningrad Codex via the
+      <a href="https://github.com/openscriptures/morphhb" target="_blank" rel="noopener">Open Scriptures Hebrew Bible</a>
+      project (ketiv, consonants only, spaces removed). Skip = standard mispar hechrachi gematria of your input.
+      ELS pattern-finding is a matter of ongoing debate among scholars and statisticians; this tool is presented
+      for study and exploration.
+    </p>
+  </footer>
+
+</div>
+<script type="module" src="js/app.js"></script>
+</body>
+</html>
