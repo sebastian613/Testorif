@@ -392,6 +392,35 @@ header h1 {
   flex-wrap: wrap;
 }
 
+.copy-btn {
+  font-family: "Assistant", sans-serif;
+  font-size: 0.68rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  color: var(--muted);
+  background: transparent;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  padding: 2px 9px;
+  cursor: pointer;
+}
+
+.copy-btn:hover:not(:disabled) {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+.copy-btn:disabled {
+  cursor: default;
+  color: var(--accent);
+  border-color: var(--accent);
+}
+
+.verse-ref .copy-btn {
+  margin-inline-start: 8px;
+}
+
 .result-citation {
   margin-top: 10px;
   padding: 10px 14px;
@@ -503,6 +532,7 @@ footer {
   .filter-input,
   .export-btn,
   .load-more,
+  .copy-btn,
   .tab {
     display: none !important;
   }

@@ -242,11 +242,13 @@ function renderResultsList() {
       const item = dataset.items[i];
       if (tab === "verses") {
         li.innerHTML = renderVerseBlock(item);
+        li.querySelector(".verse-ref").appendChild(makeCopyButton(() => buildCopyText("verse", item)));
       } else {
         const headline = document.createElement("div");
         headline.className = "result-headline";
         headline.dir = "rtl";
         headline.textContent = textOf[tab](item);
+        headline.appendChild(makeCopyButton(() => buildCopyText(tab, item, verseDataset)));
         li.appendChild(headline);
 
         const occurrences = item[1];
@@ -293,6 +295,69 @@ function renderVerseBlock(v) {
       ? `<span class="lang-label">JPS 1917 translation</span><span class="verse-text verse-text-en" dir="ltr">${escapeHtml(v.en)}</span>`
       : "")
   );
+}
+
+// --- Copy / share ------------------------------------------------------------
+
+/** Builds the plain-text summary a result's Copy button puts on the clipboard. */
+function buildCopyText(kind, item, verseDataset) {
+  if (kind === "verse") {
+    return [item.ref, item.text, item.en ? `JPS 1917: ${item.en}` : null].filter(Boolean).join("\n");
+  }
+  const [text, occurrences] = item;
+  const lines = [`${text} — ${HECHRACHI_INFO.label} ${state.value}`];
+  if (occurrences && occurrences.length) {
+    const verse = verseDataset.items[occurrences[0][0]];
+    lines.push(verse.ref, verse.text);
+    if (verse.en) lines.push(`JPS 1917: ${verse.en}`);
+  }
+  return lines.join("\n");
+}
+
+function makeCopyButton(getText) {
+  const btn = document.createElement("button");
+  btn.type = "button";
+  btn.className = "copy-btn";
+  btn.dir = "ltr";
+  btn.textContent = "Copy";
+  btn.addEventListener("click", async () => {
+    const ok = await writeClipboard(getText());
+    btn.textContent = ok ? "Copied!" : "Couldn't copy";
+    btn.disabled = true;
+    setTimeout(() => {
+      btn.textContent = "Copy";
+      btn.disabled = false;
+    }, 1500);
+  });
+  return btn;
+}
+
+/** navigator.clipboard is blocked in some sandboxed embeds (same class of
+ * issue as window.print() — see exportPdf) — fall back to the legacy
+ * execCommand("copy") path via a temporary offscreen textarea. */
+async function writeClipboard(text) {
+  try {
+    if (navigator.clipboard && window.isSecureContext) {
+      await navigator.clipboard.writeText(text);
+      return true;
+    }
+  } catch {
+    // fall through to the legacy fallback below
+  }
+  try {
+    const ta = document.createElement("textarea");
+    ta.value = text;
+    ta.style.position = "fixed";
+    ta.style.opacity = "0";
+    document.body.appendChild(ta);
+    ta.focus();
+    ta.select();
+    const ok = document.execCommand("copy");
+    document.body.removeChild(ta);
+    return ok;
+  } catch {
+    return false;
+  }
 }
 
 // --- Recent searches --------------------------------------------------------
