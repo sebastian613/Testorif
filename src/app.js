@@ -1,6 +1,7 @@
 import { HECHRACHI_INFO, computeHechrachi, stripToHebrewLetters, numberToHebrewNumeral } from "./gematria.js";
 import { loadDatasets, findMatches, textOf } from "./data.js";
 import { findNotableValue } from "./notable-values.js";
+import { POPULAR_NUMBERS, POPULAR_PHRASES } from "./popular-searches.js";
 
 const PAGE_SIZE = 100;
 // Must match MAX_OCC used when the Hebrew data files were generated — once an
@@ -36,6 +37,8 @@ const el = {
   resultsMeta: document.getElementById("results-meta"),
   loadMoreBtn: document.getElementById("load-more"),
   recentSearches: document.getElementById("recent-searches"),
+  popularNumbers: document.getElementById("popular-numbers"),
+  popularPhrases: document.getElementById("popular-phrases"),
   exportBtn: document.getElementById("export-pdf"),
 };
 
@@ -44,6 +47,7 @@ init();
 async function init() {
   wireInputs();
   renderRecentSearches();
+  renderPopularSearches();
 
   const params = new URLSearchParams(location.search);
   if (params.get("q")) state.inputValue = params.get("q");
@@ -77,7 +81,12 @@ function wireInputs() {
     recompute();
   }, 150));
 
-  el.nameInput.addEventListener("blur", () => commitRecentSearch());
+  // Deferred: blur fires synchronously on mousedown, before the browser
+  // dispatches mouseup/click — committing (and re-rendering) Recent
+  // Searches in place can shift page layout mid-click, so whatever the
+  // user was actually clicking below the input can miss its target. A
+  // macrotask lets the current click finish first.
+  el.nameInput.addEventListener("blur", () => setTimeout(commitRecentSearch, 0));
   el.nameInput.addEventListener("keydown", (e) => {
     if (e.key === "Enter") commitRecentSearch();
   });
@@ -324,19 +333,34 @@ function renderRecentSearches() {
   }
   el.recentSearches.hidden = false;
   for (const value of state.recentSearches) {
-    const btn = document.createElement("button");
-    btn.type = "button";
-    btn.className = "recent-chip";
-    btn.dir = "rtl";
-    btn.textContent = value;
-    btn.addEventListener("click", () => {
-      el.nameInput.value = value;
-      state.inputValue = value;
-      recompute();
-      commitRecentSearch();
-    });
-    el.recentSearches.appendChild(btn);
+    el.recentSearches.appendChild(makeSearchChip(value, "recent-chip", "rtl"));
   }
+}
+
+/** A search picked from Recent or Popular: fill the input, search, and remember it. */
+function selectSearch(value) {
+  el.nameInput.value = value;
+  state.inputValue = value;
+  recompute();
+  commitRecentSearch();
+}
+
+function makeSearchChip(value, className, dir) {
+  const btn = document.createElement("button");
+  btn.type = "button";
+  btn.className = className;
+  btn.dir = dir;
+  btn.textContent = value;
+  btn.addEventListener("click", () => selectSearch(value));
+  return btn;
+}
+
+function renderPopularSearches() {
+  el.popularNumbers.innerHTML = "";
+  for (const n of POPULAR_NUMBERS) el.popularNumbers.appendChild(makeSearchChip(n, "popular-chip", "ltr"));
+
+  el.popularPhrases.innerHTML = "";
+  for (const phrase of POPULAR_PHRASES) el.popularPhrases.appendChild(makeSearchChip(phrase, "popular-chip", "rtl"));
 }
 
 // --- Rendering helpers -------------------------------------------------------

@@ -142,6 +142,50 @@ header h1 {
   color: var(--accent);
 }
 
+.popular-searches {
+  margin-top: 14px;
+}
+
+.popular-searches summary {
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 0.9rem;
+  color: var(--accent);
+  font-family: "Assistant", sans-serif;
+}
+
+.popular-searches summary::marker {
+  color: var(--muted);
+}
+
+.chip-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 10px;
+}
+
+.chip-row:last-child {
+  margin-bottom: 4px;
+}
+
+.popular-chip {
+  padding: 5px 12px;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  background: var(--card);
+  color: var(--fg);
+  cursor: pointer;
+  font-family: "Frank Ruhl Libre", serif;
+  font-size: 0.9rem;
+  font-variant-numeric: tabular-nums;
+}
+
+.popular-chip:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
 .value-display {
   margin: 24px 0;
 }
@@ -454,6 +498,7 @@ footer {
   }
 
   #recent-searches,
+  .popular-searches,
   .status,
   .filter-input,
   .export-btn,
