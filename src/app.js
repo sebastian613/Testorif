@@ -1,4 +1,4 @@
-import { HE_CIPHERS, computeAllHebrewCiphers, stripToHebrewLetters, numberToHebrewNumeral } from "./gematria.js";
+import { HE_CIPHERS, HE_CIPHER_KEYS, computeAllHebrewCiphers, stripToHebrewLetters, numberToHebrewNumeral } from "./gematria.js";
 import { loadDatasets, findMatches, textOf } from "./data.js";
 
 const PAGE_SIZE = 100;
@@ -26,6 +26,7 @@ const state = {
 const el = {
   nameInput: document.getElementById("name-input"),
   status: document.getElementById("status"),
+  numeralHint: document.getElementById("numeral-hint"),
   cipherBadges: document.getElementById("cipher-badges"),
   resultsSection: document.getElementById("results-section"),
   tabs: document.getElementById("tabs"),
@@ -63,7 +64,6 @@ async function init() {
 
 function wireInputs() {
   el.nameInput.addEventListener("input", debounce(() => {
-    applyNumeralConversion();
     state.inputValue = el.nameInput.value;
     recompute();
   }, 150));
@@ -87,23 +87,30 @@ function wireInputs() {
   el.exportBtn.addEventListener("click", () => window.print());
 }
 
-/** If the input is plain digits, convert it in place to Hebrew numeral notation. */
-function applyNumeralConversion() {
-  const raw = el.nameInput.value.trim();
-  if (!/^\d+$/.test(raw)) return;
-  const converted = numberToHebrewNumeral(parseInt(raw, 10));
-  if (converted) el.nameInput.value = converted;
-}
-
 function recompute() {
   const text = el.nameInput.value;
-  if (!text.trim() || !state.datasets) {
+  const trimmed = text.trim();
+  if (!trimmed || !state.datasets) {
     state.values = null;
+    renderNumeralHint(null);
     el.resultsSection.hidden = true;
     renderCipherBadges();
     return;
   }
-  state.values = computeAllHebrewCiphers(text);
+
+  if (/^\d+$/.test(trimmed)) {
+    // A plain number is the target value itself — searched the same way a
+    // word's computed value would be, under whichever system you pick, not
+    // spelled out and recomputed from letters.
+    const n = parseInt(trimmed, 10);
+    state.values = {};
+    for (const key of HE_CIPHER_KEYS) state.values[key] = n;
+    renderNumeralHint(numberToHebrewNumeral(n));
+  } else {
+    state.values = computeAllHebrewCiphers(text);
+    renderNumeralHint(null);
+  }
+
   renderCipherBadges();
   recomputeMatches();
   el.resultsSection.hidden = false;
@@ -277,7 +284,8 @@ function saveRecentSearches() {
 
 function commitRecentSearch() {
   const value = el.nameInput.value.trim();
-  if (!value || !stripToHebrewLetters(value)) return;
+  const isNumeral = /^\d+$/.test(value);
+  if (!value || (!isNumeral && !stripToHebrewLetters(value))) return;
   state.recentSearches = [value, ...state.recentSearches.filter((v) => v !== value)].slice(0, RECENT_MAX);
   saveRecentSearches();
   renderRecentSearches();
@@ -307,6 +315,17 @@ function renderRecentSearches() {
 }
 
 // --- Rendering helpers -------------------------------------------------------
+
+function renderNumeralHint(hebrewNumeral) {
+  if (!hebrewNumeral) {
+    el.numeralHint.hidden = true;
+    return;
+  }
+  el.numeralHint.hidden = false;
+  el.numeralHint.innerHTML = `Searching for this value directly — traditionally written <span dir="rtl">${escapeHtml(
+    hebrewNumeral
+  )}</span>`;
+}
 
 function setStatus(message, loading, isError = false) {
   el.status.textContent = message;

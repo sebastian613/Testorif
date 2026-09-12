@@ -107,6 +107,18 @@ header h1 {
   color: #b5482f;
 }
 
+.numeral-hint {
+  margin: 10px 0 0;
+  color: var(--muted);
+  font-size: 0.85rem;
+}
+
+.numeral-hint span {
+  font-family: "Frank Ruhl Libre", serif;
+  color: var(--accent);
+  font-weight: 700;
+}
+
 .recent-searches {
   display: flex;
   flex-wrap: wrap;

@@ -59,10 +59,13 @@ One thing, done thoroughly: there is no other mode.
   wrong word. In practice this finds a confident highlight for about 44% of
   word occurrences and 15% of phrase occurrences (phrases need two
   independent unique matches, so the bar is higher).
-- **Numeral input**: typing a plain number (e.g. `613`) converts it in place
-  to standard Hebrew numeral notation (`תרי״ג`), including the traditional
-  ט״ו/ט״ז substitution for 15/16 (avoiding forms that resemble the divine
-  name), so you can jump straight to a value instead of a word.
+- **Numeral input**: a plain number (e.g. `613`) is searched exactly like a
+  word or phrase's computed value — it's used directly as the target under
+  whichever system you pick (so it shows the same number under all eleven
+  badges, since it wasn't derived from letters) rather than being spelled
+  out and recomputed. A small note underneath shows how it would
+  traditionally be written in Hebrew numerals (`תרי״ג`, with the customary
+  ט״ו/ט״ז substitution for 15/16) for reference only.
 - **Recent searches**: the last dozen searches are remembered (in
   `localStorage`, per browser) and shown as clickable chips for quick
   recall.
