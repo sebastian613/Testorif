@@ -9,7 +9,11 @@ const readJson = (name) => JSON.parse(readFileSync(path.join(DATA_DIR, name), "u
 
 const mishnehTorah = readJson("mishneh-torah.json");
 const mtWords = readJson("mishneh-torah-words.json");
-const mtPhrases = readJson("mishneh-torah-phrases.json");
+// Split across two files purely because one file is too large to publish
+// to some hosting targets — see scripts/build_mishneh_torah.py and
+// src/data.js's fetchJsonConcat. Concatenated back into one list here,
+// same as the app does at load time.
+const mtPhrases = [...readJson("mishneh-torah-phrases-1.json"), ...readJson("mishneh-torah-phrases-2.json")];
 
 test("mishneh-torah.json: 79 confirmed-Public-Domain treatises' worth of halachot present", () => {
   // 9 of the 88 treatises (4 introductory list-books, 5 of Sefer Ahavah's

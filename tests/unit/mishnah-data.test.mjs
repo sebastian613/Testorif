@@ -28,13 +28,19 @@ test("mishnah.json: every entry has a clean ref/he/text, no leftover markup, no 
   }
 });
 
-test("phrase entries are two space-separated words, in both corpora", () => {
+test("phrase entries are two space-separated words, in every corpus", () => {
   // Regression test: an earlier version of the Mishnah phrase extraction
   // concatenated the two words with no separator at all ("קוריןאת" instead
   // of "קורין את") — not just a display bug, since two genuinely different
   // word-pairs can concatenate to the exact same string and silently
   // collide into one (wrong) phrase entry once the space disappears.
-  for (const file of ["hebrew-phrases.json", "mishnah-phrases.json", "mishneh-torah-phrases.json"]) {
+  const files = [
+    "hebrew-phrases.json",
+    "mishnah-phrases.json",
+    "mishneh-torah-phrases-1.json",
+    "mishneh-torah-phrases-2.json",
+  ];
+  for (const file of files) {
     const phrases = readJson(file);
     for (const [phrase] of phrases) {
       assert.equal((phrase.match(/ /g) || []).length, 1, `${file}: "${phrase}" should be exactly two words`);

@@ -22,7 +22,11 @@ export const CORPORA = [
     label: "Mishneh Torah",
     files: {
       words: "data/mishneh-torah-words.json",
-      phrases: "data/mishneh-torah-phrases.json",
+      // Split across two files: one file would be too large to publish to
+      // some hosting targets (see scripts/build_mishneh_torah.py) — see
+      // fetchJsonConcat in loadDatasets below for how a corpus file entry
+      // can be an array of shards instead of one path.
+      phrases: ["data/mishneh-torah-phrases-1.json", "data/mishneh-torah-phrases-2.json"],
       passages: "data/mishneh-torah.json",
     },
   },
@@ -49,9 +53,9 @@ export async function loadDatasets(onProgress) {
   const loaded = await Promise.all(
     CORPORA.map(async (corpus) => {
       const [words, phrases, passages] = await Promise.all([
-        fetchJson(corpus.files.words),
-        fetchJson(corpus.files.phrases),
-        fetchJson(corpus.files.passages),
+        fetchJsonConcat(corpus.files.words),
+        fetchJsonConcat(corpus.files.phrases),
+        fetchJsonConcat(corpus.files.passages),
       ]);
       return [corpus.key, { words, phrases, passages }];
     })
@@ -73,6 +77,19 @@ async function fetchJson(path) {
   const res = await fetch(path);
   if (!res.ok) throw new Error(`Failed to load ${path}: ${res.status}`);
   return res.json();
+}
+
+/**
+ * A corpus file entry is normally a single path, but a large corpus can
+ * split one logical dataset (e.g. a huge phrases list) across several
+ * physical files — a publishing-size concern, not a data-shape one — by
+ * giving an array of paths instead. Either way this returns one combined
+ * array, so callers never need to know whether a corpus is sharded.
+ */
+async function fetchJsonConcat(pathOrPaths) {
+  if (!Array.isArray(pathOrPaths)) return fetchJson(pathOrPaths);
+  const parts = await Promise.all(pathOrPaths.map(fetchJson));
+  return parts.flat();
 }
 
 /**

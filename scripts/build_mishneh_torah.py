@@ -303,8 +303,22 @@ def main():
     print(f"  {len(word_occ)} distinct words, {len(phrase_occ)} distinct phrases")
     json.dump([[w, o] for w, o in word_occ.items()],
               open(os.path.join(DATA_DIR, "mishneh-torah-words.json"), "w", encoding="utf-8"), ensure_ascii=False)
-    json.dump([[w, o] for w, o in phrase_occ.items()],
-              open(os.path.join(DATA_DIR, "mishneh-torah-phrases.json"), "w", encoding="utf-8"), ensure_ascii=False)
+
+    # The phrases list alone is too large for some hosting targets as one
+    # file (Mishneh Torah's halachot run much longer per passage than a
+    # Tanakh verse or a mishnah, so it has far more distinct two-word
+    # spans than either despite fewer passages). Split it across two files
+    # of roughly equal size; src/data.js's CORPORA entry for this corpus
+    # lists both, and loadDatasets fetches and concatenates them
+    # transparently — this is a publishing-size split, not a data-shape
+    # one, so both shards are committed and neither is a derived/cache
+    # artifact.
+    phrase_items = [[w, o] for w, o in phrase_occ.items()]
+    midpoint = len(phrase_items) // 2
+    shards = [phrase_items[:midpoint], phrase_items[midpoint:]]
+    for i, shard in enumerate(shards, start=1):
+        json.dump(shard, open(os.path.join(DATA_DIR, f"mishneh-torah-phrases-{i}.json"), "w", encoding="utf-8"),
+                   ensure_ascii=False, separators=(",", ":"))
     print("Done.")
     print(f"Skipped (no confirmed Public Domain Hebrew version): {', '.join(sorted(skipped))}")
 
