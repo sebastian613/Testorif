@@ -6,7 +6,7 @@ const PAGE_SIZE = 100;
 // Must match MAX_OCC used when the Hebrew data files were generated — once an
 // item's occurrence list reaches this length we show "N+" instead of "N".
 const OCC_CAP = 8;
-const DEFAULT_VALUE = "דוד";
+const DEFAULT_VALUE = "יאשיהו דוד עזריאל לישאביץ";
 const RECENT_KEY = "gematria:recentSearches";
 const RECENT_MAX = 12;
 
