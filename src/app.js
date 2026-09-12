@@ -221,19 +221,20 @@ function renderResultsList() {
     el.resultsList.appendChild(empty);
   } else {
     const verseDataset = state.datasets.verses;
+    const ownValueBadge = renderOwnValueBadge();
     for (const i of visible) {
       const li = document.createElement("li");
       const item = dataset.items[i];
       const connections = renderConnectionsBadge(dataset, i);
       if (tab === "verses") {
-        li.innerHTML = renderVerseBlock(item, connections);
+        li.innerHTML = renderVerseBlock(item, ownValueBadge + connections);
       } else {
         const headline = document.createElement("div");
         headline.className = "result-headline";
         headline.dir = "rtl";
         headline.textContent = textOf[tab](item);
         li.appendChild(headline);
-        if (connections) li.insertAdjacentHTML("beforeend", connections);
+        li.insertAdjacentHTML("beforeend", ownValueBadge + connections);
 
         const occurrences = item[1];
         if (occurrences && occurrences.length) {
@@ -269,6 +270,18 @@ function renderResultsList() {
   }
 
   el.loadMoreBtn.hidden = visible.length >= indices.length;
+}
+
+/**
+ * Every result in the list matches the search on the active cipher by
+ * definition — but nothing else on the card ever showed that number (the
+ * connections badge deliberately excludes it), so a card full of *other*
+ * systems' values could look like the search returned the wrong thing.
+ * This makes the one number that actually matters impossible to miss.
+ */
+function renderOwnValueBadge() {
+  const cipher = HE_CIPHERS.find((c) => c.key === state.activeCipher);
+  return `<span class="own-value-badge">${escapeHtml(cipher.label)}: ${state.values[state.activeCipher]}</span>`;
 }
 
 // Total Squared (klali) is hechrachi², and Integral Reduced (katanMispari)

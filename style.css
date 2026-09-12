@@ -368,6 +368,21 @@ header h1 {
   flex-wrap: wrap;
 }
 
+.own-value-badge {
+  display: inline-block;
+  font-family: "Assistant", sans-serif;
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  color: var(--accent-fg);
+  background: var(--accent);
+  border-radius: 999px;
+  padding: 2px 9px;
+  cursor: default;
+  direction: ltr;
+  font-variant-numeric: tabular-nums;
+}
+
 .connections-badge {
   display: inline-block;
   font-family: "Assistant", sans-serif;
@@ -383,6 +398,7 @@ header h1 {
   direction: ltr;
 }
 
+.verse-ref .own-value-badge,
 .verse-ref .connections-badge {
   margin-inline-start: 8px;
 }
