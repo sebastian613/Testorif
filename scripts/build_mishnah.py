@@ -1,8 +1,11 @@
 #!/usr/bin/env python3
-"""Fetches the Mishnah's Hebrew text from Sefaria's public GCS export,
-builds data/mishnah.json (in the same {ref, he, text} shape as
-data/tanakh.json), and merges its word/phrase occurrences into
-data/hebrew-words.json and data/hebrew-phrases.json.
+"""Fetches the Mishnah's Hebrew text from Sefaria (the "Torat Emet 357"
+version specifically — see below) and builds three standalone files:
+data/mishnah.json, data/mishnah-words.json, data/mishnah-phrases.json.
+These are a self-contained second corpus, kept separate from
+data/tanakh.json / hebrew-words.json / hebrew-phrases.json rather than
+merged into them, so Mishnah search stays a distinct corpus the app can
+switch to rather than blending into Tanakh results.
 
 Run from the repo root: python3 scripts/build_mishnah.py
 
@@ -10,17 +13,20 @@ Idempotent-ish: cached raw fetches live in .cache/mishnah_raw/ so re-runs
 after a partial failure don't re-fetch tractates already saved. Delete that
 directory to force a clean re-fetch.
 
-Sefaria's license for the Mishnah's Hebrew text is set per tractate, not
-once for the whole work, and the split is lopsided: only 25 of 63 tractates
-are CC-BY (freely reusable, commercial included) — see CC_BY_NC_TRACTATES
-below for the other 38, which are CC-BY-NC (fine to show in this free app,
-not for a print/commercial product). The GCS export used here doesn't carry
-the license inline, so this list was captured once from
-https://www.sefaria.org/api/texts/<title>?context=0's "license" field
-during initial development — re-verify before relying on it if Sefaria's
-licensing terms could have changed since. This script does NOT fetch or
-attach any English translation: Mishnah citations in the app show the
-original Hebrew only. See the "Corpora" section of the README for why.
+Why "Torat Emet 357" specifically: Sefaria hosts several independent
+Hebrew versions per tractate, and this app's earlier attempt used whichever
+one Sefaria's own "merged"/default text happens to prioritize — which
+turned out to be CC-BY-NC for 38 of the 63 tractates (see git history).
+Checking a tractate's available versions
+(https://www.sefaria.org/api/texts/versions/Mishnah_<title>) shows several
+independent options, at least two of which are Public Domain for every
+tractate checked: "Torat Emet 357" (vocalized, matching the style already
+used for Tanakh) and "Mishnah, ed. Romm, Vilna 1913" (unvocalized). This
+script uses Torat Emet 357 for visual consistency with the Tanakh text
+already shown elsewhere in the app. Confirmed Public Domain on a spot check
+across all six sedarim before adopting it; the license is version-specific
+and worth re-verifying (via the versions endpoint above) if Sefaria's
+licensing terms could have changed since.
 """
 import json
 import os
@@ -33,12 +39,13 @@ import urllib.request
 REPO_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 DATA_DIR = os.path.join(REPO_ROOT, "data")
 CACHE_DIR = os.path.join(REPO_ROOT, ".cache", "mishnah_raw")
-MAX_OCC = 8  # must match the cap already baked into hebrew-words.json/hebrew-phrases.json
+MAX_OCC = 8  # matches the cap used for hebrew-words.json/hebrew-phrases.json
+VERSION_TITLE = "Torat Emet 357"
 
-# (Sefaria's GCS folder name for the seder, tractate name, real chapter count
-# — used only to sanity-check the fetch; a mismatch is logged, not fatal,
-# since a couple of tractates have known printed-edition variants, e.g.
-# Bikkurim is sometimes 3 chapters, sometimes 4 with an appendix chapter).
+# (Sefaria's category folder, tractate name, real chapter count — used only
+# to sanity-check the fetch; a mismatch is logged, not fatal, since a couple
+# of tractates have known printed-edition variants, e.g. Bikkurim is
+# sometimes 3 chapters, sometimes 4 with an appendix chapter).
 TRACTATES = [
     ("Seder Zeraim", "Berakhot", 9), ("Seder Zeraim", "Peah", 8), ("Seder Zeraim", "Demai", 7),
     ("Seder Zeraim", "Kilayim", 9), ("Seder Zeraim", "Sheviit", 10), ("Seder Zeraim", "Terumot", 11),
@@ -65,21 +72,6 @@ TRACTATES = [
     ("Seder Tahorot", "Tevul Yom", 4), ("Seder Tahorot", "Yadayim", 4), ("Seder Tahorot", "Oktzin", 3),
 ]
 
-# Captured from https://www.sefaria.org/api/texts/Mishnah_<name>?context=0's
-# "license" field for every tractate (see the module docstring). Every
-# tractate not listed here is CC-BY. The split tracks almost exactly with
-# which tractates carry accompanying Talmud Bavli Gemara (digitized as part
-# of the same Steinsaltz/Koren project, which licensed CC-BY-NC) versus
-# which don't.
-CC_BY_NC_TRACTATES = frozenset({
-    "Berakhot", "Shabbat", "Eruvin", "Pesachim", "Shekalim", "Yoma", "Sukkah", "Beitzah",
-    "Rosh Hashanah", "Ta'anit", "Megillah", "Moed Katan", "Chagigah",
-    "Yevamot", "Ketubot", "Nedarim", "Nazir", "Sotah", "Gittin", "Kiddushin",
-    "Bava Kamma", "Bava Metzia", "Bava Batra", "Sanhedrin", "Makkot", "Shevuot", "Avodah Zarah", "Horayot",
-    "Zevachim", "Menachot", "Chullin", "Bekhorot", "Arakhin", "Temurah", "Keritot", "Meilah", "Tamid",
-    "Niddah",
-})
-
 HECHRACHI = {
     "א": 1, "ב": 2, "ג": 3, "ד": 4, "ה": 5, "ו": 6, "ז": 7, "ח": 8, "ט": 9, "י": 10,
     "כ": 20, "ל": 30, "מ": 40, "נ": 50, "ס": 60, "ע": 70, "פ": 80, "צ": 90,
@@ -103,19 +95,24 @@ def fetch_tractate(seder, name, expected_chapters):
     if os.path.exists(cache_path):
         return json.load(open(cache_path, encoding="utf-8"))
 
-    # Pirkei Avot is titled without the "Mishnah " prefix in Sefaria's export,
-    # unlike every other tractate.
-    title = "Pirkei Avot" if name == "Avot" else f"Mishnah {name}"
-    path = f"Mishnah/{seder}/{title}/Hebrew/merged.json"
-    url = "https://storage.googleapis.com/sefaria-export/json/" + urllib.parse.quote(path)
+    slug = "Mishnah_" + name.replace(" ", "_")
+    version = urllib.parse.quote(VERSION_TITLE)
+    url = f"https://www.sefaria.org/api/v3/texts/{urllib.parse.quote(slug)}?version=hebrew|{version}"
     with urllib.request.urlopen(url, timeout=20) as resp:
         d = json.loads(resp.read().decode("utf-8"))
-    chapters = d.get("text")
+    versions = d.get("versions") or []
+    if not versions:
+        raise RuntimeError(f"{name}: no '{VERSION_TITLE}' version returned")
+    v = versions[0]
+    license_ = v.get("license")
+    if license_ != "Public Domain":
+        raise RuntimeError(f"{name}: expected Public Domain, got {license_!r} — investigate before using")
+    chapters = v.get("text")
     n = len(chapters) if isinstance(chapters, list) else 0
     if n != expected_chapters:
         print(f"  note: {name} has {n} chapters, expected {expected_chapters} "
               f"(printed editions sometimes vary — verify this wasn't a partial fetch)")
-    record = {"seder": seder, "name": name, "heTitle": d.get("heTitle"), "text": chapters}
+    record = {"seder": seder, "name": name, "heTitle": d.get("heTitle"), "license": license_, "text": chapters}
     os.makedirs(CACHE_DIR, exist_ok=True)
     json.dump(record, open(cache_path, "w", encoding="utf-8"), ensure_ascii=False)
     return record
@@ -131,25 +128,17 @@ def tokenize(text):
     return tokens
 
 
-def merge_occurrences(existing_path, new_occurrences_by_key):
-    existing = json.load(open(existing_path, encoding="utf-8"))
-    merged = {word: list(occs) for word, occs in existing}
-    for key, occs in new_occurrences_by_key.items():
-        bucket = merged.setdefault(key, [])
-        room = MAX_OCC - len(bucket)
-        if room > 0:
-            bucket.extend(occs[:room])
-    json.dump([[w, o] for w, o in merged.items()], open(existing_path, "w", encoding="utf-8"), ensure_ascii=False)
-
-
 def main():
-    print(f"Fetching {len(TRACTATES)} tractates...")
+    print(f"Fetching {len(TRACTATES)} tractates (version: {VERSION_TITLE!r})...")
     tractates = []
     for i, (seder, name, expected) in enumerate(TRACTATES, 1):
         d = fetch_tractate(seder, name, expected)
         tractates.append(d)
-        print(f"  [{i}/{len(TRACTATES)}] {name}")
+        print(f"  [{i}/{len(TRACTATES)}] {name}: {d['license']}")
         time.sleep(0.1)
+
+    licenses = {d["license"] for d in tractates}
+    assert licenses == {"Public Domain"}, f"unexpected licenses found: {licenses}"
 
     print("Building data/mishnah.json...")
     mishnah_passages = []
@@ -167,28 +156,26 @@ def main():
     print(f"  {len(mishnah_passages)} mishnayot")
     json.dump(mishnah_passages, open(os.path.join(DATA_DIR, "mishnah.json"), "w", encoding="utf-8"), ensure_ascii=False)
 
-    tanakh = json.load(open(os.path.join(DATA_DIR, "tanakh.json"), encoding="utf-8"))
-    offset = len(tanakh)  # Mishnah passages are appended after Tanakh's in the app's combined array
-
-    print("Extracting word/phrase occurrences...")
+    print("Extracting word/phrase occurrences (local indices, no Tanakh offset)...")
     word_occ, phrase_occ = {}, {}
     for i, p in enumerate(mishnah_passages):
-        idx = offset + i
         toks = tokenize(p["text"])
         for bare, start, end in toks:
             bucket = word_occ.setdefault(bare, [])
             if len(bucket) < MAX_OCC:
-                bucket.append([idx, start, end])
+                bucket.append([i, start, end])
         for j in range(len(toks) - 1):
             b1, s1, _ = toks[j]
             _, _, e2 = toks[j + 1]
             bucket = phrase_occ.setdefault(b1 + toks[j + 1][0], [])
             if len(bucket) < MAX_OCC:
-                bucket.append([idx, s1, e2])
+                bucket.append([i, s1, e2])
 
-    print("Merging into hebrew-words.json / hebrew-phrases.json...")
-    merge_occurrences(os.path.join(DATA_DIR, "hebrew-words.json"), word_occ)
-    merge_occurrences(os.path.join(DATA_DIR, "hebrew-phrases.json"), phrase_occ)
+    print(f"  {len(word_occ)} distinct words, {len(phrase_occ)} distinct phrases")
+    json.dump([[w, o] for w, o in word_occ.items()],
+              open(os.path.join(DATA_DIR, "mishnah-words.json"), "w", encoding="utf-8"), ensure_ascii=False)
+    json.dump([[w, o] for w, o in phrase_occ.items()],
+              open(os.path.join(DATA_DIR, "mishnah-phrases.json"), "w", encoding="utf-8"), ensure_ascii=False)
     print("Done.")
 
 

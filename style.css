@@ -293,6 +293,39 @@ header h1 {
   flex-wrap: wrap;
 }
 
+.corpus-tabs {
+  display: flex;
+  gap: 4px;
+  margin-bottom: 16px;
+  border-bottom: 1px solid var(--border);
+}
+
+.corpus-tab {
+  padding: 8px 4px;
+  margin-bottom: -1px;
+  border: none;
+  border-bottom: 2px solid transparent;
+  background: transparent;
+  color: var(--muted);
+  cursor: pointer;
+  font-size: 0.95rem;
+  font-weight: 700;
+  font-family: "Frank Ruhl Libre", serif;
+}
+
+.corpus-tab + .corpus-tab {
+  margin-inline-start: 16px;
+}
+
+.corpus-tab:hover {
+  color: var(--fg);
+}
+
+.corpus-tab.active {
+  color: var(--accent);
+  border-bottom-color: var(--accent);
+}
+
 .export-btn {
   display: inline-block;
   padding: 8px 14px;
@@ -550,8 +583,14 @@ footer {
   .export-btn,
   .load-more,
   .copy-btn,
-  .tab {
+  .tab,
+  .corpus-tab {
     display: none !important;
+  }
+
+  .corpus-tabs {
+    border-bottom: none;
+    margin-bottom: 4px;
   }
 
   .results-meta {

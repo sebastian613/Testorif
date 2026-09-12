@@ -1,14 +1,23 @@
 import { computeHechrachi } from "./gematria.js";
 
-const FILES = {
-  words: "data/hebrew-words.json",
-  phrases: "data/hebrew-phrases.json",
-  // Passage corpora, concatenated in this order into one combined array.
-  // Word/phrase occurrences store an index into that combined array, so
-  // this order must never change without regenerating hebrew-words.json
-  // and hebrew-phrases.json to match.
-  corpora: ["data/tanakh.json", "data/mishnah.json"],
-};
+/**
+ * Each corpus is a fully independent word/phrase/passage index — searching
+ * one never touches another. This is deliberate: a word's occurrence
+ * indices are local to its own corpus's passage list, so corpora can be
+ * added (or dropped) without ever renumbering another corpus's data.
+ */
+export const CORPORA = [
+  {
+    key: "tanakh",
+    label: "Tanakh",
+    files: { words: "data/hebrew-words.json", phrases: "data/hebrew-phrases.json", passages: "data/tanakh.json" },
+  },
+  {
+    key: "mishnah",
+    label: "Mishnah",
+    files: { words: "data/mishnah-words.json", phrases: "data/mishnah-phrases.json", passages: "data/mishnah.json" },
+  },
+];
 
 const TEXT_OF = {
   words: (item) => item[0],
@@ -19,27 +28,36 @@ const TEXT_OF = {
 export { TEXT_OF as textOf };
 
 /**
- * Loads the word/phrase/passage datasets and precomputes each item's
- * Standard Value so lookups are a simple array scan instead of recomputing
- * gematria on every keystroke.
+ * Loads every corpus's word/phrase/passage datasets and precomputes each
+ * item's Standard Value so lookups are a simple array scan instead of
+ * recomputing gematria on every keystroke.
+ * @returns {Object} keyed by corpus key, e.g. { tanakh: {...}, mishnah: {...} }
  */
 export async function loadDatasets(onProgress) {
   const report = (msg) => onProgress && onProgress(msg);
 
-  report("Loading the Hebrew word list and source texts…");
-  const [words, phrases, ...corpora] = await Promise.all([
-    fetchJson(FILES.words),
-    fetchJson(FILES.phrases),
-    ...FILES.corpora.map(fetchJson),
-  ]);
-  const passages = corpora.flat();
+  report("Loading source texts…");
+  const loaded = await Promise.all(
+    CORPORA.map(async (corpus) => {
+      const [words, phrases, passages] = await Promise.all([
+        fetchJson(corpus.files.words),
+        fetchJson(corpus.files.phrases),
+        fetchJson(corpus.files.passages),
+      ]);
+      return [corpus.key, { words, phrases, passages }];
+    })
+  );
 
   report("Building the gematria index…");
-  return {
-    words: { items: words, values: buildIndex(words, TEXT_OF.words) },
-    phrases: { items: phrases, values: buildIndex(phrases, TEXT_OF.phrases) },
-    passages: { items: passages, values: buildIndex(passages, TEXT_OF.passages) },
-  };
+  const result = {};
+  for (const [key, { words, phrases, passages }] of loaded) {
+    result[key] = {
+      words: { items: words, values: buildIndex(words, TEXT_OF.words) },
+      phrases: { items: phrases, values: buildIndex(phrases, TEXT_OF.phrases) },
+      passages: { items: passages, values: buildIndex(passages, TEXT_OF.passages) },
+    };
+  }
+  return result;
 }
 
 async function fetchJson(path) {

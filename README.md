@@ -2,10 +2,11 @@
 
 A static, browser-based app that calculates the **Standard Value** (Mispar
 Hechrachi) Hebrew gematria of a name or word and finds every word, phrase,
-and passage — from the Tanakh (Hebrew Bible) and the Mishnah — that shares
-the same value, each one grounded in its source and, for Tanakh citations,
-shown alongside the JPS 1917 Jewish translation. One thing, done thoroughly:
-there is no other mode.
+and passage that shares the same value in a source text of your choosing —
+the Tanakh (Hebrew Bible) or the Mishnah, searched one at a time rather than
+blended together — each one grounded in its source and, for Tanakh
+citations, shown alongside the JPS 1917 Jewish translation. One thing, done
+thoroughly: there is no other mode.
 
 ## How it works
 
@@ -13,40 +14,51 @@ there is no other mode.
   (א=1…ת=400), added up. Only the 22 Hebrew letters count; niqqud (vowel
   points), cantillation marks, and punctuation are ignored. The value badge
   has a hover tooltip spelling out exactly how it's calculated.
-- **Matching**: `data/hebrew-words.json` (~55,900 distinct word forms) and
-  `data/hebrew-phrases.json` (~290,900 two-word phrases) are every word and
-  adjacent word-pair that actually occurs across two source corpora —
-  `data/tanakh.json` (all 23,213 verses of the Masoretic Text) and
-  `data/mishnah.json` (all 4,192 mishnayot across all 63 tractates) —
-  concatenated into one combined passage list at load time (Tanakh first,
-  Mishnah appended after, so an occurrence's index either lands in the first
-  23,213 slots or the ones after). Every word/phrase result shows the
+- **Corpora**: two so far — **Tanakh** and **Mishnah** — searched one at a
+  time, chosen with the Tanakh/Mishnah tabs above the results. They're kept
+  fully independent on purpose, not blended into one combined result list:
+  each has its own word/phrase/passage index (`data/hebrew-words.json` +
+  `data/hebrew-phrases.json` + `data/tanakh.json` for Tanakh;
+  `data/mishnah-words.json` + `data/mishnah-phrases.json` + `data/mishnah.json`
+  for Mishnah), and an occurrence's index is always local to its own
+  corpus's passage list — nothing to offset, nothing coupling the two
+  together. `src/data.js`'s `CORPORA` array is the whole of what "supporting
+  a corpus" means to the app; adding another is adding another entry there
+  plus the three files it points to (see **Extending** below).
+- **Matching**: within whichever corpus is selected, every word and
+  adjacent word-pair that actually occurs in it is indexed on load —
+  ~39,500 distinct word forms and ~180,700 two-word phrases for Tanakh's
+  23,213 verses; ~24,000 words and ~110,000 phrases for the Mishnah's 4,187
+  mishnayot across all 63 tractates. Every word/phrase result shows the
   passage it comes from: the original text with that exact occurrence
   highlighted, cited by its reference, plus — for Tanakh citations — the
   JPS 1917 translation with the corresponding English word(s) highlighted
   too, wherever that can be identified with confidence (see below); Mishnah
   citations show the original Hebrew only, since no equivalently
-  freely-licensed English translation is wired in yet (see **Corpora**
-  below). A word or phrase that occurs more than once shows its first
-  occurrence plus a combined occurrence count. The Passages tab
-  (whole-passage matches) shows the same citation for an entire verse or
-  mishnah, unhighlighted (there's no single word to point to).
-- **Corpora**: adding a text here only ever needs two things settled first —
-  is the original-language text actually public domain (rabbinic and
-  biblical text always is, being centuries to millennia old), and is there a
-  translation licensed for how it'll be shown/used. Tanakh's JPS 1917
-  translation is fully public domain, so it's shown everywhere without
-  restriction. The Mishnah's Hebrew (via Sefaria) is included for search and
-  citation, but the license genuinely varies by tractate — 25 of 63 are
-  CC-BY (commercial-safe), the other 38 are CC-BY-NC (free to show here,
-  not for a print/commercial product) — see **Regenerating the data** below
-  for the exact split; no English translation is wired in for it yet either
-  way. Talmud and Zohar are natural next additions — their original text is
-  equally public domain — but are both far larger than the Mishnah and, for
+  freely-licensed English translation is wired in yet. A word or phrase
+  that occurs more than once shows its first occurrence plus an occurrence
+  count. The Passages tab (whole-passage matches) shows the same citation
+  for an entire verse or mishnah, unhighlighted (there's no single word to
+  point to).
+- **Licensing, per corpus**: adding a text here only ever needs two things
+  settled first — is the original-language text actually public domain
+  (rabbinic and biblical text always is, being centuries to millennia old),
+  and is there a translation licensed for how it'll be shown/used. Tanakh's
+  JPS 1917 translation is fully public domain, so it's shown everywhere
+  without restriction. The Mishnah's Hebrew is Sefaria's "Torat Emet 357"
+  version specifically — checked **Public Domain across every one of the 63
+  tractates**, unlike Sefaria's own default/"merged" text for the same
+  tractates, which turned out to be CC-BY-NC for 38 of them (see
+  **Regenerating the data** below for how that was found and worked
+  around). No English translation is wired in for the Mishnah yet either
+  way. Talmud and Zohar are natural next corpora — their original text is
+  equally public domain — but both are far larger than the Mishnah, and for
   the Talmud specifically, the only readily available complete English
   translation (the Steinsaltz/William Davidson Edition) is CC-BY-NC, meaning
   free to show in this app but not usable in a commercial/print product
-  built from it.
+  built from it — the same kind of per-version check that solved the
+  Mishnah's licensing may or may not turn up a public-domain Talmud
+  translation too; that hasn't been checked yet.
 - **Hebrew text source**: the Westminster Leningrad Codex, via the
   [Open Scriptures Hebrew Bible](https://github.com/openscriptures/morphhb)
   project (public domain). Verses use the Qere (traditional spoken reading)
@@ -130,8 +142,8 @@ npm run test:unit # tests/unit/*.test.mjs via node's built-in test runner —
                    # every notable-value/popular-phrase entry actually
                    # computes to the value it claims)
 npm run test:e2e  # tests/e2e/*.spec.js via Playwright — drives the real
-                   # served app in a browser (search, Popular Searches,
-                   # Copy, Copy as Markdown)
+                   # served app in a browser (search, switching corpus,
+                   # Popular Searches, Copy, Copy as Markdown)
 ```
 
 CI (`.github/workflows/ci.yml`) runs both on every push and pull request.
@@ -169,25 +181,28 @@ src/popular-searches.js    # curated quick-pick numbers/phrases for the Popular 
 src/app.js                 # UI wiring: search, tabs, recent/popular searches, copy, copy as markdown
 assets/                    # brand mark + favicons
 data/tanakh.json           # Tanakh (WLC + JPS 1917), {ref, he, text (Hebrew), en (English)} per verse
+data/hebrew-words.json     # Tanakh words: [bareWord, [[passageIndex, heStart, heEnd, enStart, enEnd], ...]]
+data/hebrew-phrases.json   # Tanakh two-word phrases, same shape
 data/mishnah.json          # all 63 tractates, {ref, he, text} per mishnah — no `en`, see Corpora above
-data/hebrew-words.json     # [bareWord, [[passageIndex, heStart, heEnd, enStart, enEnd], ...]]
-data/hebrew-phrases.json   # same shape, for two-word phrases, across both corpora
-scripts/build_mishnah.py   # fetches + builds data/mishnah.json, merges its words/phrases in
+data/mishnah-words.json    # Mishnah words: [bareWord, [[passageIndex, heStart, heEnd], ...]] — own index, not Tanakh's
+data/mishnah-phrases.json  # Mishnah two-word phrases, same shape
+scripts/build_mishnah.py   # fetches Sefaria's Torat Emet 357 Mishnah text, builds the three mishnah-*.json files
 tests/unit/                # node --test: pure-logic unit tests (no browser)
 tests/e2e/                 # Playwright: drives the real served app in a browser
 playwright.config.js       # e2e test config (auto-starts/stops the static server)
 ```
 
 An occurrence is `[passageIndex, heStart, heEnd, enStart, enEnd]` (the last
-two omitted for Mishnah occurrences, which have no translation to
-highlight): `passageIndex` indexes into the combined passages array
-`src/data.js` builds by concatenating `tanakh.json` then `mishnah.json` at
-load time — indices `0..23212` are Tanakh, `23213` and up are Mishnah.
-`heStart`/`heEnd` are character offsets into that passage's Hebrew/Aramaic
-text, used to highlight the exact occurrence in context; `enStart`/`enEnd`
-are the equivalent offsets into the Tanakh passage's JPS text (`.en`), or
-`-1` when no confident English highlight was found (the translation still
-displays, just unhighlighted).
+two omitted for Mishnah, which has no translation to highlight).
+`passageIndex` is always local to that corpus's own passage file — Tanakh
+occurrences index into `tanakh.json`, Mishnah occurrences into
+`mishnah.json`; the two are never mixed or offset against each other, since
+`src/data.js`'s `CORPORA` array loads and indexes each corpus completely
+independently. `heStart`/`heEnd` are character offsets into that passage's
+Hebrew/Aramaic text, used to highlight the exact occurrence in context;
+`enStart`/`enEnd` are the equivalent offsets into the Tanakh passage's JPS
+text (`.en`), or `-1` when no confident English highlight was found (the
+translation still displays, just unhighlighted).
 
 ## Extending
 
@@ -214,36 +229,47 @@ displays, just unhighlighted).
   **Corpora** above)? `scripts/build_mishnah.py` is the template: fetch the
   Hebrew/Aramaic text into `data/<corpus>.json` in the same `{ref, he,
   text}` shape (add `en` only if a translation with a license that fits
-  your use is actually available), then extract and merge its word/phrase
-  occurrences into `hebrew-words.json`/`hebrew-phrases.json` the same way,
-  offsetting each occurrence's passage index by the combined length of
-  every corpus already in `src/data.js`'s `FILES.corpora` array (in the
-  order they're listed there) before merging. Both the Talmud and the Zohar
+  your use is actually available), extract its word/phrase occurrences into
+  `data/<corpus>-words.json`/`data/<corpus>-phrases.json` as their own,
+  self-contained index (indices local to `data/<corpus>.json` — never
+  offset against or merged into another corpus's files), then add one entry
+  to `src/data.js`'s `CORPORA` array pointing at the three files. That's the
+  entire integration; `src/app.js` already renders whatever's in `CORPORA`
+  as a tab with no further changes needed. Both the Talmud and the Zohar
   are much bigger than the Mishnah — expect this to be a heavier fetch/build
-  job, not a quick rerun of the same script with new URLs.
+  job, not a quick rerun of the same script with new URLs — and check each
+  one's *own* per-version licensing the way `build_mishnah.py` does rather
+  than trusting whichever text a source's API returns by default.
 
 ## Regenerating the data
 
-`data/mishnah.json` is generated by `scripts/build_mishnah.py`, which also
-merges its word/phrase occurrences into `hebrew-words.json`/
-`hebrew-phrases.json` (run it from the repo root: `python3
-scripts/build_mishnah.py`; raw per-tractate fetches are cached in
-`.cache/mishnah_raw/` so a re-run after a partial failure doesn't re-fetch
-everything). Its source is Sefaria's public GCS export of the Mishnah's
-Hebrew text — but the license is **not one blanket value for the whole
-work**, and the actual split is lopsided enough to matter for anything built
-commercially on top of this app: checked per-tractate against
-`https://www.sefaria.org/api/texts/<title>`'s `license` field, only
-**25 of the 63 tractates are CC-BY** (freely reusable, commercial included) —
-essentially all of Seder Zeraim and Seder Tahorot, plus Eduyot, Avot,
-Middot, and Kinnim. The other **38 (60%) are CC-BY-NC**: all of Seder Moed,
-Seder Nashim, and Seder Nezikin, most of Seder Kodashim, plus Berakhot and
-Niddah — free to show in this app, not usable in a print/commercial product
-without swapping in a different source for those tractates specifically.
-The pattern lines up with which tractates have accompanying Talmud Bavli
-Gemara (digitized as part of the same Steinsaltz/Koren project) versus which
-don't, which tracks with the same CC-BY-NC restriction already noted for
-the Talmud translation itself.
+`data/mishnah.json`, `data/mishnah-words.json`, and
+`data/mishnah-phrases.json` are generated by `scripts/build_mishnah.py`
+(run it from the repo root: `python3 scripts/build_mishnah.py`; raw
+per-tractate fetches are cached in `.cache/mishnah_raw/` so a re-run after
+a partial failure doesn't re-fetch everything).
+
+Getting a fully public-domain Mishnah took two passes. The first pull used
+Sefaria's public GCS export (its "merged"/default Hebrew text per
+tractate) and, checked after the fact against
+`https://www.sefaria.org/api/texts/<title>`'s `license` field, turned out
+to be CC-BY-NC for 38 of the 63 tractates (all of Seder Moed, Seder Nashim,
+and Seder Nezikin, most of Seder Kodashim, plus Berakhot and Niddah — the
+pattern lines up almost exactly with which tractates have accompanying
+Talmud Bavli Gemara, digitized as part of the same Steinsaltz/Koren
+project that licenses that translation CC-BY-NC). The fix wasn't a
+different source — it was asking Sefaria for a different *version* of the
+same tractates: `https://www.sefaria.org/api/texts/versions/<title>` lists
+every independent Hebrew edition Sefaria hosts per text, and one of
+them — **"Torat Emet 357"** — checked Public Domain on every one of the 63
+tractates (spot-checked across all six sedarim, including ones that were
+CC-BY-NC under the default text) and happens to be vocalized in the same
+style as the Tanakh text already used elsewhere in the app. The script
+requests it explicitly via the v3 API
+(`/api/v3/texts/<title>?version=hebrew|Torat Emet 357`) and asserts the
+returned license actually is `"Public Domain"` before using it, so a
+future change on Sefaria's end fails loudly instead of silently
+reintroducing a licensing problem.
 
 `data/tanakh.json`, `data/hebrew-words.json`, and `data/hebrew-phrases.json`
 are generated from two sources, not hand-written:

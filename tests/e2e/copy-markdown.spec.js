@@ -23,17 +23,23 @@ test("Copy as Markdown puts a structured report of the active tab on the clipboa
 
   const clipboardText = await page.evaluate(() => navigator.clipboard.readText());
   expect(clipboardText).toContain("# יאשיהו — Standard Value: 332");
-  expect(clipboardText).toContain("## Words (64)");
+  expect(clipboardText).toContain("## Tanakh Words (41)");
   expect(clipboardText).toMatch(/^### /m); // at least one result heading
   expect(clipboardText).toContain("JPS 1917:");
 });
 
-test("Copy as Markdown follows the active tab", async ({ page }) => {
+test("Copy as Markdown follows the active tab and corpus", async ({ page }) => {
   await page.fill("#name-input", "יאשיהו דוד עזריאל לישאביץ");
   await expect(page.locator(".value-number")).toHaveText("1107");
   await page.click('.tab:has-text("Passages")');
 
   await page.locator("#copy-markdown").click();
   const clipboardText = await page.evaluate(() => navigator.clipboard.readText());
-  expect(clipboardText).toContain("## Passages");
+  expect(clipboardText).toContain("## Tanakh Passages");
+
+  await page.click('.corpus-tab:has-text("Mishnah")');
+  await page.click('.tab:has-text("Phrases")');
+  await page.locator("#copy-markdown").click();
+  const mishnahClipboard = await page.evaluate(() => navigator.clipboard.readText());
+  expect(mishnahClipboard).toContain("## Mishnah Phrases");
 });

@@ -1,5 +1,5 @@
 import { HECHRACHI_INFO, computeHechrachi, stripToHebrewLetters, numberToHebrewNumeral } from "./gematria.js";
-import { loadDatasets, findMatches, textOf } from "./data.js";
+import { CORPORA, loadDatasets, findMatches, textOf } from "./data.js";
 import { findNotableValue } from "./notable-values.js";
 import { POPULAR_NUMBERS, POPULAR_PHRASES } from "./popular-searches.js";
 
@@ -16,6 +16,7 @@ const TAB_LABELS = { words: "Words", phrases: "Phrases", passages: "Passages" };
 const state = {
   datasets: null,
   inputValue: DEFAULT_VALUE,
+  corpus: CORPORA[0].key,
   activeTab: "words",
   value: null,
   matches: { words: [], phrases: [], passages: [] },
@@ -31,6 +32,7 @@ const el = {
   notableValue: document.getElementById("notable-value"),
   valueDisplay: document.getElementById("value-display"),
   resultsSection: document.getElementById("results-section"),
+  corpusTabs: document.getElementById("corpus-tabs"),
   tabs: document.getElementById("tabs"),
   filterInput: document.getElementById("filter-input"),
   resultsList: document.getElementById("results-list"),
@@ -65,9 +67,36 @@ async function init() {
     return;
   }
 
+  renderCorpusTabs();
   el.nameInput.disabled = false;
   el.nameInput.focus();
   recompute();
+}
+
+/**
+ * Search is scoped to one corpus at a time (Tanakh or Mishnah, chosen
+ * here) rather than blending both into one result list — each corpus's
+ * word/phrase index is independent (see data.js), so switching corpus
+ * re-runs the search against a completely separate dataset.
+ */
+function renderCorpusTabs() {
+  el.corpusTabs.innerHTML = "";
+  for (const corpus of CORPORA) {
+    const btn = document.createElement("button");
+    btn.type = "button";
+    btn.className = "corpus-tab" + (corpus.key === state.corpus ? " active" : "");
+    btn.textContent = corpus.label;
+    btn.addEventListener("click", () => {
+      if (state.corpus === corpus.key) return;
+      state.corpus = corpus.key;
+      state.activeTab = "words";
+      state.filterText = "";
+      el.filterInput.value = "";
+      renderCorpusTabs();
+      recompute();
+    });
+    el.corpusTabs.appendChild(btn);
+  }
 }
 
 function wireInputs() {
@@ -151,7 +180,7 @@ function renderValueDisplay() {
 }
 
 function recomputeMatches() {
-  const datasets = state.datasets;
+  const datasets = state.datasets && state.datasets[state.corpus];
   if (state.value === null || !datasets) return;
 
   const target = state.value;
@@ -195,7 +224,8 @@ function renderTabs() {
 
 function renderResultsList() {
   const tab = state.activeTab;
-  const dataset = state.datasets[tab];
+  const corpusData = state.datasets[state.corpus];
+  const dataset = corpusData[tab];
   let indices = state.matches[tab];
 
   if (state.filterText) {
@@ -215,7 +245,7 @@ function renderResultsList() {
     empty.textContent = "No matches found.";
     el.resultsList.appendChild(empty);
   } else {
-    const passageDataset = state.datasets.passages;
+    const passageDataset = corpusData.passages;
     for (const i of visible) {
       const li = document.createElement("li");
       const item = dataset.items[i];
@@ -306,21 +336,23 @@ function buildCopyText(kind, item, passageDataset) {
  */
 function buildMarkdownReport() {
   const tab = state.activeTab;
-  const passageDataset = state.datasets.passages;
+  const corpusLabel = CORPORA.find((c) => c.key === state.corpus).label;
+  const corpusData = state.datasets[state.corpus];
+  const passageDataset = corpusData.passages;
   const indices = state.matches[tab].slice(0, state.visibleCount[tab]);
   const lines = [`# ${el.nameInput.value.trim()} — ${HECHRACHI_INFO.label}: ${state.value}`, ""];
 
   const notable = state.value !== null ? findNotableValue(state.value) : null;
   if (notable) lines.push(`> ${notable.value} is traditionally associated with ${notable.note}`, "");
 
-  lines.push(`## ${TAB_LABELS[tab]} (${state.matches[tab].length})`, "");
+  lines.push(`## ${corpusLabel} ${TAB_LABELS[tab]} (${state.matches[tab].length})`, "");
 
   if (indices.length === 0) {
     lines.push("_No matches found._");
   } else if (tab === "passages") {
     for (const i of indices) lines.push(...markdownForPassage(passageDataset.items[i]), "");
   } else {
-    const dataset = state.datasets[tab];
+    const dataset = corpusData[tab];
     for (const i of indices) {
       const item = dataset.items[i];
       lines.push(`### ${textOf[tab](item)}`);

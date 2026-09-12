@@ -15,10 +15,22 @@ test("typing a Hebrew word updates the Standard Value and finds real matches", a
   await expect(page.locator(".value-number")).toHaveText("332");
 
   // Regression test: a prior findMatches shape bug made every search
-  // silently return zero results no matter the value. 332 has 65 known
-  // word matches across the corpus (64 once the searched word excludes
-  // itself) — Tanakh plus Mishnah, now that both are merged into one index.
-  await expect(page.locator(".tab").first()).toContainText("Words (64)");
+  // silently return zero results no matter the value. 332 has 42 known
+  // Tanakh word matches (41 once the searched word excludes itself).
+  await expect(page.locator(".tab").first()).toContainText("Words (41)");
+});
+
+test("switching the corpus tab searches a completely separate index", async ({ page }) => {
+  await page.fill("#name-input", "יאשיהו דוד עזריאל לישאביץ");
+  await expect(page.locator(".value-number")).toHaveText("1107");
+  const tanakhTabs = await page.locator(".tab").allTextContents();
+
+  await page.click('.corpus-tab:has-text("Mishnah")');
+  const mishnahTabs = await page.locator(".tab").allTextContents();
+  expect(mishnahTabs).not.toEqual(tanakhTabs);
+
+  await page.click('.corpus-tab:has-text("Tanakh")');
+  await expect(page.locator(".tab").first()).toHaveText(tanakhTabs[0]);
 });
 
 test("a plain number is searched as a direct target value", async ({ page }) => {
