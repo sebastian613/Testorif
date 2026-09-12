@@ -210,7 +210,10 @@ function renderResultsList() {
 
         const occurrences = item[1];
         if (occurrences && occurrences.length) {
-          const [verseIndex, start, end] = occurrences[0];
+          const occ = occurrences[0];
+          const [verseIndex, start, end] = occ;
+          const enStart = occ.length > 3 ? occ[3] : -1;
+          const enEnd = occ.length > 3 ? occ[4] : -1;
           const verse = verseDataset.items[verseIndex];
           const capped = occurrences.length >= OCC_CAP;
           const label =
@@ -225,7 +228,11 @@ function renderResultsList() {
             `<span class="occurrence-count"> · ${escapeHtml(label)}</span></span>` +
             `<span class="verse-text" dir="rtl">${highlightSpan(verse.text, start, end)}</span>` +
             (verse.en
-              ? `<span class="lang-label">JPS 1917 translation</span><span class="verse-text verse-text-en" dir="ltr">${escapeHtml(verse.en)}</span>`
+              ? `<span class="lang-label">JPS 1917 translation</span><span class="verse-text verse-text-en" dir="ltr">${
+                  enStart !== -1
+                    ? highlightSpan(verse.en, enStart, enEnd)
+                    : escapeHtml(verse.en)
+                }</span>`
               : "");
           li.appendChild(citation);
         }

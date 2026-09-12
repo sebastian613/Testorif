@@ -26,10 +26,12 @@ One thing, done thoroughly: there is no other mode.
   verses of the Masoretic Text) — so every match is indexed against all
   eleven systems on load, and every word/phrase result shows the pasuk it
   comes from: the Hebrew verse with that exact occurrence highlighted, cited
-  by book/chapter/verse, plus its JPS 1917 translation. A word or phrase
-  that occurs more than once shows its first occurrence plus an occurrence
-  count. The Verses tab (whole-verse matches) shows that same translation
-  under each Hebrew pasuk.
+  by book/chapter/verse, plus its JPS 1917 translation with the
+  corresponding English word(s) highlighted too, wherever that can be
+  identified with confidence (see below). A word or phrase that occurs more
+  than once shows its first occurrence plus an occurrence count. The Verses
+  tab (whole-verse matches) shows that same translation under each Hebrew
+  pasuk, unhighlighted (there's no single word to point to).
 - **Hebrew text source**: the Westminster Leningrad Codex, via the
   [Open Scriptures Hebrew Bible](https://github.com/openscriptures/morphhb)
   project (public domain). Verses use the Qere (traditional spoken reading)
@@ -44,6 +46,19 @@ One thing, done thoroughly: there is no other mode.
   with the Hebrew text directly for 99.7% of verses — the only exceptions
   are three chapters (Exodus 20, Numbers 25, Deuteronomy 5) where printed
   editions differ on verse splitting around the Ten Commandments.
+- **English highlighting**: JPS isn't word-aligned to the Hebrew the way an
+  interlinear gloss would be, so highlighting the matched word/phrase inside
+  it is a heuristic, not a lookup: a separate, word-aligned interlinear
+  source ([STEPBible's TAHOT](https://github.com/STEPBible/STEPBible-Data))
+  supplies a rough English gloss for the specific Hebrew word(s) matched,
+  and that gloss's most distinctive word is searched for in the JPS verse
+  text. The highlight is only shown when that search word appears **exactly
+  once** in the verse (for a phrase, both words must each be unique and land
+  within ~45 characters of each other) — ambiguous or unlocatable cases
+  simply show the translation unhighlighted rather than risk pointing at the
+  wrong word. In practice this finds a confident highlight for about 44% of
+  word occurrences and 15% of phrase occurrences (phrases need two
+  independent unique matches, so the bar is higher).
 - **Numeral input**: typing a plain number (e.g. `613`) converts it in place
   to standard Hebrew numeral notation (`תרי״ג`), including the traditional
   ט״ו/ט״ז substitution for 15/16 (avoiding forms that resemble the divine
@@ -78,13 +93,16 @@ src/gematria.js            # the 11 cipher systems + integer-to-Hebrew-numeral c
 src/data.js                # dataset loading + precomputed per-cipher indexes
 src/app.js                 # UI wiring: search, tabs, recent searches, PDF export
 data/tanakh.json           # Tanakh (WLC + JPS 1917), {ref, he, text (Hebrew), en (English)} per verse
-data/hebrew-words.json     # [bareWord, [[verseIndex, start, end], ...]]
+data/hebrew-words.json     # [bareWord, [[verseIndex, heStart, heEnd, enStart, enEnd], ...]]
 data/hebrew-phrases.json   # same shape, for two-word phrases from the Tanakh
 ```
 
-An occurrence is `[verseIndex, start, end]`, where `start`/`end` are
-character offsets into that verse's Hebrew text (`data/tanakh.json[verseIndex].text`)
-— used to highlight the exact occurrence in context.
+An occurrence is `[verseIndex, heStart, heEnd, enStart, enEnd]`: `heStart`/
+`heEnd` are character offsets into that verse's Hebrew text
+(`data/tanakh.json[verseIndex].text`), used to highlight the exact
+occurrence in context; `enStart`/`enEnd` are the equivalent offsets into the
+verse's JPS text (`.en`), or `-1` when no confident English highlight was
+found (the translation still displays, just unhighlighted).
 
 ## Extending
 
@@ -119,5 +137,19 @@ are generated from two sources, not hand-written:
    for public reading; that markup and its content is stripped.
 
 Every distinct bare (niqqud-stripped) word and two-word span is then emitted
-with `[verseIndex, start, end]` for each of its occurrences (capped at 8 per
-entry to bound file size).
+with `[verseIndex, heStart, heEnd]` for each of its occurrences (capped at 8
+per entry to bound file size).
+
+3. A separate pass adds the English highlight offsets: STEPBible's TAHOT
+   (`git clone https://github.com/STEPBible/STEPBible-Data`) is parsed the
+   same way as for the earlier interlinear approach (keying on its
+   parenthetical Hebrew verse reference where present, then verifying word
+   count and first/last word against the Hebrew XML per verse) to get a
+   verified, token-aligned English gloss for ~19,150 of the 23,213 verses.
+   For each stored occurrence, the gloss word(s) at that Hebrew token
+   position are looked up, split into individual words (a gloss can be
+   multi-word, e.g. "sheaves your" for a suffixed noun), and the most
+   distinctive candidate word is searched for in that verse's JPS text.
+   `enStart`/`enEnd` are only set when a candidate is found as a whole word
+   exactly once in the verse (for phrases, both words must be unique and
+   land within 45 characters of each other); otherwise they're `-1`.
