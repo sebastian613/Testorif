@@ -27,15 +27,19 @@
       <input id="term-input" class="hebrew-input" type="text" dir="rtl"
              placeholder="לדוגמה: שלום" autocomplete="off" spellcheck="false">
 
-      <div class="gematria-row">
-        <div class="gematria-badge">
-          <span class="gematria-label">Gematria&nbsp;/&nbsp;Skip</span>
-          <span id="gematria-value" class="gematria-value">0</span>
-        </div>
+      <div class="preview-row">
         <div class="letters-preview" id="letters-preview" aria-live="polite"></div>
       </div>
 
       <div class="controls-grid">
+        <div class="control">
+          <label for="min-skip">Min skip to search</label>
+          <input id="min-skip" type="number" min="1" max="1000000" value="2" step="1">
+        </div>
+        <div class="control">
+          <label for="max-skip">Max skip to search</label>
+          <input id="max-skip" type="number" min="1" max="1000000" value="1000" step="1">
+        </div>
         <div class="control">
           <label for="rows-above">Rows above</label>
           <input id="rows-above" type="number" min="0" max="60" value="12">
@@ -51,9 +55,16 @@
         </div>
       </div>
 
-      <button id="search-btn" class="primary-btn">Build matrix</button>
+      <button id="search-btn" class="primary-btn">Find ELS occurrences</button>
+      <button id="cancel-btn" class="secondary-btn" hidden>Cancel search</button>
+
+      <div id="progress-wrap" class="progress-wrap" hidden>
+        <div class="progress-track"><div id="progress-bar" class="progress-bar"></div></div>
+        <p id="progress-label" class="progress-label"></p>
+      </div>
 
       <div id="search-status" class="search-status" role="status"></div>
+      <p class="panel-hint">Every skip from 1 up to your max is searched in both directions; results are sorted with the smallest (most notable) skip first.</p>
       <div id="occurrence-list" class="occurrence-list"></div>
     </section>
 
@@ -84,7 +95,7 @@
       </div>
       <div class="canvas-wrap" id="canvas-wrap">
         <canvas id="matrix-canvas"></canvas>
-        <div class="canvas-empty" id="canvas-empty">Enter a Hebrew word or phrase and press <strong>Build matrix</strong>.</div>
+        <div class="canvas-empty" id="canvas-empty">Enter a Hebrew word or phrase and press <strong>Find ELS occurrences</strong>.</div>
         <div class="cell-tooltip" id="cell-tooltip" hidden></div>
       </div>
     </section>
@@ -102,9 +113,9 @@
     <p>
       Text source: Westminster Leningrad Codex via the
       <a href="https://github.com/openscriptures/morphhb" target="_blank" rel="noopener">Open Scriptures Hebrew Bible</a>
-      project (ketiv, consonants only, spaces removed). Skip = standard mispar hechrachi gematria of your input.
-      ELS pattern-finding is a matter of ongoing debate among scholars and statisticians; this tool is presented
-      for study and exploration.
+      project (ketiv, consonants only, spaces removed). Every skip from 1 to your chosen maximum is searched in
+      both directions; occurrences are ranked with the smallest skip first. ELS pattern-finding is a matter of
+      ongoing debate among scholars and statisticians; this tool is presented for study and exploration.
     </p>
   </footer>
 

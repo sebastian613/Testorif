@@ -1,18 +1,23 @@
-import { gematria, hebrewLettersOnly } from "./gematria.js";
+import { hebrewLettersOnly } from "./hebrew.js";
 import { loadTorahData, loadLexicon } from "./data.js";
-import { findELS, findVerseForIndex, buildMatrix } from "./els.js";
+import { buildPositionIndex, findAllELS, findVerseForIndex, buildMatrix } from "./els.js";
 import { buildLexiconAutomaton, findWordsInMatrix } from "./wordfinder.js";
 import { MatrixView } from "./render.js";
 
 const els = {
   termInput: document.getElementById("term-input"),
-  gematriaValue: document.getElementById("gematria-value"),
   lettersPreview: document.getElementById("letters-preview"),
+  minSkip: document.getElementById("min-skip"),
+  maxSkip: document.getElementById("max-skip"),
   rowsAbove: document.getElementById("rows-above"),
   rowsBelow: document.getElementById("rows-below"),
   minLength: document.getElementById("min-length"),
   minLengthValue: document.getElementById("min-length-value"),
   searchBtn: document.getElementById("search-btn"),
+  cancelBtn: document.getElementById("cancel-btn"),
+  progressWrap: document.getElementById("progress-wrap"),
+  progressBar: document.getElementById("progress-bar"),
+  progressLabel: document.getElementById("progress-label"),
   searchStatus: document.getElementById("search-status"),
   occurrenceList: document.getElementById("occurrence-list"),
   canvas: document.getElementById("matrix-canvas"),
@@ -28,16 +33,20 @@ const els = {
 };
 
 const MAX_DISPLAYED_WORDS = 180;
+const MAX_DISPLAYED_OCCURRENCES = 300;
 
 const state = {
   torah: null,          // { books, letters, verses, source }
+  positionIndex: null,  // Map<letter, sortedIndexArray>
   lexiconIndex: null,   // { automaton, words, categoryByWord }
-  occurrences: [],       // [{ startIndex, skip, verse }]
+  occurrences: [],       // full sorted list from the last search (capped at MAX_DISPLAYED_OCCURRENCES for display)
+  occurrenceTotal: 0,
   activeOccurrenceIdx: -1,
   matrix: null,
-  foundWords: [],        // capped list actually rendered/drawn
-  foundWordsTotal: 0,     // total matches before capping
+  foundWords: [],
+  foundWordsTotal: 0,
   categoryVisibility: { torah: true, rabbinic: true, modern: true },
+  cancelToken: null,
 };
 
 let matrixView;
@@ -47,19 +56,16 @@ function setStatus(msg, isError) {
   els.searchStatus.classList.toggle("error", !!isError);
 }
 
-function updateGematriaPreview() {
-  const raw = els.termInput.value;
-  const letters = hebrewLettersOnly(raw);
-  const value = gematria(raw);
-  els.gematriaValue.textContent = value.toLocaleString();
-  els.lettersPreview.textContent = letters ? `${letters.split("").join(" ")}` : "";
+function updateLettersPreview() {
+  const letters = hebrewLettersOnly(els.termInput.value);
+  els.lettersPreview.textContent = letters ? letters.split("").join(" ") : "";
 }
 
 function verseLabel(v) {
   return v ? `${v.book} ${v.chapter}:${v.verse}` : "—";
 }
 
-function renderOccurrenceList(term, termLetters) {
+function renderOccurrenceList(termLetters) {
   els.occurrenceList.innerHTML = "";
   state.occurrences.forEach((occ, i) => {
     const chip = document.createElement("div");
@@ -73,7 +79,7 @@ function renderOccurrenceList(term, termLetters) {
 function selectOccurrence(index, termLetters) {
   state.activeOccurrenceIdx = index;
   const occ = state.occurrences[index];
-  renderOccurrenceList(null, termLetters);
+  renderOccurrenceList(termLetters);
   buildAndRender(occ.startIndex, occ.skip, termLetters.length);
 }
 
@@ -133,60 +139,106 @@ function buildAndRender(startIndex, skip, termLength) {
   renderFoundList();
 }
 
-function runSearch() {
+function showProgress(current, total, foundSoFar) {
+  els.progressWrap.hidden = false;
+  const pct = total ? Math.round((current / total) * 100) : 0;
+  els.progressBar.style.width = pct + "%";
+  els.progressLabel.textContent = `Scanning… ${pct}% (${foundSoFar.toLocaleString()} found so far)`;
+}
+
+function hideProgress() {
+  els.progressWrap.hidden = true;
+}
+
+function resetResultsUI() {
+  els.occurrenceList.innerHTML = "";
+  state.occurrences = [];
+  state.occurrenceTotal = 0;
+  state.activeOccurrenceIdx = -1;
+  state.matrix = null;
+  state.foundWords = [];
+  matrixView.setData(null, []);
+  els.canvasEmpty.hidden = false;
+  els.foundList.innerHTML = "";
+  els.foundCount.textContent = "";
+}
+
+async function runSearch() {
   const raw = els.termInput.value;
   const termLetters = hebrewLettersOnly(raw);
-  if (!termLetters) {
-    setStatus("Type a Hebrew word or phrase first.", true);
+  if (termLetters.length < 2) {
+    setStatus("Type a Hebrew word or phrase of at least 2 letters.", true);
     return;
   }
-  const skip = gematria(raw);
-  if (!skip) {
-    setStatus("Gematria value is zero — nothing to search for.", true);
+  const minSkip = parseInt(els.minSkip.value, 10) || 1;
+  const maxSkip = parseInt(els.maxSkip.value, 10);
+  if (!maxSkip || maxSkip < 1) {
+    setStatus("Enter a max skip of at least 1.", true);
+    return;
+  }
+  if (minSkip > maxSkip) {
+    setStatus("Min skip can't be greater than max skip.", true);
     return;
   }
 
-  setStatus("Searching…");
+  resetResultsUI();
   els.searchBtn.disabled = true;
+  els.searchBtn.hidden = true;
+  els.cancelBtn.hidden = false;
+  setStatus(`Searching every skip from ${minSkip.toLocaleString()} to ${maxSkip.toLocaleString()}…`);
 
-  // Let the status message paint before the (fast, but synchronous) search.
-  setTimeout(() => {
-    const fwd = findELS(state.torah.letters, termLetters, skip);
-    const bwd = findELS(state.torah.letters, termLetters, -skip);
+  const cancelToken = { cancelled: false };
+  state.cancelToken = cancelToken;
 
-    const occurrences = [
-      ...fwd.map((startIndex) => ({ startIndex, skip })),
-      ...bwd.map((startIndex) => ({ startIndex, skip: -skip })),
-    ].map((o) => ({ ...o, verse: findVerseForIndex(state.torah.verses, state.torah.books, o.startIndex) }));
-
-    occurrences.sort((a, b) => a.startIndex - b.startIndex);
-    state.occurrences = occurrences;
-    state.activeOccurrenceIdx = -1;
-
+  let result;
+  try {
+    result = await findAllELS(state.positionIndex, state.torah.letters.length, termLetters, maxSkip, {
+      minSkip,
+      onProgress: (current, total, foundSoFar) => showProgress(current, total, foundSoFar),
+      cancelToken,
+    });
+  } finally {
+    hideProgress();
     els.searchBtn.disabled = false;
+    els.searchBtn.hidden = false;
+    els.cancelBtn.hidden = true;
+  }
 
-    if (occurrences.length === 0) {
-      setStatus(`No occurrences of "${termLetters}" found at skip ±${skip} in the Torah.`, true);
-      els.occurrenceList.innerHTML = "";
-      state.matrix = null;
-      state.foundWords = [];
-      matrixView.setData(null, []);
-      els.canvasEmpty.hidden = false;
-      els.foundList.innerHTML = "";
-      els.foundCount.textContent = "";
-      return;
-    }
+  if (cancelToken.cancelled) {
+    setStatus("Search cancelled.");
+    return;
+  }
 
-    setStatus(`Gematria ${skip} → found ${occurrences.length} occurrence${occurrences.length === 1 ? "" : "s"} at skip ±${skip}.`);
-    renderOccurrenceList(termLetters, termLetters);
-    selectOccurrence(0, termLetters);
-  }, 10);
+  const all = result.occurrences.map((o) => ({
+    ...o,
+    verse: findVerseForIndex(state.torah.verses, state.torah.books, o.startIndex),
+  }));
+  state.occurrenceTotal = all.length;
+  state.occurrences = all.slice(0, MAX_DISPLAYED_OCCURRENCES);
+
+  if (all.length === 0) {
+    setStatus(`No occurrences of "${termLetters}" found at any skip from ${minSkip.toLocaleString()} to ${maxSkip.toLocaleString()}.`, true);
+    return;
+  }
+
+  const truncatedNote = result.truncated
+    ? ` (stopped early — extremely common term; narrow the skip range or use a longer phrase)`
+    : state.occurrenceTotal > state.occurrences.length
+      ? ` — showing the ${state.occurrences.length} smallest-skip occurrences`
+      : "";
+  setStatus(`Found ${state.occurrenceTotal.toLocaleString()} occurrence${state.occurrenceTotal === 1 ? "" : "s"} across skips ${minSkip.toLocaleString()}–${maxSkip.toLocaleString()}${truncatedNote}. Smallest skip: ${state.occurrences[0].skip}.`);
+
+  renderOccurrenceList(termLetters);
+  selectOccurrence(0, termLetters);
 }
 
 function wireEvents() {
-  els.termInput.addEventListener("input", updateGematriaPreview);
+  els.termInput.addEventListener("input", updateLettersPreview);
   els.termInput.addEventListener("keydown", (e) => { if (e.key === "Enter") runSearch(); });
   els.searchBtn.addEventListener("click", runSearch);
+  els.cancelBtn.addEventListener("click", () => {
+    if (state.cancelToken) state.cancelToken.cancelled = true;
+  });
 
   els.minLength.addEventListener("input", () => {
     els.minLengthValue.textContent = els.minLength.value;
@@ -252,6 +304,7 @@ async function init() {
   try {
     const [torah, lexicon] = await Promise.all([loadTorahData(), loadLexicon()]);
     state.torah = torah;
+    state.positionIndex = buildPositionIndex(torah.letters);
     state.lexiconIndex = buildLexiconAutomaton(lexicon);
     setStatus(`Loaded ${torah.letters.length.toLocaleString()} letters of Torah text. Ready.`);
   } catch (err) {
@@ -262,7 +315,7 @@ async function init() {
   }
 
   wireEvents();
-  updateGematriaPreview();
+  updateLettersPreview();
 }
 
 init();

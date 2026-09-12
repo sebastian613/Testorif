@@ -1,48 +1,105 @@
 // Equal Letter Skip (ELS) search + matrix construction over the full
 // continuous Torah letter stream (no spaces, ketiv only).
 //
-// Performance note: for a fixed skip magnitude m, the letters at positions
-// {r, r+m, r+2m, ...} (one residue class r = 0..m-1) form a subsequence of
-// the text. Concatenating all m residue subsequences visits every letter
-// exactly once, so a full ELS search at a given skip costs O(n) plus the
-// substring search inside each residue slice -- independent of how large
-// the skip itself is. This keeps single-skip searches fast even for large
-// gematria values / a 300k-letter text.
+// findAllELS finds every occurrence of a term across a whole range of skip
+// magnitudes at once -- the way the original ELS/"Bible code" search tools
+// work: rather than picking one skip, they scan for every (start, skip)
+// pair where the term appears, then let you inspect any occurrence's
+// matrix, with the smallest |skip| generally treated as most notable.
+//
+// The naive way to do this -- for every candidate skip, re-scan the whole
+// 305k-letter text -- costs O(text length x max skip), which gets slow
+// past a few hundred skips. Instead we index every letter's positions once
+// (O(n)), then for a given term intersect those position lists: for each
+// occurrence of the term's first letter, binary-search the second letter's
+// positions within +-maxSkip to get candidate skips directly, and confirm
+// the rest of the term with O(log n) membership checks. Cost then tracks
+// how often those letters actually co-occur, independent of how large
+// maxSkip is -- which is what makes a large, user-chosen skip range
+// practical instead of a many-second scan.
 
-function reverseString(s) {
-  return s.split("").reverse().join("");
+export function buildPositionIndex(text) {
+  const index = new Map();
+  for (let i = 0; i < text.length; i++) {
+    const ch = text[i];
+    let arr = index.get(ch);
+    if (!arr) { arr = []; index.set(ch, arr); }
+    arr.push(i);
+  }
+  return index;
 }
 
-// Returns an ascending array of text indices, one per match, each the
-// index of the term's FIRST letter (in reading order) for that skip.
-export function findELS(text, term, skip) {
-  const n = text.length;
+function lowerBound(arr, value) {
+  let lo = 0, hi = arr.length;
+  while (lo < hi) {
+    const mid = (lo + hi) >> 1;
+    if (arr[mid] < value) lo = mid + 1; else hi = mid;
+  }
+  return lo;
+}
+
+function hasValue(arr, value) {
+  let lo = 0, hi = arr.length - 1;
+  while (lo <= hi) {
+    const mid = (lo + hi) >> 1;
+    if (arr[mid] === value) return true;
+    if (arr[mid] < value) lo = mid + 1; else hi = mid - 1;
+  }
+  return false;
+}
+
+const yieldToUI = () => new Promise((resolve) => setTimeout(resolve, 0));
+
+// Scans every skip magnitude from minSkip..maxSkip (both directions at
+// once -- d = t - s is signed) for `term`. Chunked with periodic yields so
+// the caller can show progress and cancel a long search without freezing
+// the page. Returns { occurrences: [{startIndex, skip}], truncated },
+// sorted by ascending |skip| (smallest skip first, the traditional
+// convention). minSkip defaults to 2: skip 1 is just the plain text (read
+// forward or backward), not a letter-skip pattern.
+export async function findAllELS(positionIndex, textLength, term, maxSkip, opts = {}) {
+  const { minSkip = 2, resultCap = 200000, onProgress, cancelToken, chunkSize = 400 } = opts;
   const L = term.length;
-  if (L === 0 || skip === 0 || L > n) return [];
+  if (L < 2 || maxSkip < 1 || maxSkip < minSkip) return { occurrences: [], truncated: false };
 
-  const m = Math.abs(skip);
-  const forward = skip > 0;
-  const pattern = forward ? term : reverseString(term);
+  const letterPositions = [];
+  for (const ch of term) letterPositions.push(positionIndex.get(ch) || []);
+
   const results = [];
+  let truncated = false;
+  const P0 = letterPositions[0];
+  const P1 = letterPositions[1];
 
-  for (let r = 0; r < m; r++) {
-    const idxMap = [];
-    const chars = [];
-    for (let idx = r; idx < n; idx += m) {
-      chars.push(text[idx]);
-      idxMap.push(idx);
-    }
-    if (chars.length < L) continue;
-    const sub = chars.join("");
-    let pos = sub.indexOf(pattern);
-    while (pos !== -1) {
-      results.push(forward ? idxMap[pos] : idxMap[pos + L - 1]);
-      pos = sub.indexOf(pattern, pos + 1);
+  function scanRange(s, lo, hi) {
+    for (let j = lo; j < hi; j++) {
+      const t = P1[j];
+      const d = t - s;
+      let ok = true;
+      for (let k = 2; k < L; k++) {
+        const pos = s + k * d;
+        if (pos < 0 || pos >= textLength || !hasValue(letterPositions[k], pos)) { ok = false; break; }
+      }
+      if (ok) results.push({ startIndex: s, skip: d });
     }
   }
 
-  results.sort((a, b) => a - b);
-  return results;
+  outer:
+  for (let i = 0; i < P0.length; i++) {
+    const s = P0[i];
+    // Two windows around s, excluding |d| < minSkip (skip 1 is just the
+    // plain text, not a letter-skip pattern) and d = 0.
+    scanRange(s, lowerBound(P1, s - maxSkip), lowerBound(P1, s - minSkip + 1));
+    scanRange(s, lowerBound(P1, s + minSkip), lowerBound(P1, s + maxSkip + 1));
+    if (results.length >= resultCap) { truncated = true; break outer; }
+    if (i % chunkSize === chunkSize - 1) {
+      if (cancelToken && cancelToken.cancelled) { truncated = true; break; }
+      if (onProgress) onProgress(i + 1, P0.length, results.length);
+      await yieldToUI();
+    }
+  }
+
+  results.sort((a, b) => Math.abs(a.skip) - Math.abs(b.skip) || a.startIndex - b.startIndex);
+  return { occurrences: results, truncated };
 }
 
 // Binary search: returns the verse reference {book, chapter, verse} whose
