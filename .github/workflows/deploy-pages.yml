@@ -1,0 +1,50 @@
+name: Deploy to GitHub Pages
+
+# Publishes the app (a fully static site — no build step) to GitHub Pages
+# on every push to this branch. Requires two one-time settings only a repo
+# owner can flip (no API access to do this from a workflow or from Claude):
+#   1. Repo visibility: Public (Pages' free tier only serves public repos)
+#   2. Settings → Pages → Source: "GitHub Actions"
+# Once both are set, this workflow needs no further attention — every push
+# here republishes automatically.
+
+on:
+  push:
+    branches: ["claude/gematria-name-calculator-jfquk7"]
+  workflow_dispatch: {}
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: "pages"
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Stage only the files the app serves
+        # Publishes just the runtime app — not tests/, scripts/, package.json,
+        # etc. — so the public site doesn't also expose unrelated repo files.
+        run: |
+          mkdir _site
+          cp index.html style.css _site/
+          cp -r assets data src _site/
+      - uses: actions/configure-pages@v5
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: "_site"
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4

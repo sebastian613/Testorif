@@ -1,0 +1,618 @@
+[
+ {
+  "treatise": "Mishneh Torah, Transmission of the Oral Law",
+  "book": "Introduction",
+  "versionTitle": "Mechon Mamre Mishneh Torah",
+  "license": "Public Domain",
+  "sefariaLicenseTagged": true
+ },
+ {
+  "treatise": "Mishneh Torah, Positive Mitzvot",
+  "book": "Introduction",
+  "versionTitle": "Mechon-mamre Mishneh Torah",
+  "license": "Public Domain",
+  "sefariaLicenseTagged": true
+ },
+ {
+  "treatise": "Mishneh Torah, Negative Mitzvot",
+  "book": "Introduction",
+  "versionTitle": "Mechon Mamre (mechon-mamre.org/i/0002n.htm)",
+  "license": "Public Domain",
+  "sefariaLicenseTagged": true
+ },
+ {
+  "treatise": "Mishneh Torah, Overview of Mishneh Torah Contents",
+  "book": "Introduction",
+  "versionTitle": "Mechon Mamre (mechon-mamre.org/i/0003n.htm)",
+  "license": "Public Domain",
+  "sefariaLicenseTagged": true
+ },
+ {
+  "treatise": "Mishneh Torah, Foundations of the Torah",
+  "book": "Sefer Madda",
+  "versionTitle": "Torat Emet 363",
+  "license": "Public Domain",
+  "sefariaLicenseTagged": true
+ },
+ {
+  "treatise": "Mishneh Torah, Human Dispositions",
+  "book": "Sefer Madda",
+  "versionTitle": "Torat Emet 363",
+  "license": "Public Domain",
+  "sefariaLicenseTagged": true
+ },
+ {
+  "treatise": "Mishneh Torah, Torah Study",
+  "book": "Sefer Madda",
+  "versionTitle": "Torat Emet 363",
+  "license": "Public Domain",
+  "sefariaLicenseTagged": true
+ },
+ {
+  "treatise": "Mishneh Torah, Foreign Worship and Customs of the Nations",
+  "book": "Sefer Madda",
+  "versionTitle": "Torat Emet 363",
+  "license": "Public Domain",
+  "sefariaLicenseTagged": true
+ },
+ {
+  "treatise": "Mishneh Torah, Repentance",
+  "book": "Sefer Madda",
+  "versionTitle": "Torat Emet 363",
+  "license": "Public Domain",
+  "sefariaLicenseTagged": true
+ },
+ {
+  "treatise": "Mishneh Torah, Reading the Shema",
+  "book": "Sefer Ahavah",
+  "versionTitle": "Torat Emet 370",
+  "license": "Public Domain",
+  "sefariaLicenseTagged": true
+ },
+ {
+  "treatise": "Mishneh Torah, Prayer and the Priestly Blessing",
+  "book": "Sefer Ahavah",
+  "versionTitle": "Torat Emet 370",
+  "license": "Public Domain",
+  "sefariaLicenseTagged": true
+ },
+ {
+  "treatise": "Mishneh Torah, Tefillin, Mezuzah and the Torah Scroll",
+  "book": "Sefer Ahavah",
+  "versionTitle": "Torat Emet 370",
+  "license": "Public Domain (untagged by Sefaria on this treatise)",
+  "sefariaLicenseTagged": false
+ },
+ {
+  "treatise": "Mishneh Torah, Fringes",
+  "book": "Sefer Ahavah",
+  "versionTitle": "Torat Emet 370",
+  "license": "Public Domain (untagged by Sefaria on this treatise)",
+  "sefariaLicenseTagged": false
+ },
+ {
+  "treatise": "Mishneh Torah, Blessings",
+  "book": "Sefer Ahavah",
+  "versionTitle": "Torat Emet 370",
+  "license": "Public Domain (untagged by Sefaria on this treatise)",
+  "sefariaLicenseTagged": false
+ },
+ {
+  "treatise": "Mishneh Torah, Circumcision",
+  "book": "Sefer Ahavah",
+  "versionTitle": "Torat Emet 370",
+  "license": "Public Domain (untagged by Sefaria on this treatise)",
+  "sefariaLicenseTagged": false
+ },
+ {
+  "treatise": "Mishneh Torah, The Order of Prayer",
+  "book": "Sefer Ahavah",
+  "versionTitle": "Torat Emet 370",
+  "license": "Public Domain (untagged by Sefaria on this treatise)",
+  "sefariaLicenseTagged": false
+ },
+ {
+  "treatise": "Mishneh Torah, Sabbath",
+  "book": "Sefer Zemanim",
+  "versionTitle": "Torat Emet 363",
+  "license": "Public Domain",
+  "sefariaLicenseTagged": true
+ },
+ {
+  "treatise": "Mishneh Torah, Eruvin",
+  "book": "Sefer Zemanim",
+  "versionTitle": "Torat Emet 363",
+  "license": "Public Domain",
+  "sefariaLicenseTagged": true
+ },
+ {
+  "treatise": "Mishneh Torah, Rest on the Tenth of Tishrei",
+  "book": "Sefer Zemanim",
+  "versionTitle": "Torat Emet 363",
+  "license": "Public Domain",
+  "sefariaLicenseTagged": true
+ },
+ {
+  "treatise": "Mishneh Torah, Rest on a Holiday",
+  "book": "Sefer Zemanim",
+  "versionTitle": "Torat Emet 363",
+  "license": "Public Domain",
+  "sefariaLicenseTagged": true
+ },
+ {
+  "treatise": "Mishneh Torah, Leavened and Unleavened Bread",
+  "book": "Sefer Zemanim",
+  "versionTitle": "Torat Emet 363",
+  "license": "Public Domain",
+  "sefariaLicenseTagged": true
+ },
+ {
+  "treatise": "Mishneh Torah, Shofar, Sukkah and Lulav",
+  "book": "Sefer Zemanim",
+  "versionTitle": "Torat Emet 363",
+  "license": "Public Domain",
+  "sefariaLicenseTagged": true
+ },
+ {
+  "treatise": "Mishneh Torah, Sheqel Dues",
+  "book": "Sefer Zemanim",
+  "versionTitle": "Torat Emet 363",
+  "license": "Public Domain",
+  "sefariaLicenseTagged": true
+ },
+ {
+  "treatise": "Mishneh Torah, Sanctification of the New Month",
+  "book": "Sefer Zemanim",
+  "versionTitle": "Torat Emet 363",
+  "license": "Public Domain",
+  "sefariaLicenseTagged": true
+ },
+ {
+  "treatise": "Mishneh Torah, Fasts",
+  "book": "Sefer Zemanim",
+  "versionTitle": "Torat Emet 363",
+  "license": "Public Domain",
+  "sefariaLicenseTagged": true
+ },
+ {
+  "treatise": "Mishneh Torah, Scroll of Esther and Hanukkah",
+  "book": "Sefer Zemanim",
+  "versionTitle": "Torat Emet 363",
+  "license": "Public Domain",
+  "sefariaLicenseTagged": true
+ },
+ {
+  "treatise": "Mishneh Torah, Marriage",
+  "book": "Sefer Nashim",
+  "versionTitle": "Torat Emet 363",
+  "license": "Public Domain",
+  "sefariaLicenseTagged": true
+ },
+ {
+  "treatise": "Mishneh Torah, Divorce",
+  "book": "Sefer Nashim",
+  "versionTitle": "Torat Emet 363",
+  "license": "Public Domain",
+  "sefariaLicenseTagged": true
+ },
+ {
+  "treatise": "Mishneh Torah, Levirate Marriage and Release",
+  "book": "Sefer Nashim",
+  "versionTitle": "Torat Emet 363",
+  "license": "Public Domain",
+  "sefariaLicenseTagged": true
+ },
+ {
+  "treatise": "Mishneh Torah, Virgin Maiden",
+  "book": "Sefer Nashim",
+  "versionTitle": "Torat Emet 363",
+  "license": "Public Domain",
+  "sefariaLicenseTagged": true
+ },
+ {
+  "treatise": "Mishneh Torah, Woman Suspected of Infidelity",
+  "book": "Sefer Nashim",
+  "versionTitle": "Torat Emet 363",
+  "license": "Public Domain",
+  "sefariaLicenseTagged": true
+ },
+ {
+  "treatise": "Mishneh Torah, Forbidden Intercourse",
+  "book": "Sefer Kedushah",
+  "versionTitle": "Torat Emet 363",
+  "license": "Public Domain",
+  "sefariaLicenseTagged": true
+ },
+ {
+  "treatise": "Mishneh Torah, Forbidden Foods",
+  "book": "Sefer Kedushah",
+  "versionTitle": "Torat Emet 363",
+  "license": "Public Domain",
+  "sefariaLicenseTagged": true
+ },
+ {
+  "treatise": "Mishneh Torah, Ritual Slaughter",
+  "book": "Sefer Kedushah",
+  "versionTitle": "Torat Emet 363",
+  "license": "Public Domain",
+  "sefariaLicenseTagged": true
+ },
+ {
+  "treatise": "Mishneh Torah, Oaths",
+  "book": "Sefer Haflaah",
+  "versionTitle": "Torat Emet 363",
+  "license": "Public Domain",
+  "sefariaLicenseTagged": true
+ },
+ {
+  "treatise": "Mishneh Torah, Vows",
+  "book": "Sefer Haflaah",
+  "versionTitle": "Torat Emet 363",
+  "license": "Public Domain",
+  "sefariaLicenseTagged": true
+ },
+ {
+  "treatise": "Mishneh Torah, Nazariteship",
+  "book": "Sefer Haflaah",
+  "versionTitle": "Torat Emet 363",
+  "license": "Public Domain",
+  "sefariaLicenseTagged": true
+ },
+ {
+  "treatise": "Mishneh Torah, Appraisals and Devoted Property",
+  "book": "Sefer Haflaah",
+  "versionTitle": "Torat Emet 363",
+  "license": "Public Domain",
+  "sefariaLicenseTagged": true
+ },
+ {
+  "treatise": "Mishneh Torah, Diverse Species",
+  "book": "Sefer Zeraim",
+  "versionTitle": "Torat Emet 363",
+  "license": "Public Domain",
+  "sefariaLicenseTagged": true
+ },
+ {
+  "treatise": "Mishneh Torah, Gifts to the Poor",
+  "book": "Sefer Zeraim",
+  "versionTitle": "Torat Emet 363",
+  "license": "Public Domain",
+  "sefariaLicenseTagged": true
+ },
+ {
+  "treatise": "Mishneh Torah, Heave Offerings",
+  "book": "Sefer Zeraim",
+  "versionTitle": "Torat Emet 363",
+  "license": "Public Domain",
+  "sefariaLicenseTagged": true
+ },
+ {
+  "treatise": "Mishneh Torah, Tithes",
+  "book": "Sefer Zeraim",
+  "versionTitle": "Torat Emet 363",
+  "license": "Public Domain",
+  "sefariaLicenseTagged": true
+ },
+ {
+  "treatise": "Mishneh Torah, Second Tithes and Fourth Year's Fruit",
+  "book": "Sefer Zeraim",
+  "versionTitle": "Torat Emet 363",
+  "license": "Public Domain",
+  "sefariaLicenseTagged": true
+ },
+ {
+  "treatise": "Mishneh Torah, First Fruits and other Gifts to Priests Outside the Sanctuary",
+  "book": "Sefer Zeraim",
+  "versionTitle": "Torat Emet 363",
+  "license": "Public Domain",
+  "sefariaLicenseTagged": true
+ },
+ {
+  "treatise": "Mishneh Torah, Sabbatical Year and the Jubilee",
+  "book": "Sefer Zeraim",
+  "versionTitle": "Torat Emet 363",
+  "license": "Public Domain",
+  "sefariaLicenseTagged": true
+ },
+ {
+  "treatise": "Mishneh Torah, The Chosen Temple",
+  "book": "Sefer Avodah",
+  "versionTitle": "Torat Emet 363",
+  "license": "Public Domain",
+  "sefariaLicenseTagged": true
+ },
+ {
+  "treatise": "Mishneh Torah, Vessels of the Sanctuary and Those Who Serve Therein",
+  "book": "Sefer Avodah",
+  "versionTitle": "Torat Emet 363",
+  "license": "Public Domain",
+  "sefariaLicenseTagged": true
+ },
+ {
+  "treatise": "Mishneh Torah, Admission into the Sanctuary",
+  "book": "Sefer Avodah",
+  "versionTitle": "Torat Emet 363",
+  "license": "Public Domain",
+  "sefariaLicenseTagged": true
+ },
+ {
+  "treatise": "Mishneh Torah, Things Forbidden on the Altar",
+  "book": "Sefer Avodah",
+  "versionTitle": "Torat Emet 363",
+  "license": "Public Domain",
+  "sefariaLicenseTagged": true
+ },
+ {
+  "treatise": "Mishneh Torah, Sacrificial Procedure",
+  "book": "Sefer Avodah",
+  "versionTitle": "Torat Emet 363",
+  "license": "Public Domain",
+  "sefariaLicenseTagged": true
+ },
+ {
+  "treatise": "Mishneh Torah, Daily Offerings and Additional Offerings",
+  "book": "Sefer Avodah",
+  "versionTitle": "Torat Emet 363",
+  "license": "Public Domain",
+  "sefariaLicenseTagged": true
+ },
+ {
+  "treatise": "Mishneh Torah, Sacrifices Rendered Unfit",
+  "book": "Sefer Avodah",
+  "versionTitle": "Torat Emet 363",
+  "license": "Public Domain",
+  "sefariaLicenseTagged": true
+ },
+ {
+  "treatise": "Mishneh Torah, Service on the Day of Atonement",
+  "book": "Sefer Avodah",
+  "versionTitle": "Torat Emet 363",
+  "license": "Public Domain",
+  "sefariaLicenseTagged": true
+ },
+ {
+  "treatise": "Mishneh Torah, Trespass",
+  "book": "Sefer Avodah",
+  "versionTitle": "Torat Emet 363",
+  "license": "Public Domain",
+  "sefariaLicenseTagged": true
+ },
+ {
+  "treatise": "Mishneh Torah, Paschal Offering",
+  "book": "Sefer Korbanot",
+  "versionTitle": "Torat Emet 363",
+  "license": "Public Domain",
+  "sefariaLicenseTagged": true
+ },
+ {
+  "treatise": "Mishneh Torah, Festival Offering",
+  "book": "Sefer Korbanot",
+  "versionTitle": "Torat Emet 363",
+  "license": "Public Domain",
+  "sefariaLicenseTagged": true
+ },
+ {
+  "treatise": "Mishneh Torah, Firstlings",
+  "book": "Sefer Korbanot",
+  "versionTitle": "Torat Emet 363",
+  "license": "Public Domain",
+  "sefariaLicenseTagged": true
+ },
+ {
+  "treatise": "Mishneh Torah, Offerings for Unintentional Transgressions",
+  "book": "Sefer Korbanot",
+  "versionTitle": "Torat Emet 363",
+  "license": "Public Domain",
+  "sefariaLicenseTagged": true
+ },
+ {
+  "treatise": "Mishneh Torah, Offerings for Those with Incomplete Atonement",
+  "book": "Sefer Korbanot",
+  "versionTitle": "Torat Emet 363",
+  "license": "Public Domain",
+  "sefariaLicenseTagged": true
+ },
+ {
+  "treatise": "Mishneh Torah, Substitution",
+  "book": "Sefer Korbanot",
+  "versionTitle": "Torat Emet 363",
+  "license": "Public Domain",
+  "sefariaLicenseTagged": true
+ },
+ {
+  "treatise": "Mishneh Torah, Defilement by a Corpse",
+  "book": "Sefer Taharah",
+  "versionTitle": "Torat Emet 363",
+  "license": "Public Domain",
+  "sefariaLicenseTagged": true
+ },
+ {
+  "treatise": "Mishneh Torah, Red Heifer",
+  "book": "Sefer Taharah",
+  "versionTitle": "Torat Emet 363",
+  "license": "Public Domain",
+  "sefariaLicenseTagged": true
+ },
+ {
+  "treatise": "Mishneh Torah, Defilement by Leprosy",
+  "book": "Sefer Taharah",
+  "versionTitle": "Torat Emet 363",
+  "license": "Public Domain",
+  "sefariaLicenseTagged": true
+ },
+ {
+  "treatise": "Mishneh Torah, Those Who Defile Bed or Seat",
+  "book": "Sefer Taharah",
+  "versionTitle": "Torat Emet 363",
+  "license": "Public Domain",
+  "sefariaLicenseTagged": true
+ },
+ {
+  "treatise": "Mishneh Torah, Other Sources of Defilement",
+  "book": "Sefer Taharah",
+  "versionTitle": "Torat Emet 363",
+  "license": "Public Domain",
+  "sefariaLicenseTagged": true
+ },
+ {
+  "treatise": "Mishneh Torah, Defilement of Foods",
+  "book": "Sefer Taharah",
+  "versionTitle": "Torat Emet 363",
+  "license": "Public Domain",
+  "sefariaLicenseTagged": true
+ },
+ {
+  "treatise": "Mishneh Torah, Vessels",
+  "book": "Sefer Taharah",
+  "versionTitle": "Torat Emet 363",
+  "license": "Public Domain",
+  "sefariaLicenseTagged": true
+ },
+ {
+  "treatise": "Mishneh Torah, Immersion Pools",
+  "book": "Sefer Taharah",
+  "versionTitle": "Torat Emet 363",
+  "license": "Public Domain",
+  "sefariaLicenseTagged": true
+ },
+ {
+  "treatise": "Mishneh Torah, Damages to Property",
+  "book": "Sefer Nezikim",
+  "versionTitle": "Torat Emet 363",
+  "license": "Public Domain",
+  "sefariaLicenseTagged": true
+ },
+ {
+  "treatise": "Mishneh Torah, Theft",
+  "book": "Sefer Nezikim",
+  "versionTitle": "Torat Emet 363",
+  "license": "Public Domain",
+  "sefariaLicenseTagged": true
+ },
+ {
+  "treatise": "Mishneh Torah, Robbery and Lost Property",
+  "book": "Sefer Nezikim",
+  "versionTitle": "Torat Emet 363",
+  "license": "Public Domain",
+  "sefariaLicenseTagged": true
+ },
+ {
+  "treatise": "Mishneh Torah, One Who Injures a Person or Property",
+  "book": "Sefer Nezikim",
+  "versionTitle": "Torat Emet 363",
+  "license": "Public Domain",
+  "sefariaLicenseTagged": true
+ },
+ {
+  "treatise": "Mishneh Torah, Murderer and the Preservation of Life",
+  "book": "Sefer Nezikim",
+  "versionTitle": "Torat Emet 363",
+  "license": "Public Domain",
+  "sefariaLicenseTagged": true
+ },
+ {
+  "treatise": "Mishneh Torah, Sales",
+  "book": "Sefer Kinyan",
+  "versionTitle": "Torat Emet 363",
+  "license": "Public Domain",
+  "sefariaLicenseTagged": true
+ },
+ {
+  "treatise": "Mishneh Torah, Ownerless Property and Gifts",
+  "book": "Sefer Kinyan",
+  "versionTitle": "Torat Emet 363",
+  "license": "Public Domain",
+  "sefariaLicenseTagged": true
+ },
+ {
+  "treatise": "Mishneh Torah, Neighbors",
+  "book": "Sefer Kinyan",
+  "versionTitle": "Torat Emet 363",
+  "license": "Public Domain",
+  "sefariaLicenseTagged": true
+ },
+ {
+  "treatise": "Mishneh Torah, Agents and Partners",
+  "book": "Sefer Kinyan",
+  "versionTitle": "Torat Emet 363",
+  "license": "Public Domain",
+  "sefariaLicenseTagged": true
+ },
+ {
+  "treatise": "Mishneh Torah, Slaves",
+  "book": "Sefer Kinyan",
+  "versionTitle": "Torat Emet 363",
+  "license": "Public Domain",
+  "sefariaLicenseTagged": true
+ },
+ {
+  "treatise": "Mishneh Torah, Hiring",
+  "book": "Sefer Mishpatim",
+  "versionTitle": "Torat Emet 363",
+  "license": "Public Domain",
+  "sefariaLicenseTagged": true
+ },
+ {
+  "treatise": "Mishneh Torah, Borrowing and Deposit",
+  "book": "Sefer Mishpatim",
+  "versionTitle": "Torat Emet 363",
+  "license": "Public Domain",
+  "sefariaLicenseTagged": true
+ },
+ {
+  "treatise": "Mishneh Torah, Creditor and Debtor",
+  "book": "Sefer Mishpatim",
+  "versionTitle": "Torat Emet 363",
+  "license": "Public Domain",
+  "sefariaLicenseTagged": true
+ },
+ {
+  "treatise": "Mishneh Torah, Plaintiff and Defendant",
+  "book": "Sefer Mishpatim",
+  "versionTitle": "Torat Emet 363",
+  "license": "Public Domain",
+  "sefariaLicenseTagged": true
+ },
+ {
+  "treatise": "Mishneh Torah, Inheritances",
+  "book": "Sefer Mishpatim",
+  "versionTitle": "Torat Emet 363",
+  "license": "Public Domain",
+  "sefariaLicenseTagged": true
+ },
+ {
+  "treatise": "Mishneh Torah, The Sanhedrin and the Penalties within Their Jurisdiction",
+  "book": "Sefer Shoftim",
+  "versionTitle": "Torat Emet 363",
+  "license": "Public Domain",
+  "sefariaLicenseTagged": true
+ },
+ {
+  "treatise": "Mishneh Torah, Testimony",
+  "book": "Sefer Shoftim",
+  "versionTitle": "Torat Emet 363",
+  "license": "Public Domain",
+  "sefariaLicenseTagged": true
+ },
+ {
+  "treatise": "Mishneh Torah, Rebels",
+  "book": "Sefer Shoftim",
+  "versionTitle": "Torat Emet 363",
+  "license": "Public Domain",
+  "sefariaLicenseTagged": true
+ },
+ {
+  "treatise": "Mishneh Torah, Mourning",
+  "book": "Sefer Shoftim",
+  "versionTitle": "Torat Emet 363",
+  "license": "Public Domain",
+  "sefariaLicenseTagged": true
+ },
+ {
+  "treatise": "Mishneh Torah, Kings and Wars",
+  "book": "Sefer Shoftim",
+  "versionTitle": "Torat Emet 363",
+  "license": "Public Domain",
+  "sefariaLicenseTagged": true
+ }
+]
