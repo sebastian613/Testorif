@@ -353,7 +353,8 @@ function renderResultsList() {
           `<span class="verse-ref">${escapeHtml(mode.verseRef(item))}</span>` +
           `<span class="verse-text" dir="${mode.contentDir}">${escapeHtml(mode.verseBody(item))}</span>` +
           (translation
-            ? `<span class="verse-text verse-text-en" dir="ltr">${escapeHtml(translation)}</span>`
+            ? `<span class="lang-label">English (word-for-word)</span>` +
+              `<span class="verse-text verse-text-en" dir="ltr">${escapeHtml(translation)}</span>`
             : "");
       } else {
         const headline = document.createElement("div");
@@ -379,7 +380,9 @@ function renderResultsList() {
             `<span class="verse-text" dir="${mode.contentDir}">${highlightSpan(verse.text, mainStart, mainEnd)}</span>`;
 
           if (enStart !== -1 && verse.en) {
-            html += `<span class="verse-text verse-text-en" dir="ltr">${highlightSpan(verse.en, enStart, enEnd)}</span>`;
+            html +=
+              `<span class="lang-label">English (word-for-word)</span>` +
+              `<span class="verse-text verse-text-en" dir="ltr">${highlightSpan(verse.en, enStart, enEnd)}</span>`;
           }
 
           citation.innerHTML = html;

@@ -45,10 +45,11 @@ Tanakh, with the same citation-and-highlight treatment.
 - **English translation**: word-for-word glosses from
   [STEPBible's Translators Amalgamated Hebrew OT](https://github.com/STEPBible/STEPBible-Data)
   (CC BY), aligned to each Hebrew word automatically and verified before use
-  (matching word count plus matching first/last word per verse) — so a
-  minority of verses (~25%, mostly where Hebrew and English Bibles number
-  verses differently, e.g. Psalm superscriptions) don't have a verified
-  English alignment and simply show the Hebrew citation alone.
+  (matching word count plus matching first/last word per verse). STEPBible
+  annotates its own Hebrew/English verse-numbering differences inline (e.g.
+  Psalm superscriptions, Genesis 32, Joel, Malachi), and those are resolved
+  before matching, so ~82% of verses have a verified English alignment; the
+  rest simply show the Hebrew citation alone.
 
 ### English
 
@@ -126,11 +127,18 @@ translation line in that case. English occurrences are 3-element
 2. STEPBible's Translators Amalgamated Hebrew OT
    (`git clone https://github.com/STEPBible/STEPBible-Data`) — its
    `Translators Amalgamated OT+NT/TAHOT *.txt` files give a per-word English
-   gloss in Hebrew word order. For each verse, its word count and first/last
-   bare-consonant word are compared against the Hebrew Bible XML's; only when
-   both match is the verse's English gloss sequence trusted, cleaned up
-   (stripping the interlinear markup), and given its own character offsets
-   the same way as the Hebrew text.
+   gloss in Hebrew word order, keyed by verse reference. Where the English
+   (KJV) and Hebrew (Masoretic) verse numbers differ — Psalm superscriptions
+   counted as verse 1 in Hebrew but not English, Genesis 32, Joel, Malachi,
+   etc. — STEPBible's reference includes both, e.g. `Psa.3.0(3.1)` is English
+   Ps 3:0 / Hebrew Ps 3:1; parsing must key on the parenthetical Hebrew
+   reference when present (falling back to the primary one otherwise) or it
+   silently drops every such line. For each verse, its word count and
+   first/last bare-consonant word are then compared against the Hebrew Bible
+   XML's; only when both match is the verse's English gloss sequence
+   trusted, cleaned up (stripping the interlinear markup, capitalizing the
+   first word), and given its own character offsets the same way as the
+   Hebrew text.
 
 Every distinct bare (niqqud-stripped) word and two-word span is then emitted
 with `[verseIndex, heStart, heEnd, enStart, enEnd]` for each of its
