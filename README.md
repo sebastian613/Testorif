@@ -2,10 +2,10 @@
 
 A static, browser-based app that calculates the **Standard Value** (Mispar
 Hechrachi) Hebrew gematria of a name or word and finds every word, phrase,
-and Tanakh (Hebrew Bible) verse that shares the same value — each one
-grounded in its pasuk (verse), cited by book/chapter/verse, and shown
-alongside the JPS 1917 Jewish translation. One thing, done thoroughly: there
-is no other mode.
+and passage — from the Tanakh (Hebrew Bible) and the Mishnah — that shares
+the same value, each one grounded in its source and, for Tanakh citations,
+shown alongside the JPS 1917 Jewish translation. One thing, done thoroughly:
+there is no other mode.
 
 ## How it works
 
@@ -13,18 +13,40 @@ is no other mode.
   (א=1…ת=400), added up. Only the 22 Hebrew letters count; niqqud (vowel
   points), cantillation marks, and punctuation are ignored. The value badge
   has a hover tooltip spelling out exactly how it's calculated.
-- **Matching**: `data/hebrew-words.json` (~39,500 distinct word forms) and
-  `data/hebrew-phrases.json` (~180,000 two-word phrases) are every word and
-  adjacent word-pair that actually occurs in `data/tanakh.json` (all 23,213
-  verses of the Masoretic Text) — so every match is indexed on load, and
-  every word/phrase result shows the pasuk it comes from: the Hebrew verse
-  with that exact occurrence highlighted, cited by book/chapter/verse, plus
-  its JPS 1917 translation with the corresponding English word(s)
-  highlighted too, wherever that can be identified with confidence (see
+- **Matching**: `data/hebrew-words.json` (~55,900 distinct word forms) and
+  `data/hebrew-phrases.json` (~290,900 two-word phrases) are every word and
+  adjacent word-pair that actually occurs across two source corpora —
+  `data/tanakh.json` (all 23,213 verses of the Masoretic Text) and
+  `data/mishnah.json` (all 4,192 mishnayot across all 63 tractates) —
+  concatenated into one combined passage list at load time (Tanakh first,
+  Mishnah appended after, so an occurrence's index either lands in the first
+  23,213 slots or the ones after). Every word/phrase result shows the
+  passage it comes from: the original text with that exact occurrence
+  highlighted, cited by its reference, plus — for Tanakh citations — the
+  JPS 1917 translation with the corresponding English word(s) highlighted
+  too, wherever that can be identified with confidence (see below); Mishnah
+  citations show the original Hebrew only, since no equivalently
+  freely-licensed English translation is wired in yet (see **Corpora**
   below). A word or phrase that occurs more than once shows its first
-  occurrence plus an occurrence count. The Verses tab (whole-verse matches)
-  shows that same translation under each Hebrew pasuk, unhighlighted
-  (there's no single word to point to).
+  occurrence plus a combined occurrence count. The Passages tab
+  (whole-passage matches) shows the same citation for an entire verse or
+  mishnah, unhighlighted (there's no single word to point to).
+- **Corpora**: adding a text here only ever needs two things settled first —
+  is the original-language text actually public domain (rabbinic and
+  biblical text always is, being centuries to millennia old), and is there a
+  translation licensed for how it'll be shown/used. Tanakh's JPS 1917
+  translation is fully public domain, so it's shown everywhere without
+  restriction. The Mishnah's Hebrew (via Sefaria) is included for search and
+  citation, but the license genuinely varies by tractate — 25 of 63 are
+  CC-BY (commercial-safe), the other 38 are CC-BY-NC (free to show here,
+  not for a print/commercial product) — see **Regenerating the data** below
+  for the exact split; no English translation is wired in for it yet either
+  way. Talmud and Zohar are natural next additions — their original text is
+  equally public domain — but are both far larger than the Mishnah and, for
+  the Talmud specifically, the only readily available complete English
+  translation (the Steinsaltz/William Davidson Edition) is CC-BY-NC, meaning
+  free to show in this app but not usable in a commercial/print product
+  built from it.
 - **Hebrew text source**: the Westminster Leningrad Codex, via the
   [Open Scriptures Hebrew Bible](https://github.com/openscriptures/morphhb)
   project (public domain). Verses use the Qere (traditional spoken reading)
@@ -147,19 +169,25 @@ src/popular-searches.js    # curated quick-pick numbers/phrases for the Popular 
 src/app.js                 # UI wiring: search, tabs, recent/popular searches, copy, copy as markdown
 assets/                    # brand mark + favicons
 data/tanakh.json           # Tanakh (WLC + JPS 1917), {ref, he, text (Hebrew), en (English)} per verse
-data/hebrew-words.json     # [bareWord, [[verseIndex, heStart, heEnd, enStart, enEnd], ...]]
-data/hebrew-phrases.json   # same shape, for two-word phrases from the Tanakh
+data/mishnah.json          # all 63 tractates, {ref, he, text} per mishnah — no `en`, see Corpora above
+data/hebrew-words.json     # [bareWord, [[passageIndex, heStart, heEnd, enStart, enEnd], ...]]
+data/hebrew-phrases.json   # same shape, for two-word phrases, across both corpora
+scripts/build_mishnah.py   # fetches + builds data/mishnah.json, merges its words/phrases in
 tests/unit/                # node --test: pure-logic unit tests (no browser)
 tests/e2e/                 # Playwright: drives the real served app in a browser
 playwright.config.js       # e2e test config (auto-starts/stops the static server)
 ```
 
-An occurrence is `[verseIndex, heStart, heEnd, enStart, enEnd]`: `heStart`/
-`heEnd` are character offsets into that verse's Hebrew text
-(`data/tanakh.json[verseIndex].text`), used to highlight the exact
-occurrence in context; `enStart`/`enEnd` are the equivalent offsets into the
-verse's JPS text (`.en`), or `-1` when no confident English highlight was
-found (the translation still displays, just unhighlighted).
+An occurrence is `[passageIndex, heStart, heEnd, enStart, enEnd]` (the last
+two omitted for Mishnah occurrences, which have no translation to
+highlight): `passageIndex` indexes into the combined passages array
+`src/data.js` builds by concatenating `tanakh.json` then `mishnah.json` at
+load time — indices `0..23212` are Tanakh, `23213` and up are Mishnah.
+`heStart`/`heEnd` are character offsets into that passage's Hebrew/Aramaic
+text, used to highlight the exact occurrence in context; `enStart`/`enEnd`
+are the equivalent offsets into the Tanakh passage's JPS text (`.en`), or
+`-1` when no confident English highlight was found (the translation still
+displays, just unhighlighted).
 
 ## Extending
 
@@ -182,8 +210,40 @@ found (the translation still displays, just unhighlighted).
   project shipped (the `findMatches` shape mismatch, the Popular Searches
   click race) were caught by hand, after the fact — the e2e specs written
   for them afterward are there so the *next* one like it fails CI instead.
+- Adding another corpus (Talmud and Zohar are the natural next ones — see
+  **Corpora** above)? `scripts/build_mishnah.py` is the template: fetch the
+  Hebrew/Aramaic text into `data/<corpus>.json` in the same `{ref, he,
+  text}` shape (add `en` only if a translation with a license that fits
+  your use is actually available), then extract and merge its word/phrase
+  occurrences into `hebrew-words.json`/`hebrew-phrases.json` the same way,
+  offsetting each occurrence's passage index by the combined length of
+  every corpus already in `src/data.js`'s `FILES.corpora` array (in the
+  order they're listed there) before merging. Both the Talmud and the Zohar
+  are much bigger than the Mishnah — expect this to be a heavier fetch/build
+  job, not a quick rerun of the same script with new URLs.
 
 ## Regenerating the data
+
+`data/mishnah.json` is generated by `scripts/build_mishnah.py`, which also
+merges its word/phrase occurrences into `hebrew-words.json`/
+`hebrew-phrases.json` (run it from the repo root: `python3
+scripts/build_mishnah.py`; raw per-tractate fetches are cached in
+`.cache/mishnah_raw/` so a re-run after a partial failure doesn't re-fetch
+everything). Its source is Sefaria's public GCS export of the Mishnah's
+Hebrew text — but the license is **not one blanket value for the whole
+work**, and the actual split is lopsided enough to matter for anything built
+commercially on top of this app: checked per-tractate against
+`https://www.sefaria.org/api/texts/<title>`'s `license` field, only
+**25 of the 63 tractates are CC-BY** (freely reusable, commercial included) —
+essentially all of Seder Zeraim and Seder Tahorot, plus Eduyot, Avot,
+Middot, and Kinnim. The other **38 (60%) are CC-BY-NC**: all of Seder Moed,
+Seder Nashim, and Seder Nezikin, most of Seder Kodashim, plus Berakhot and
+Niddah — free to show in this app, not usable in a print/commercial product
+without swapping in a different source for those tractates specifically.
+The pattern lines up with which tractates have accompanying Talmud Bavli
+Gemara (digitized as part of the same Steinsaltz/Koren project) versus which
+don't, which tracks with the same CC-BY-NC restriction already noted for
+the Talmud translation itself.
 
 `data/tanakh.json`, `data/hebrew-words.json`, and `data/hebrew-phrases.json`
 are generated from two sources, not hand-written:

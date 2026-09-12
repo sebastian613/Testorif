@@ -19,13 +19,13 @@ test("copying a word result puts its value and citation on the clipboard", async
   expect(clipboardText).toContain("JPS 1917:");
 });
 
-test("copying a verse result puts its citation and translation on the clipboard", async ({ page }) => {
-  // 1107 (יאשיהו דוד עזריאל לישאביץ) is known to have whole-verse matches;
-  // a single word like יהוה never will, since a verse's total is a sum
+test("copying a passage result puts its citation and translation on the clipboard", async ({ page }) => {
+  // 1107 (יאשיהו דוד עזריאל לישאביץ) is known to have whole-passage matches;
+  // a single word like יהוה never will, since a passage's total is a sum
   // across every one of its words and 26 is far too small.
   await page.fill("#name-input", "יאשיהו דוד עזריאל לישאביץ");
   await expect(page.locator(".value-number")).toHaveText("1107"); // wait out the input debounce
-  await page.click('.tab:has-text("Verses")');
+  await page.click('.tab:has-text("Passages")');
 
   const copyBtn = page.locator("#results-list li").first().locator(".copy-btn");
   await copyBtn.click();

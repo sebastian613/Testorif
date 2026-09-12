@@ -3,37 +3,42 @@ import { computeHechrachi } from "./gematria.js";
 const FILES = {
   words: "data/hebrew-words.json",
   phrases: "data/hebrew-phrases.json",
-  verses: "data/tanakh.json",
+  // Passage corpora, concatenated in this order into one combined array.
+  // Word/phrase occurrences store an index into that combined array, so
+  // this order must never change without regenerating hebrew-words.json
+  // and hebrew-phrases.json to match.
+  corpora: ["data/tanakh.json", "data/mishnah.json"],
 };
 
 const TEXT_OF = {
   words: (item) => item[0],
   phrases: (item) => item[0],
-  verses: (v) => v.text,
+  passages: (p) => p.text,
 };
 
 export { TEXT_OF as textOf };
 
 /**
- * Loads the word/phrase/verse datasets and precomputes each item's Standard
- * Value so lookups are a simple array scan instead of recomputing gematria
- * on every keystroke.
+ * Loads the word/phrase/passage datasets and precomputes each item's
+ * Standard Value so lookups are a simple array scan instead of recomputing
+ * gematria on every keystroke.
  */
 export async function loadDatasets(onProgress) {
   const report = (msg) => onProgress && onProgress(msg);
 
-  report("Loading the Hebrew word list and the Tanakh…");
-  const [words, phrases, verses] = await Promise.all([
+  report("Loading the Hebrew word list and source texts…");
+  const [words, phrases, ...corpora] = await Promise.all([
     fetchJson(FILES.words),
     fetchJson(FILES.phrases),
-    fetchJson(FILES.verses),
+    ...FILES.corpora.map(fetchJson),
   ]);
+  const passages = corpora.flat();
 
   report("Building the gematria index…");
   return {
     words: { items: words, values: buildIndex(words, TEXT_OF.words) },
     phrases: { items: phrases, values: buildIndex(phrases, TEXT_OF.phrases) },
-    verses: { items: verses, values: buildIndex(verses, TEXT_OF.verses) },
+    passages: { items: passages, values: buildIndex(passages, TEXT_OF.passages) },
   };
 }
 

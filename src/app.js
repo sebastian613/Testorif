@@ -11,15 +11,15 @@ const DEFAULT_VALUE = "יאשיהו דוד עזריאל לישאביץ";
 const RECENT_KEY = "gematria:recentSearches";
 const RECENT_MAX = 12;
 
-const TAB_LABELS = { words: "Words", phrases: "Phrases", verses: "Verses (Tanakh)" };
+const TAB_LABELS = { words: "Words", phrases: "Phrases", passages: "Passages" };
 
 const state = {
   datasets: null,
   inputValue: DEFAULT_VALUE,
   activeTab: "words",
   value: null,
-  matches: { words: [], phrases: [], verses: [] },
-  visibleCount: { words: PAGE_SIZE, phrases: PAGE_SIZE, verses: PAGE_SIZE },
+  matches: { words: [], phrases: [], passages: [] },
+  visibleCount: { words: PAGE_SIZE, phrases: PAGE_SIZE, passages: PAGE_SIZE },
   filterText: "",
   recentSearches: loadRecentSearches(),
 };
@@ -54,7 +54,7 @@ async function init() {
 
   el.nameInput.value = state.inputValue;
   el.nameInput.disabled = true;
-  setStatus("Loading the Hebrew word list and the Tanakh…", true);
+  setStatus("Loading the Hebrew word list and source texts…", true);
 
   try {
     state.datasets = await loadDatasets((msg) => setStatus(msg, true));
@@ -155,7 +155,7 @@ function recomputeMatches() {
   if (state.value === null || !datasets) return;
 
   const target = state.value;
-  const { words, phrases, verses } = datasets;
+  const { words, phrases, passages } = datasets;
   const selfKey = stripToHebrewLetters(el.nameInput.value.trim());
 
   state.matches.words = findMatches(words.values, target).filter(
@@ -164,7 +164,7 @@ function recomputeMatches() {
   state.matches.phrases = findMatches(phrases.values, target).filter(
     (i) => textOf.phrases(phrases.items[i]) !== selfKey
   );
-  state.matches.verses = findMatches(verses.values, target);
+  state.matches.passages = findMatches(passages.values, target);
 
   resetVisibleCount();
   renderTabs();
@@ -172,12 +172,12 @@ function recomputeMatches() {
 }
 
 function resetVisibleCount() {
-  state.visibleCount = { words: PAGE_SIZE, phrases: PAGE_SIZE, verses: PAGE_SIZE };
+  state.visibleCount = { words: PAGE_SIZE, phrases: PAGE_SIZE, passages: PAGE_SIZE };
 }
 
 function renderTabs() {
   el.tabs.innerHTML = "";
-  for (const tab of ["words", "phrases", "verses"]) {
+  for (const tab of ["words", "phrases", "passages"]) {
     const btn = document.createElement("button");
     btn.type = "button";
     btn.className = "tab" + (tab === state.activeTab ? " active" : "");
@@ -215,45 +215,45 @@ function renderResultsList() {
     empty.textContent = "No matches found.";
     el.resultsList.appendChild(empty);
   } else {
-    const verseDataset = state.datasets.verses;
+    const passageDataset = state.datasets.passages;
     for (const i of visible) {
       const li = document.createElement("li");
       const item = dataset.items[i];
-      if (tab === "verses") {
-        li.innerHTML = renderVerseBlock(item);
-        li.querySelector(".verse-ref").appendChild(makeCopyButton(() => buildCopyText("verse", item)));
+      if (tab === "passages") {
+        li.innerHTML = renderPassageBlock(item);
+        li.querySelector(".verse-ref").appendChild(makeCopyButton(() => buildCopyText("passage", item)));
       } else {
         const headline = document.createElement("div");
         headline.className = "result-headline";
         headline.dir = "rtl";
         headline.textContent = textOf[tab](item);
-        headline.appendChild(makeCopyButton(() => buildCopyText(tab, item, verseDataset)));
+        headline.appendChild(makeCopyButton(() => buildCopyText(tab, item, passageDataset)));
         li.appendChild(headline);
 
         const occurrences = item[1];
         if (occurrences && occurrences.length) {
           const occ = occurrences[0];
-          const [verseIndex, start, end] = occ;
+          const [passageIndex, start, end] = occ;
           const enStart = occ.length > 3 ? occ[3] : -1;
           const enEnd = occ.length > 3 ? occ[4] : -1;
-          const verse = verseDataset.items[verseIndex];
+          const passage = passageDataset.items[passageIndex];
           const capped = occurrences.length >= OCC_CAP;
           const label =
-            capped ? `${occurrences.length}+ occurrences in the Tanakh`
-              : occurrences.length === 1 ? "Only occurrence in the Tanakh"
-              : `${occurrences.length} occurrences in the Tanakh`;
+            capped ? `${occurrences.length}+ occurrences found`
+              : occurrences.length === 1 ? "Only occurrence found"
+              : `${occurrences.length} occurrences found`;
 
           const citation = document.createElement("div");
           citation.className = "result-citation";
           citation.innerHTML =
-            `<span class="verse-ref">${escapeHtml(verse.ref)}` +
+            `<span class="verse-ref">${escapeHtml(passage.ref)}` +
             `<span class="occurrence-count"> · ${escapeHtml(label)}</span></span>` +
-            `<span class="verse-text" dir="rtl">${highlightSpan(verse.text, start, end)}</span>` +
-            (verse.en
+            `<span class="verse-text" dir="rtl">${highlightSpan(passage.text, start, end)}</span>` +
+            (passage.en
               ? `<span class="lang-label">JPS 1917 translation</span><span class="verse-text verse-text-en" dir="ltr">${
                   enStart !== -1
-                    ? highlightSpan(verse.en, enStart, enEnd)
-                    : escapeHtml(verse.en)
+                    ? highlightSpan(passage.en, enStart, enEnd)
+                    : escapeHtml(passage.en)
                 }</span>`
               : "");
           li.appendChild(citation);
@@ -266,12 +266,12 @@ function renderResultsList() {
   el.loadMoreBtn.hidden = visible.length >= indices.length;
 }
 
-function renderVerseBlock(v) {
+function renderPassageBlock(p) {
   return (
-    `<span class="verse-ref">${escapeHtml(v.ref)}</span>` +
-    `<span class="verse-text" dir="rtl">${escapeHtml(v.text)}</span>` +
-    (v.en
-      ? `<span class="lang-label">JPS 1917 translation</span><span class="verse-text verse-text-en" dir="ltr">${escapeHtml(v.en)}</span>`
+    `<span class="verse-ref">${escapeHtml(p.ref)}</span>` +
+    `<span class="verse-text" dir="rtl">${escapeHtml(p.text)}</span>` +
+    (p.en
+      ? `<span class="lang-label">JPS 1917 translation</span><span class="verse-text verse-text-en" dir="ltr">${escapeHtml(p.en)}</span>`
       : "")
   );
 }
@@ -279,16 +279,16 @@ function renderVerseBlock(v) {
 // --- Copy / share ------------------------------------------------------------
 
 /** Builds the plain-text summary a result's Copy button puts on the clipboard. */
-function buildCopyText(kind, item, verseDataset) {
-  if (kind === "verse") {
+function buildCopyText(kind, item, passageDataset) {
+  if (kind === "passage") {
     return [item.ref, item.text, item.en ? `JPS 1917: ${item.en}` : null].filter(Boolean).join("\n");
   }
   const [text, occurrences] = item;
   const lines = [`${text} — ${HECHRACHI_INFO.label} ${state.value}`];
   if (occurrences && occurrences.length) {
-    const verse = verseDataset.items[occurrences[0][0]];
-    lines.push(verse.ref, verse.text);
-    if (verse.en) lines.push(`JPS 1917: ${verse.en}`);
+    const passage = passageDataset.items[occurrences[0][0]];
+    lines.push(passage.ref, passage.text);
+    if (passage.en) lines.push(`JPS 1917: ${passage.en}`);
   }
   return lines.join("\n");
 }
@@ -306,7 +306,7 @@ function buildCopyText(kind, item, verseDataset) {
  */
 function buildMarkdownReport() {
   const tab = state.activeTab;
-  const verseDataset = state.datasets.verses;
+  const passageDataset = state.datasets.passages;
   const indices = state.matches[tab].slice(0, state.visibleCount[tab]);
   const lines = [`# ${el.nameInput.value.trim()} — ${HECHRACHI_INFO.label}: ${state.value}`, ""];
 
@@ -317,8 +317,8 @@ function buildMarkdownReport() {
 
   if (indices.length === 0) {
     lines.push("_No matches found._");
-  } else if (tab === "verses") {
-    for (const i of indices) lines.push(...markdownForVerse(verseDataset.items[i]), "");
+  } else if (tab === "passages") {
+    for (const i of indices) lines.push(...markdownForPassage(passageDataset.items[i]), "");
   } else {
     const dataset = state.datasets[tab];
     for (const i of indices) {
@@ -326,7 +326,7 @@ function buildMarkdownReport() {
       lines.push(`### ${textOf[tab](item)}`);
       const occurrences = item[1];
       if (occurrences && occurrences.length) {
-        lines.push(...markdownForVerse(verseDataset.items[occurrences[0][0]]));
+        lines.push(...markdownForPassage(passageDataset.items[occurrences[0][0]]));
       }
       lines.push("");
     }
@@ -335,10 +335,10 @@ function buildMarkdownReport() {
   return lines.join("\n").trim() + "\n";
 }
 
-/** Renders one verse citation as a Markdown blockquote (Hebrew, then JPS). */
-function markdownForVerse(v) {
-  const lines = [`**${v.ref}**`, `> ${v.text}`];
-  if (v.en) lines.push(">", `> *JPS 1917:* ${v.en}`);
+/** Renders one passage citation as a Markdown blockquote (original text, then translation if any). */
+function markdownForPassage(p) {
+  const lines = [`**${p.ref}**`, `> ${p.text}`];
+  if (p.en) lines.push(">", `> *JPS 1917:* ${p.en}`);
   return lines;
 }
 

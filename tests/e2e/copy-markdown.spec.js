@@ -23,7 +23,7 @@ test("Copy as Markdown puts a structured report of the active tab on the clipboa
 
   const clipboardText = await page.evaluate(() => navigator.clipboard.readText());
   expect(clipboardText).toContain("# יאשיהו — Standard Value: 332");
-  expect(clipboardText).toContain("## Words (41)");
+  expect(clipboardText).toContain("## Words (64)");
   expect(clipboardText).toMatch(/^### /m); // at least one result heading
   expect(clipboardText).toContain("JPS 1917:");
 });
@@ -31,9 +31,9 @@ test("Copy as Markdown puts a structured report of the active tab on the clipboa
 test("Copy as Markdown follows the active tab", async ({ page }) => {
   await page.fill("#name-input", "יאשיהו דוד עזריאל לישאביץ");
   await expect(page.locator(".value-number")).toHaveText("1107");
-  await page.click('.tab:has-text("Verses")');
+  await page.click('.tab:has-text("Passages")');
 
   await page.locator("#copy-markdown").click();
   const clipboardText = await page.evaluate(() => navigator.clipboard.readText());
-  expect(clipboardText).toContain("## Verses (Tanakh)");
+  expect(clipboardText).toContain("## Passages");
 });
