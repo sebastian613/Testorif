@@ -167,7 +167,7 @@ def main():
         for j in range(len(toks) - 1):
             b1, s1, _ = toks[j]
             _, _, e2 = toks[j + 1]
-            bucket = phrase_occ.setdefault(b1 + toks[j + 1][0], [])
+            bucket = phrase_occ.setdefault(f"{b1} {toks[j + 1][0]}", [])
             if len(bucket) < MAX_OCC:
                 bucket.append([i, s1, e2])
 
