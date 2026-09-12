@@ -287,6 +287,12 @@ header h1 {
   margin-bottom: 14px;
 }
 
+.results-header-actions {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
 .tabs {
   display: flex;
   gap: 8px;

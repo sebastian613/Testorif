@@ -52,16 +52,15 @@ test("a known notable value shows its callout", async ({ page }) => {
   await expect(page.locator("#notable-value")).toContainText("Tetragrammaton");
 });
 
-test("a search lands in the URL so it can be copied and shared", async ({ page }) => {
-  // The app read ?q= on load long before it ever wrote it, so copying the
-  // address bar mid-search handed someone else the default search instead
-  // of yours. This is the half that was missing.
+test("searching never rewrites the address bar on its own", async ({ page }) => {
+  // Regression test: an earlier version synced ?q= into the address bar
+  // automatically on every keystroke. That silently broke "Add to Home
+  // Screen" — iOS captures whatever URL is showing at the moment the icon
+  // is added, so a home-screen launch could reopen to a half-typed search
+  // instead of the app's real default (see the Copy Link tests in
+  // copy-markdown.spec.js for the opt-in replacement).
   await page.fill("#name-input", "חיים");
   await expect(page.locator(".value-number")).toHaveText("68");
-  await expect(page).toHaveURL(/[?&]q=/);
-
-  // Clearing the box shouldn't leave a stale ?q= behind to be copied.
-  await page.fill("#name-input", "");
   await expect(page).not.toHaveURL(/[?&]q=/);
 });
 

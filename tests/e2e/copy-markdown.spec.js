@@ -43,3 +43,24 @@ test("Copy as Markdown follows the active tab and corpus", async ({ page }) => {
   const mishnahClipboard = await page.evaluate(() => navigator.clipboard.readText());
   expect(mishnahClipboard).toContain("## Mishnah Phrases");
 });
+
+test("Copy Link puts a ?q= link on the clipboard without ever touching the address bar on its own", async ({
+  page,
+}) => {
+  // An earlier version synced ?q= into the address bar automatically on
+  // every keystroke via history.replaceState. That silently broke "Add to
+  // Home Screen": iOS captures whatever URL is showing at the moment the
+  // icon is added, so a home-screen launch could reopen to a half-typed
+  // search instead of the app's real default. Copy Link is opt-in instead.
+  await page.fill("#name-input", "חיים");
+  await expect(page.locator(".value-number")).toHaveText("68");
+  await expect(page).not.toHaveURL(/[?&]q=/);
+
+  const btn = page.locator("#copy-link");
+  await btn.click();
+  await expect(btn).toHaveText("Copied!");
+  await expect(page).not.toHaveURL(/[?&]q=/);
+
+  const link = await page.evaluate(() => navigator.clipboard.readText());
+  expect(link).toContain(`?q=${encodeURIComponent("חיים")}`);
+});

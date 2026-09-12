@@ -45,6 +45,7 @@ const el = {
   popularNumbers: document.getElementById("popular-numbers"),
   popularPhrases: document.getElementById("popular-phrases"),
   exportBtn: document.getElementById("copy-markdown"),
+  copyLinkBtn: document.getElementById("copy-link"),
 };
 
 init();
@@ -131,6 +132,7 @@ function wireInputs() {
   });
 
   el.exportBtn.addEventListener("click", () => copyToClipboardWithFeedback(el.exportBtn, buildMarkdownReport));
+  el.copyLinkBtn.addEventListener("click", () => copyToClipboardWithFeedback(el.copyLinkBtn, copyShareableLink));
 }
 
 function recompute() {
@@ -141,7 +143,6 @@ function recompute() {
     renderNumeralHint(null);
     el.resultsSection.hidden = true;
     renderValueDisplay();
-    if (state.datasets) syncShareableUrl("");
     return;
   }
 
@@ -161,7 +162,6 @@ function recompute() {
     renderValueDisplay();
     renderNotableValue();
     el.resultsSection.hidden = true;
-    syncShareableUrl(trimmed);
     return;
   } else {
     state.value = computeHechrachi(text);
@@ -172,25 +172,24 @@ function recompute() {
   renderNotableValue();
   recomputeMatches();
   el.resultsSection.hidden = false;
-  syncShareableUrl(trimmed);
 }
 
 /**
- * Keeps ?q= in the address bar in sync with the search, so a result can be
- * copied and shared — init() already reads ?q= back on load, which until
- * now was only half a feature. replaceState rather than pushState: typing
- * a name shouldn't bury the previous page under a dozen history entries.
+ * Builds a link that reopens the current search via ?q= (read back in
+ * init()) and copies it to the clipboard. Deliberately NOT synced to the
+ * address bar automatically on every keystroke — an earlier version did
+ * that via history.replaceState, and it silently broke "Add to Home
+ * Screen": iOS captures whatever URL is showing at the moment you add the
+ * icon, so a home-screen launch could reopen to a half-typed search
+ * instead of the app's actual default. This only ever touches the URL
+ * when explicitly asked to.
  */
-function syncShareableUrl(query) {
-  try {
-    const url = new URL(location.href);
-    if (query) url.searchParams.set("q", query);
-    else url.searchParams.delete("q");
-    history.replaceState(null, "", url);
-  } catch {
-    // Some sandboxed embeddings disallow touching history; the search
-    // itself still works, so a shareable URL is simply not offered there.
-  }
+function copyShareableLink() {
+  const url = new URL(location.href);
+  url.search = "";
+  const query = el.nameInput.value.trim();
+  if (query) url.searchParams.set("q", query);
+  return url.toString();
 }
 
 function renderNotableValue() {
