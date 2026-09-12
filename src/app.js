@@ -74,10 +74,11 @@ async function init() {
 }
 
 /**
- * Search is scoped to one corpus at a time (Tanakh or Mishnah, chosen
- * here) rather than blending both into one result list — each corpus's
- * word/phrase index is independent (see data.js), so switching corpus
- * re-runs the search against a completely separate dataset.
+ * Search is scoped to one corpus at a time (Tanakh, Mishnah, or Mishneh
+ * Torah, chosen here) rather than blending them into one result list —
+ * each corpus's word/phrase index is independent (see data.js), so
+ * switching corpus re-runs the search against a completely separate
+ * dataset.
  */
 function renderCorpusTabs() {
   el.corpusTabs.innerHTML = "";

@@ -29,6 +29,11 @@ test("switching the corpus tab searches a completely separate index", async ({ p
   const mishnahTabs = await page.locator(".tab").allTextContents();
   expect(mishnahTabs).not.toEqual(tanakhTabs);
 
+  await page.click('.corpus-tab:has-text("Mishneh Torah")');
+  const mishnehTorahTabs = await page.locator(".tab").allTextContents();
+  expect(mishnehTorahTabs).not.toEqual(tanakhTabs);
+  expect(mishnehTorahTabs).not.toEqual(mishnahTabs);
+
   await page.click('.corpus-tab:has-text("Tanakh")');
   await expect(page.locator(".tab").first()).toHaveText(tanakhTabs[0]);
 });

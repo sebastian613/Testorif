@@ -34,7 +34,7 @@ test("phrase entries are two space-separated words, in both corpora", () => {
   // of "קורין את") — not just a display bug, since two genuinely different
   // word-pairs can concatenate to the exact same string and silently
   // collide into one (wrong) phrase entry once the space disappears.
-  for (const file of ["hebrew-phrases.json", "mishnah-phrases.json"]) {
+  for (const file of ["hebrew-phrases.json", "mishnah-phrases.json", "mishneh-torah-phrases.json"]) {
     const phrases = readJson(file);
     for (const [phrase] of phrases) {
       assert.equal((phrase.match(/ /g) || []).length, 1, `${file}: "${phrase}" should be exactly two words`);

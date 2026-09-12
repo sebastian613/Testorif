@@ -17,6 +17,15 @@ export const CORPORA = [
     label: "Mishnah",
     files: { words: "data/mishnah-words.json", phrases: "data/mishnah-phrases.json", passages: "data/mishnah.json" },
   },
+  {
+    key: "mishneh-torah",
+    label: "Mishneh Torah",
+    files: {
+      words: "data/mishneh-torah-words.json",
+      phrases: "data/mishneh-torah-phrases.json",
+      passages: "data/mishneh-torah.json",
+    },
+  },
 ];
 
 const TEXT_OF = {

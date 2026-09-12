@@ -3,10 +3,10 @@
 A static, browser-based app that calculates the **Standard Value** (Mispar
 Hechrachi) Hebrew gematria of a name or word and finds every word, phrase,
 and passage that shares the same value in a source text of your choosing —
-the Tanakh (Hebrew Bible) or the Mishnah, searched one at a time rather than
-blended together — each one grounded in its source and, for Tanakh
-citations, shown alongside the JPS 1917 Jewish translation. One thing, done
-thoroughly: there is no other mode.
+the Tanakh (Hebrew Bible), the Mishnah, or Rambam's Mishneh Torah, searched
+one at a time rather than blended together — each one grounded in its
+source and, for Tanakh citations, shown alongside the JPS 1917 Jewish
+translation. One thing, done thoroughly: there is no other mode.
 
 ## How it works
 
@@ -14,32 +14,37 @@ thoroughly: there is no other mode.
   (א=1…ת=400), added up. Only the 22 Hebrew letters count; niqqud (vowel
   points), cantillation marks, and punctuation are ignored. The value badge
   has a hover tooltip spelling out exactly how it's calculated.
-- **Corpora**: two so far — **Tanakh** and **Mishnah** — searched one at a
-  time, chosen with the Tanakh/Mishnah tabs above the results. They're kept
-  fully independent on purpose, not blended into one combined result list:
-  each has its own word/phrase/passage index (`data/hebrew-words.json` +
-  `data/hebrew-phrases.json` + `data/tanakh.json` for Tanakh;
-  `data/mishnah-words.json` + `data/mishnah-phrases.json` + `data/mishnah.json`
-  for Mishnah), and an occurrence's index is always local to its own
-  corpus's passage list — nothing to offset, nothing coupling the two
-  together. `src/data.js`'s `CORPORA` array is the whole of what "supporting
-  a corpus" means to the app; adding another is adding another entry there
-  plus the three files it points to (see **Extending** below).
+- **Corpora**: three so far — **Tanakh**, **Mishnah**, and **Mishneh
+  Torah** — searched one at a time, chosen with the tabs above the results.
+  They're kept fully independent on purpose, not blended into one combined
+  result list: each has its own word/phrase/passage index
+  (`data/hebrew-words.json` + `data/hebrew-phrases.json` +
+  `data/tanakh.json` for Tanakh; `data/mishnah-words.json` +
+  `data/mishnah-phrases.json` + `data/mishnah.json` for Mishnah;
+  `data/mishneh-torah-words.json` + `data/mishneh-torah-phrases.json` +
+  `data/mishneh-torah.json` for Mishneh Torah), and an occurrence's index is
+  always local to its own corpus's passage list — nothing to offset,
+  nothing coupling any of them together. `src/data.js`'s `CORPORA` array is
+  the whole of what "supporting a corpus" means to the app; adding another
+  is adding another entry there plus the three files it points to (see
+  **Extending** below).
 - **Matching**: within whichever corpus is selected, every word and
   adjacent word-pair that actually occurs in it is indexed on load —
   ~39,500 distinct word forms and ~180,700 two-word phrases for Tanakh's
   23,213 verses; ~24,000 words and ~110,000 phrases for the Mishnah's 4,187
-  mishnayot across all 63 tractates. Every word/phrase result shows the
+  mishnayot across all 63 tractates; ~50,800 words and ~398,300 phrases for
+  Mishneh Torah's 14,622 halachot across 79 treatises (see **Licensing**
+  below for why 79 and not all 88). Every word/phrase result shows the
   passage it comes from: the original text with that exact occurrence
   highlighted, cited by its reference, plus — for Tanakh citations — the
   JPS 1917 translation with the corresponding English word(s) highlighted
   too, wherever that can be identified with confidence (see below); Mishnah
-  citations show the original Hebrew only, since no equivalently
-  freely-licensed English translation is wired in yet. A word or phrase
-  that occurs more than once shows its first occurrence plus an occurrence
-  count. The Passages tab (whole-passage matches) shows the same citation
-  for an entire verse or mishnah, unhighlighted (there's no single word to
-  point to).
+  and Mishneh Torah citations show the original Hebrew only, since no
+  equivalently freely-licensed English translation is wired in yet. A word
+  or phrase that occurs more than once shows its first occurrence plus an
+  occurrence count. The Passages tab (whole-passage matches) shows the same
+  citation for an entire verse, mishnah, or halacha, unhighlighted (there's
+  no single word to point to).
 - **Licensing, per corpus**: adding a text here only ever needs two things
   settled first — is the original-language text actually public domain
   (rabbinic and biblical text always is, being centuries to millennia old),
@@ -50,15 +55,29 @@ thoroughly: there is no other mode.
   tractates**, unlike Sefaria's own default/"merged" text for the same
   tractates, which turned out to be CC-BY-NC for 38 of them (see
   **Regenerating the data** below for how that was found and worked
-  around). No English translation is wired in for the Mishnah yet either
-  way. Talmud and Zohar are natural next corpora — their original text is
-  equally public domain — but both are far larger than the Mishnah, and for
-  the Talmud specifically, the only readily available complete English
-  translation (the Steinsaltz/William Davidson Edition) is CC-BY-NC, meaning
-  free to show in this app but not usable in a commercial/print product
-  built from it — the same kind of per-version check that solved the
-  Mishnah's licensing may or may not turn up a public-domain Talmud
-  translation too; that hasn't been checked yet.
+  around). Mishneh Torah turned out to be split across *two* independently
+  licensed editions, and neither covers the whole work: "Torat Emet 363"
+  is Public Domain for 72 of its 88 treatises (all of Sefer Madda, plus
+  everything from Sefer Zemanim through Sefer Shoftim), and "Torat Emet
+  370" — the edition covering Sefer Ahavah — is Public Domain for only 2 of
+  its 7 treatises (Reading the Shema; Prayer and the Priestly Blessing).
+  That leaves 9 of the 88 treatises out of this corpus entirely: 4
+  introductory list-books (Transmission of the Oral Law, Positive Mitzvot,
+  Negative Mitzvot, Overview of Contents) and 5 of Sefer Ahavah's remaining
+  6 (Tefillin/Mezuzah/Torah Scroll, Fringes, Blessings, Circumcision, The
+  Order of Prayer) — every Hebrew version Sefaria lists for those 9 is
+  either CC-BY-SA or license `"unknown"`, checked directly per treatise via
+  `scripts/build_mishneh_torah.py`, not assumed from a spot check. No
+  English translation is wired in for the Mishnah or Mishneh Torah yet
+  either way. Talmud and Zohar are natural next corpora — their original
+  text is equally public domain — but both are far larger than Mishneh
+  Torah, and for the Talmud specifically, the only readily available
+  complete English translation (the Steinsaltz/William Davidson Edition) is
+  CC-BY-NC, meaning free to show in this app but not usable in a
+  commercial/print product built from it — the same kind of per-version
+  check that solved the Mishnah's and (mostly) Mishneh Torah's licensing
+  may or may not turn up a public-domain Talmud translation too; that
+  hasn't been checked yet.
 - **Hebrew text source**: the Westminster Leningrad Codex, via the
   [Open Scriptures Hebrew Bible](https://github.com/openscriptures/morphhb)
   project (public domain). Verses use the Qere (traditional spoken reading)
@@ -187,16 +206,21 @@ data/mishnah.json          # all 63 tractates, {ref, he, text} per mishnah — n
 data/mishnah-words.json    # Mishnah words: [bareWord, [[passageIndex, heStart, heEnd], ...]] — own index, not Tanakh's
 data/mishnah-phrases.json  # Mishnah two-word phrases, same shape
 scripts/build_mishnah.py   # fetches Sefaria's Torat Emet 357 Mishnah text, builds the three mishnah-*.json files
+data/mishneh-torah.json         # 79 of 88 treatises, {ref, he, text} per halacha — no `en`, see Corpora above
+data/mishneh-torah-words.json   # Mishneh Torah words, same shape as mishnah-words.json — own index
+data/mishneh-torah-phrases.json # Mishneh Torah two-word phrases, same shape
+scripts/build_mishneh_torah.py  # fetches Sefaria's Torat Emet 363/370 text, builds the three mishneh-torah-*.json files
 tests/unit/                # node --test: pure-logic unit tests (no browser)
 tests/e2e/                 # Playwright: drives the real served app in a browser
 playwright.config.js       # e2e test config (auto-starts/stops the static server)
 ```
 
 An occurrence is `[passageIndex, heStart, heEnd, enStart, enEnd]` (the last
-two omitted for Mishnah, which has no translation to highlight).
-`passageIndex` is always local to that corpus's own passage file — Tanakh
-occurrences index into `tanakh.json`, Mishnah occurrences into
-`mishnah.json`; the two are never mixed or offset against each other, since
+two omitted for Mishnah and Mishneh Torah, which have no translation to
+highlight). `passageIndex` is always local to that corpus's own passage
+file — Tanakh occurrences index into `tanakh.json`, Mishnah occurrences
+into `mishnah.json`, Mishneh Torah occurrences into `mishneh-torah.json`;
+none of the three are ever mixed or offset against each other, since
 `src/data.js`'s `CORPORA` array loads and indexes each corpus completely
 independently. `heStart`/`heEnd` are character offsets into that passage's
 Hebrew/Aramaic text, used to highlight the exact occurrence in context;
@@ -226,10 +250,11 @@ translation still displays, just unhighlighted).
   click race) were caught by hand, after the fact — the e2e specs written
   for them afterward are there so the *next* one like it fails CI instead.
 - Adding another corpus (Talmud and Zohar are the natural next ones — see
-  **Corpora** above)? `scripts/build_mishnah.py` is the template: fetch the
-  Hebrew/Aramaic text into `data/<corpus>.json` in the same `{ref, he,
-  text}` shape (add `en` only if a translation with a license that fits
-  your use is actually available), extract its word/phrase occurrences into
+  **Corpora** above)? `scripts/build_mishnah.py`/`build_mishneh_torah.py`
+  are the template: fetch the Hebrew/Aramaic text into `data/<corpus>.json`
+  in the same `{ref, he, text}` shape (add `en` only if a translation with
+  a license that fits your use is actually available), extract its
+  word/phrase occurrences into
   `data/<corpus>-words.json`/`data/<corpus>-phrases.json` as their own,
   self-contained index (indices local to `data/<corpus>.json` — never
   offset against or merged into another corpus's files), then add one entry
@@ -238,8 +263,11 @@ translation still displays, just unhighlighted).
   as a tab with no further changes needed. Both the Talmud and the Zohar
   are much bigger than the Mishnah — expect this to be a heavier fetch/build
   job, not a quick rerun of the same script with new URLs — and check each
-  one's *own* per-version licensing the way `build_mishnah.py` does rather
-  than trusting whichever text a source's API returns by default.
+  one's *own* per-version licensing the way `build_mishnah.py` and
+  `build_mishneh_torah.py` do rather than trusting whichever text a
+  source's API returns by default, or assuming one licensing check made
+  for one part of a work covers the rest of it (Mishneh Torah's own two
+  differently-licensed editions are the cautionary example here).
 
 ## Regenerating the data
 
@@ -270,6 +298,37 @@ requests it explicitly via the v3 API
 returned license actually is `"Public Domain"` before using it, so a
 future change on Sefaria's end fails loudly instead of silently
 reintroducing a licensing problem.
+
+`data/mishneh-torah.json`, `data/mishneh-torah-words.json`, and
+`data/mishneh-torah-phrases.json` are generated by
+`scripts/build_mishneh_torah.py` (run it from the repo root: `python3
+scripts/build_mishneh_torah.py`; raw per-treatise fetches are cached in
+`.cache/mishneh_torah_raw/`).
+
+Mishneh Torah's full table of contents (88 treatises across 14 books plus
+4 introductory list-books) comes from Sefaria's `/api/index/` endpoint,
+filtered down to nodes under the `Halakhah > Mishneh Torah` category with
+a `Mishneh Torah, ...` title and a 3-level category path (deeper paths
+turned out to be derivative commentaries nested in the same tree, not
+primary text — an early version of this script's TOC walk picked up 1,935
+"books" before that filter was added). Checking each of the 88 individually
+against `/api/texts/versions/<title>` (rather than assuming Mishnah's
+single-version-covers-everything pattern would repeat) turned up a messier
+picture: the work is split across two independently-licensed Hebrew
+editions, neither complete. **"Torat Emet 363"** is Public Domain for 72
+of the 88 (all of Sefer Madda, and everything from Sefer Zemanim through
+Sefer Shoftim) but doesn't cover Sefer Ahavah at all. **"Torat Emet
+370"** covers Sefer Ahavah instead, but is only Public Domain for 2 of its
+7 treatises (Reading the Shema; Prayer and the Priestly Blessing) — the
+other 5 come back license `"unknown"`. The 4 introductory list-books have
+no Public Domain Hebrew version under either name — only a CC-BY-SA
+Wikisource transcription. The script checks both candidate version names
+per treatise, uses whichever comes back `"Public Domain"`, and skips (and
+logs) a treatise where neither does, asserting the resulting skip list
+against a hardcoded `EXCLUDED` set so a change on Sefaria's end — a newly
+freed version, or a license getting revoked — is noticed at build time
+rather than silently changing what's in the corpus. The result: 79 of 88
+treatises, 14,622 halachot.
 
 `data/tanakh.json`, `data/hebrew-words.json`, and `data/hebrew-phrases.json`
 are generated from two sources, not hand-written:
