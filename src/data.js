@@ -48,13 +48,16 @@ async function fetchJson(path) {
 }
 
 /**
- * Builds one Int32Array per cipher holding the precomputed value for every
+ * Builds one Float64Array per cipher holding the precomputed value for every
  * item (parallel to `items`), so a match query is a single linear scan.
+ * Float64 (not Int32) because systems like Total Squared (klali) can exceed
+ * the 32-bit range for long search input, and JS numbers stay exact up to
+ * 2^53 either way.
  */
 function buildIndex(items, getText) {
   const n = items.length;
   const values = {};
-  for (const key of HE_CIPHER_KEYS) values[key] = new Int32Array(n);
+  for (const key of HE_CIPHER_KEYS) values[key] = new Float64Array(n);
 
   for (let i = 0; i < n; i++) {
     const vec = computeHebrewCipherVector(getText(items[i]));

@@ -8,23 +8,28 @@ One thing, done thoroughly: there is no other mode.
 
 ## How it works
 
-- **Systems** (11): Standard Value (Hechrachi), Full/Final Value (Gadol —
+- **Systems** (12): Standard Value (Hechrachi), Full/Final Value (Gadol —
   final letters take large values 500–900), Ordinal Value (Siduri — position
   in the alphabet), Reduced Value (Katan — each letter reduced to a single
   digit), Integral Reduced (Katan Mispari — the word's total reduced to a
   single digit), Additive Value (Musafi — standard value plus letter count),
   Cumulative Value (Kidmi — triangular alphabet-position sums), Building
-  Value (Bone'eh — a running total across the word), Squared Value (Meruba —
-  each letter's value squared), and the **Atbash** and **Albam** substitution
-  ciphers (each letter swapped for its mirror-alphabet partner before
-  valuing — Atbash is the classic cipher behind "Sheshach" for "Babel" in
-  Jeremiah). Only the 22 Hebrew letters count; niqqud (vowel points),
-  cantillation marks, and punctuation are ignored.
+  Value (Bone'eh — a running total across the word), Individual Squared
+  (P'rati — each letter's value squared, then summed) and Total Squared
+  (Klali — the word's total value squared *once*, a different and far larger
+  number than P'rati — these are two distinct traditional systems that both
+  happen to involve "squared" in their name, which is worth being careful
+  about), and the **Atbash** and **Albam** substitution ciphers (each letter
+  swapped for its mirror-alphabet partner before valuing — Atbash is the
+  classic cipher behind "Sheshach" for "Babel" in Jeremiah). Only the 22
+  Hebrew letters count; niqqud (vowel points), cantillation marks, and
+  punctuation are ignored. Every cipher badge has a hover tooltip spelling
+  out exactly how it's calculated.
 - **Matching**: `data/hebrew-words.json` (~39,500 distinct word forms) and
   `data/hebrew-phrases.json` (~180,000 two-word phrases) are every word and
   adjacent word-pair that actually occurs in `data/tanakh.json` (all 23,213
   verses of the Masoretic Text) — so every match is indexed against all
-  eleven systems on load, and every word/phrase result shows the pasuk it
+  twelve systems on load, and every word/phrase result shows the pasuk it
   comes from: the Hebrew verse with that exact occurrence highlighted, cited
   by book/chapter/verse, plus its JPS 1917 translation with the
   corresponding English word(s) highlighted too, wherever that can be
@@ -56,16 +61,33 @@ One thing, done thoroughly: there is no other mode.
   once** in the verse (for a phrase, both words must each be unique and land
   within ~45 characters of each other) — ambiguous or unlocatable cases
   simply show the translation unhighlighted rather than risk pointing at the
-  wrong word. In practice this finds a confident highlight for about 44% of
-  word occurrences and 15% of phrase occurrences (phrases need two
-  independent unique matches, so the bar is higher).
+  wrong word. Candidate words also try a few regular English inflections
+  (plural/singular, simple past) since the gloss's base form often isn't the
+  exact form the JPS prose uses. In practice this finds a confident
+  highlight for about 46% of word occurrences and 15.5% of phrase
+  occurrences (phrases need two independent unique matches, so the bar is
+  higher).
 - **Numeral input**: a plain number (e.g. `613`) is searched exactly like a
   word or phrase's computed value — it's used directly as the target under
-  whichever system you pick (so it shows the same number under all eleven
+  whichever system you pick (so it shows the same number under all twelve
   badges, since it wasn't derived from letters) rather than being spelled
   out and recomputed. A small note underneath shows how it would
   traditionally be written in Hebrew numerals (`תרי״ג`, with the customary
   ט״ו/ט״ז substitution for 15/16) for reference only.
+- **Connections**: each result also shows when it matches the search on
+  *other* systems too, not just the one you're browsing — a genuine
+  coincidence, since it's checked directly against each item's precomputed
+  value under all twelve systems. (Two pairs — Total Squared/Standard Value
+  and Integral Reduced/Standard Value — are excluded from this because
+  they're mathematically forced to match together, not a coincidence at
+  all.)
+- **Notable values**: a small, hand-verified glossary (`src/notable-values.js`)
+  of well-known gematria values — יהוה=26, חי=18, the traditional 613
+  commandments, and a dozen others — shown as a callout when your search
+  lands on one. Every entry's arithmetic is checked against the app's own
+  cipher functions, not just asserted, so it can't silently drift out of
+  sync with what the calculator actually computes; the notes themselves are
+  phrased as traditional observations, not claims.
 - **Recent searches**: the last dozen searches are remembered (in
   `localStorage`, per browser) and shown as clickable chips for quick
   recall.
@@ -92,9 +114,10 @@ server works equally well, e.g. `python3 -m http.server 8080`.
 ```
 index.html               # page shell (English UI, LTR; Hebrew content is RTL inline)
 style.css                 # styling (light/dark aware) + print stylesheet for PDF export
-src/gematria.js            # the 11 cipher systems + integer-to-Hebrew-numeral conversion
+src/gematria.js            # the 12 cipher systems + integer-to-Hebrew-numeral conversion
 src/data.js                # dataset loading + precomputed per-cipher indexes
-src/app.js                 # UI wiring: search, tabs, recent searches, PDF export
+src/notable-values.js      # hand-verified glossary of well-known gematria values
+src/app.js                 # UI wiring: search, tabs, recent searches, PDF export, connections
 data/tanakh.json           # Tanakh (WLC + JPS 1917), {ref, he, text (Hebrew), en (English)} per verse
 data/hebrew-words.json     # [bareWord, [[verseIndex, heStart, heEnd, enStart, enEnd], ...]]
 data/hebrew-phrases.json   # same shape, for two-word phrases from the Tanakh
@@ -114,7 +137,17 @@ found (the translation still displays, just unhighlighted).
   below) — the offset-based citation/highlight scheme works for any span
   length.
 - Add another gematria system by extending `HE_CIPHERS` in `src/gematria.js`
-  and the corresponding compute function.
+  and the corresponding compute function. The per-cipher index
+  (`src/data.js`) uses `Float64Array`, not `Int32Array`, specifically so a
+  system like Total Squared (which grows quadratically) can't silently wrap
+  around on unusually long search input — worth keeping in mind if you add
+  a system that compounds values further (e.g. a cube).
+- If you add a new "notable value," verify its arithmetic against
+  `computeAllHebrewCiphers` yourself before adding it to
+  `src/notable-values.js` — don't take a remembered or secondhand value on
+  faith. That's exactly how Individual Squared and Total Squared ended up
+  conflated under one name early on: two real, differently-named systems
+  that happened to share "squared" in their description.
 
 ## Regenerating the data
 
@@ -152,7 +185,8 @@ per entry to bound file size).
    For each stored occurrence, the gloss word(s) at that Hebrew token
    position are looked up, split into individual words (a gloss can be
    multi-word, e.g. "sheaves your" for a suffixed noun), and the most
-   distinctive candidate word is searched for in that verse's JPS text.
-   `enStart`/`enEnd` are only set when a candidate is found as a whole word
-   exactly once in the verse (for phrases, both words must be unique and
-   land within 45 characters of each other); otherwise they're `-1`.
+   distinctive candidate word — trying a few regular inflections of it too
+   (plural/singular, simple past) — is searched for in that verse's JPS
+   text. `enStart`/`enEnd` are only set when a candidate is found as a whole
+   word exactly once in the verse (for phrases, both words must be unique
+   and land within 45 characters of each other); otherwise they're `-1`.

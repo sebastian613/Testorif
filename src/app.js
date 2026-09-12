@@ -1,5 +1,8 @@
 import { HE_CIPHERS, HE_CIPHER_KEYS, computeAllHebrewCiphers, stripToHebrewLetters, numberToHebrewNumeral } from "./gematria.js";
 import { loadDatasets, findMatches, textOf } from "./data.js";
+import { findNotableValue } from "./notable-values.js";
+
+const CIPHER_LABELS = Object.fromEntries(HE_CIPHERS.map((c) => [c.key, c.label]));
 
 const PAGE_SIZE = 100;
 // Must match MAX_OCC used when the Hebrew data files were generated — once an
@@ -27,6 +30,7 @@ const el = {
   nameInput: document.getElementById("name-input"),
   status: document.getElementById("status"),
   numeralHint: document.getElementById("numeral-hint"),
+  notableValue: document.getElementById("notable-value"),
   cipherBadges: document.getElementById("cipher-badges"),
   resultsSection: document.getElementById("results-section"),
   tabs: document.getElementById("tabs"),
@@ -112,8 +116,19 @@ function recompute() {
   }
 
   renderCipherBadges();
+  renderNotableValue();
   recomputeMatches();
   el.resultsSection.hidden = false;
+}
+
+function renderNotableValue() {
+  const found = state.values ? findNotableValue(state.activeCipher, state.values[state.activeCipher]) : null;
+  if (!found) {
+    el.notableValue.hidden = true;
+    return;
+  }
+  el.notableValue.hidden = false;
+  el.notableValue.innerHTML = `<strong>${found.value}</strong> is traditionally associated with ${escapeHtml(found.note)}`;
 }
 
 function renderCipherBadges() {
@@ -127,9 +142,12 @@ function renderCipherBadges() {
       `<span class="cipher-sub" dir="rtl">${cipher.sub}</span>` +
       `<span class="cipher-value">${value === null ? "–" : value}</span>`;
     btn.disabled = !state.values;
+    btn.dataset.tooltip = cipher.formula;
+    btn.setAttribute("aria-label", `${cipher.label}: ${cipher.formula}`);
     btn.addEventListener("click", () => {
       state.activeCipher = cipher.key;
       renderCipherBadges();
+      renderNotableValue();
       recomputeMatches();
     });
     el.cipherBadges.appendChild(btn);
@@ -206,14 +224,16 @@ function renderResultsList() {
     for (const i of visible) {
       const li = document.createElement("li");
       const item = dataset.items[i];
+      const connections = renderConnectionsBadge(dataset, i);
       if (tab === "verses") {
-        li.innerHTML = renderVerseBlock(item);
+        li.innerHTML = renderVerseBlock(item, connections);
       } else {
         const headline = document.createElement("div");
         headline.className = "result-headline";
         headline.dir = "rtl";
         headline.textContent = textOf[tab](item);
         li.appendChild(headline);
+        if (connections) li.insertAdjacentHTML("beforeend", connections);
 
         const occurrences = item[1];
         if (occurrences && occurrences.length) {
@@ -251,9 +271,41 @@ function renderResultsList() {
   el.loadMoreBtn.hidden = visible.length >= indices.length;
 }
 
-function renderVerseBlock(v) {
+// Total Squared (klali) is hechrachi², and Integral Reduced (katanMispari)
+// is digitalRoot(hechrachi) — both are pure functions of Standard Value, and
+// klali's square is invertible (for positive integers), so within either of
+// these two systems the other two are ALWAYS also going to match: that's
+// not a coincidence worth flagging, just arithmetic. (Integral Reduced runs
+// the other way — many different Standard Values share a digital root — so
+// it doesn't force the other two, and stays a real, interesting connection.)
+const DETERMINISTIC_SIBLINGS = {
+  hechrachi: ["klali", "katanMispari"],
+  klali: ["hechrachi", "katanMispari"],
+};
+
+/**
+ * A result already matches the search on the active cipher (that's why it's
+ * a result) — this checks whether it *also* matches on any of the other
+ * systems, which (outside the guaranteed pairs above) is a much rarer
+ * coincidence worth calling out.
+ */
+function renderConnectionsBadge(dataset, i) {
+  const skip = new Set([state.activeCipher, ...(DETERMINISTIC_SIBLINGS[state.activeCipher] || [])]);
+  const extra = [];
+  for (const key of HE_CIPHER_KEYS) {
+    if (skip.has(key)) continue;
+    if (dataset.values[key][i] === state.values[key]) extra.push(key);
+  }
+  if (extra.length === 0) return "";
+
+  const tooltip = extra.map((key) => `${CIPHER_LABELS[key]} (${dataset.values[key][i]})`).join(", ");
+  const label = extra.length === 1 ? "+1 system" : `+${extra.length} systems`;
+  return `<span class="connections-badge" data-tooltip="Also matches on: ${escapeHtml(tooltip)}">${label}</span>`;
+}
+
+function renderVerseBlock(v, connections = "") {
   return (
-    `<span class="verse-ref">${escapeHtml(v.ref)}</span>` +
+    `<span class="verse-ref">${escapeHtml(v.ref)}${connections}</span>` +
     `<span class="verse-text" dir="rtl">${escapeHtml(v.text)}</span>` +
     (v.en
       ? `<span class="lang-label">JPS 1917 translation</span><span class="verse-text verse-text-en" dir="ltr">${escapeHtml(v.en)}</span>`

@@ -3,17 +3,88 @@
 // only the consonantal letters of a word carry a value.
 
 export const HE_CIPHERS = [
-  { key: "hechrachi", label: "Standard Value", sub: "מספר הכרחי" },
-  { key: "gadol", label: "Full/Final Value", sub: "מספר גדול" },
-  { key: "siduri", label: "Ordinal Value", sub: "מספר סידורי" },
-  { key: "katan", label: "Reduced Value", sub: "מספר קטן" },
-  { key: "katanMispari", label: "Integral Reduced", sub: "מספר קטן מספרי" },
-  { key: "musafi", label: "Additive Value", sub: "מספר מוסף" },
-  { key: "kidmi", label: "Cumulative Value", sub: "מספר קדמי" },
-  { key: "boneh", label: "Building Value", sub: "מספר בונה" },
-  { key: "meruba", label: "Squared Value", sub: "מספר מרובע" },
-  { key: "atbash", label: "Atbash Cipher", sub: "מספר אתב״ש" },
-  { key: "albam", label: "Albam Cipher", sub: "מספר אלב״ם" },
+  {
+    key: "hechrachi",
+    label: "Standard Value",
+    sub: "מספר הכרחי",
+    formula: "Each letter's plain value (א=1…ת=400), added up.",
+  },
+  {
+    key: "gadol",
+    label: "Full/Final Value",
+    sub: "מספר גדול",
+    formula:
+      "Like Standard Value, but the five final letters (ך ם ן ף ץ) take large values 500–900 instead of repeating their base letter's value.",
+  },
+  {
+    key: "siduri",
+    label: "Ordinal Value",
+    sub: "מספר סידורי",
+    formula:
+      "Each letter's position in the 22-letter alphabet (1–22; final letters continue 23–27), added up.",
+  },
+  {
+    key: "katan",
+    label: "Reduced Value",
+    sub: "מספר קטן",
+    formula:
+      "Each letter's Standard Value with trailing zeros dropped (100→1, 20→2, 6→6…), added up.",
+  },
+  {
+    key: "katanMispari",
+    label: "Integral Reduced",
+    sub: "מספר קטן מספרי",
+    formula:
+      "The Standard Value's digits are added together, repeatedly, until a single digit remains.",
+  },
+  {
+    key: "musafi",
+    label: "Additive Value",
+    sub: "מספר מוסף",
+    formula: "Standard Value, plus the number of letters in the word.",
+  },
+  {
+    key: "kidmi",
+    label: "Cumulative Value",
+    sub: "מספר קדמי",
+    formula:
+      "Each letter's value is the running total of every letter's Standard Value up to and including it, in alphabet order (א=1, ב=1+2=3, ג=1+2+3=6…) — then those are added up for the word.",
+  },
+  {
+    key: "boneh",
+    label: "Building Value",
+    sub: "מספר בונה",
+    formula:
+      "Walking the word left to right, add a running total at each letter, then add up all those running totals — so earlier letters count extra times.",
+  },
+  {
+    key: "perati",
+    label: "Individual Squared",
+    sub: "מספר פרטי",
+    formula:
+      "Each letter's Standard Value is squared, then those squares are added up. Also called Mispar HaMerubah HaPerati.",
+  },
+  {
+    key: "klali",
+    label: "Total Squared",
+    sub: "מספר כללי",
+    formula:
+      "The word's total Standard Value, squared once. Also called Mispar HaMerubah HaKlali — a different (and much larger) number than Individual Squared.",
+  },
+  {
+    key: "atbash",
+    label: "Atbash Cipher",
+    sub: "מספר אתב״ש",
+    formula:
+      "Each letter is swapped for its mirror-image partner across the alphabet (א↔ת, ב↔ש…), then that substituted letter's Standard Value is used — the cipher behind \"Sheshach\" for \"Babel\" in Jeremiah.",
+  },
+  {
+    key: "albam",
+    label: "Albam Cipher",
+    sub: "מספר אלב״ם",
+    formula:
+      "Each letter is swapped with its counterpart in the other half of the alphabet (א↔ל, ב↔מ…), then that substituted letter's Standard Value is used.",
+  },
 ];
 
 export const HE_CIPHER_KEYS = HE_CIPHERS.map((c) => c.key);
@@ -97,7 +168,7 @@ export function computeAllHebrewCiphers(text) {
   let kidmi = 0;
   let atbash = 0;
   let albam = 0;
-  let meruba = 0;
+  let perati = 0;
   let boneh = 0;
   let runningBoneh = 0;
   let letterCount = 0;
@@ -110,7 +181,7 @@ export function computeAllHebrewCiphers(text) {
     gadol += GADOL_FINAL[ch] ?? base;
     siduri += SIDURI[ch];
     katan += digitalRoot(base);
-    meruba += base * base;
+    perati += base * base;
     runningBoneh += base;
     boneh += runningBoneh;
 
@@ -130,7 +201,8 @@ export function computeAllHebrewCiphers(text) {
     musafi: hechrachi + letterCount,
     kidmi,
     boneh,
-    meruba,
+    perati,
+    klali: hechrachi * hechrachi,
     atbash,
     albam,
   };

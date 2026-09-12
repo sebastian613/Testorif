@@ -19,7 +19,7 @@
       <h1 id="title">Gematria Calculator</h1>
       <p class="subtitle" id="subtitle">
         Enter a name or word in Hebrew letters — or a plain number to search that
-        value directly — to calculate its gematria across eleven traditional systems,
+        value directly — to calculate its gematria across twelve traditional systems,
         then see every word, phrase, and Tanakh verse that shares that value — each
         one grounded in the pasuk (verse) it's drawn from, with the JPS 1917 Jewish
         translation alongside.
@@ -35,6 +35,7 @@
     </section>
 
     <section id="cipher-badges" class="cipher-badges" aria-label="Gematria values by system"></section>
+    <p id="notable-value" class="notable-value" hidden></p>
 
     <section id="results-section" class="results-section" hidden>
       <div class="results-header">
@@ -59,11 +60,14 @@
         Mispari — the whole word's total reduced to one digit), Additive Value
         (Musafi — standard value plus letter count), Cumulative Value (Kidmi —
         triangular alphabet-position sums), Building Value (Bone'eh — a running total
-        across the word), Squared Value (Meruba — each letter's value squared), and
-        the Atbash and Albam substitution ciphers (each letter is swapped for its
-        mirror-alphabet partner before valuing). Every word and phrase is matched
-        directly against the Masoretic Text (Leningrad Codex) of the Tanakh, and
-        cited verses are translated using The Holy Scriptures: A New Translation
+        across the word), Individual Squared (P'rati — each letter's value squared,
+        then summed) and Total Squared (Klali — the word's total value squared once;
+        a different, much larger number than Individual Squared), and the Atbash
+        and Albam substitution ciphers (each letter is swapped for its
+        mirror-alphabet partner before valuing). Hover any value for how it's
+        calculated. Every word and phrase is matched directly against the Masoretic
+        Text (Leningrad Codex) of the Tanakh, and cited verses are translated using
+        The Holy Scriptures: A New Translation
         (JPS, 1917) — a public-domain Jewish translation that follows the Masoretic
         chapter and verse numbering throughout.
       </p>
