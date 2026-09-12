@@ -13,13 +13,6 @@ const RECENT_MAX = 12;
 
 const TAB_LABELS = { words: "Words", phrases: "Phrases", verses: "Verses (Tanakh)" };
 
-// A sandboxed preview frame (e.g. an embedded Artifact panel) blocks both
-// window.print() and script-driven window.open() popups outright — but a
-// real <a target="_blank"> the user clicks directly is an ordinary
-// top-level navigation, not a popup, and isn't blocked the same way. See
-// wireInputs() and updateExportLink() below.
-const FRAMED = window.self !== window.top;
-
 const state = {
   datasets: null,
   inputValue: DEFAULT_VALUE,
@@ -109,28 +102,25 @@ function wireInputs() {
     renderResultsList();
   });
 
-  if (FRAMED) {
-    // Swap the button for a real link: a script-driven window.open() popup
-    // gets blocked here the same way window.print() does, but a genuine
-    // <a target="_blank"> click is an ordinary navigation the browser
-    // won't treat as a popup. updateExportLink() keeps its href pointed at
-    // the current search.
-    const link = document.createElement("a");
-    link.id = el.exportBtn.id;
-    link.className = el.exportBtn.className;
-    link.textContent = el.exportBtn.textContent;
-    link.target = "_blank";
-    link.rel = "noopener";
-    el.exportBtn.replaceWith(link);
-    el.exportBtn = link;
-  } else {
-    el.exportBtn.addEventListener("click", () => window.print());
-  }
 }
 
-/** Keeps the framed-mode export link pointed at the current search. No-op otherwise. */
+/**
+ * Export as PDF is a real <a target="_blank"> (see index.html), not a
+ * button, and always opens a fresh tab rather than calling window.print()
+ * in place. Two script-driven approaches were tried and both failed inside
+ * Claude's embedded Artifact preview: window.open() is blocked as a popup,
+ * and detecting the sandboxed frame via `window.self !== window.top` to
+ * decide whether to call window.print() directly turned out to be
+ * unreliable there too — it can evaluate as "not framed" inside a
+ * sandboxed/cross-origin iframe, silently taking the window.print() branch
+ * that then no-ops with zero visible feedback. A genuine, always-present
+ * link the user clicks removes the guesswork: it's the browser's own
+ * navigation handling every time, in every context. This function just
+ * keeps that link's href pointed at the current search; the destination
+ * page's own init() (see above) sees ?print=1 and calls window.print()
+ * itself once loaded, in what is now unavoidably a real top-level tab.
+ */
 function updateExportLink() {
-  if (!FRAMED) return;
   const url = new URL(location.href);
   url.searchParams.set("q", el.nameInput.value);
   url.searchParams.set("print", "1");
