@@ -30,7 +30,7 @@ jobs:
         # etc. — so the public site doesn't also expose unrelated repo files.
         run: |
           mkdir _site
-          cp index.html style.css _site/
+          cp index.html style.css manifest.webmanifest _site/
           cp -r assets data src _site/
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v3
