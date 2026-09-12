@@ -72,10 +72,48 @@ is no other mode.
 - **Recent searches**: the last dozen searches are remembered (in
   `localStorage`, per browser) and shown as clickable chips for quick
   recall.
+- **Popular searches**: a collapsed-by-default disclosure below the input
+  offering 50 curated numbers and 50 curated Hebrew phrases/names
+  (`src/popular-searches.js`) as one-click searches — phrase values are
+  verified against `computeHechrachi` the same way the notable-values
+  glossary is.
+- **Copy button**: every result carries a small "Copy" button that puts a
+  plain-text summary (the word/phrase and its value, or the verse citation,
+  plus the Hebrew text and JPS translation) on the clipboard, for pasting
+  into a message, note, or email.
 - **PDF export**: the "Export as PDF" button opens the browser's print
   dialog against a dedicated print stylesheet — pick "Save as PDF" for a
   clean, paginated document of the current results (the value badge plus
-  the active tab's matches), with all interactive chrome hidden.
+  the active tab's matches), with all interactive chrome hidden. Both this
+  and the Copy button detect when the page is embedded in a sandboxed
+  preview frame (where `window.print()`/clipboard access can be silently
+  blocked) and fall back accordingly — Export opens the same search in a
+  fresh top-level tab and prints there; Copy falls back to the legacy
+  `execCommand("copy")` path.
+
+## Testing
+
+```bash
+npm install       # once, to fetch @playwright/test
+npm test          # unit tests, then the e2e suite
+npm run test:unit # tests/unit/*.test.mjs via node's built-in test runner —
+                   # pure-logic checks (gematria math, findMatches, and that
+                   # every notable-value/popular-phrase entry actually
+                   # computes to the value it claims)
+npm run test:e2e  # tests/e2e/*.spec.js via Playwright — drives the real
+                   # served app in a browser (search, Popular Searches,
+                   # Copy, PDF export, including the sandboxed-iframe case)
+```
+
+CI (`.github/workflows/ci.yml`) runs both on every push and pull request.
+`npm run test:e2e` auto-starts and stops its own static server
+(`playwright.config.js`'s `webServer`), so nothing needs to be running
+first. Several e2e specs are regression tests written for real bugs this
+project hit — a `findMatches` shape mismatch that made every search
+silently return zero results, and a click on the Popular Searches
+disclosure landing on the wrong element because a synchronous re-render
+shifted the page mid-click — specifically so those classes of bug fail CI
+instead of waiting to be caught by hand again.
 
 ## Running it
 
@@ -98,10 +136,15 @@ style.css                 # styling (light/dark aware) + print stylesheet for PD
 src/gematria.js            # the Standard Value cipher + integer-to-Hebrew-numeral conversion
 src/data.js                # dataset loading + precomputed Standard Value index
 src/notable-values.js      # hand-verified glossary of well-known gematria values
-src/app.js                 # UI wiring: search, tabs, recent searches, PDF export
+src/popular-searches.js    # curated quick-pick numbers/phrases for the Popular Searches panel
+src/app.js                 # UI wiring: search, tabs, recent/popular searches, copy, PDF export
+assets/                    # brand mark + favicons
 data/tanakh.json           # Tanakh (WLC + JPS 1917), {ref, he, text (Hebrew), en (English)} per verse
 data/hebrew-words.json     # [bareWord, [[verseIndex, heStart, heEnd, enStart, enEnd], ...]]
 data/hebrew-phrases.json   # same shape, for two-word phrases from the Tanakh
+tests/unit/                # node --test: pure-logic unit tests (no browser)
+tests/e2e/                 # Playwright: drives the real served app in a browser
+playwright.config.js       # e2e test config (auto-starts/stops the static server)
 ```
 
 An occurrence is `[verseIndex, heStart, heEnd, enStart, enEnd]`: `heStart`/
@@ -124,9 +167,14 @@ found (the translation still displays, just unhighlighted).
   value range if you add a system that compounds values (e.g. a square or
   cube of the Standard Value) — a plain `Int32Array` can silently wrap
   around on long input; `Float64Array` avoids that up to 2^53.
-- If you add a new "notable value," verify its arithmetic against
-  `computeHechrachi` yourself before adding it to `src/notable-values.js` —
-  don't take a remembered or secondhand value on faith.
+- If you add a new "notable value," give it a `words: [...]` field —
+  `tests/unit/notable-values.test.mjs` checks every entry's `words` against
+  `computeHechrachi` automatically, so a wrong value fails the test suite
+  instead of sitting there unverified.
+- Adding a feature? Add the regression test with it. Both real bugs this
+  project shipped (the `findMatches` shape mismatch, the Popular Searches
+  click race) were caught by hand, after the fact — the e2e specs written
+  for them afterward are there so the *next* one like it fails CI instead.
 
 ## Regenerating the data
 

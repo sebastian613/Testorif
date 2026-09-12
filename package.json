@@ -3,7 +3,14 @@
   "version": "1.0.0",
   "description": "Samizdaat: calculates the gematria of a name or phrase and finds matching words, phrases, and Bible verses.",
   "private": true,
+  "type": "module",
   "scripts": {
-    "start": "npx --yes http-server -p 8080 -c-1"
+    "start": "npx --yes http-server -p 8080 -c-1",
+    "test": "npm run test:unit && npm run test:e2e",
+    "test:unit": "node --test tests/unit/",
+    "test:e2e": "playwright test"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.63.0"
   }
 }
