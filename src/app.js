@@ -45,6 +45,9 @@ async function init() {
   wireInputs();
   renderRecentSearches();
 
+  const params = new URLSearchParams(location.search);
+  if (params.get("q")) state.inputValue = params.get("q");
+
   el.nameInput.value = state.inputValue;
   el.nameInput.disabled = true;
   setStatus("Loading the Hebrew word list and the Tanakh…", true);
@@ -61,6 +64,11 @@ async function init() {
   el.nameInput.disabled = false;
   el.nameInput.focus();
   recompute();
+
+  if (params.get("print") === "1") {
+    // Give layout, fonts, and results one frame to settle before printing.
+    requestAnimationFrame(() => setTimeout(() => window.print(), 200));
+  }
 }
 
 function wireInputs() {
@@ -85,7 +93,23 @@ function wireInputs() {
     renderResultsList();
   });
 
-  el.exportBtn.addEventListener("click", () => window.print());
+  el.exportBtn.addEventListener("click", exportPdf);
+}
+
+/**
+ * window.print() is silently blocked in a sandboxed preview frame (e.g. an
+ * embedded Artifact side panel) — printing needs a real top-level tab. When
+ * this page is itself framed, open the current search in a fresh tab and
+ * print there instead of failing with no feedback in place.
+ */
+function exportPdf() {
+  if (window.self !== window.top) {
+    const url = new URL(location.href);
+    url.searchParams.set("q", el.nameInput.value);
+    url.searchParams.set("print", "1");
+    if (window.open(url.toString(), "_blank")) return;
+  }
+  window.print();
 }
 
 function recompute() {
