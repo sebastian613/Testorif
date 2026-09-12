@@ -294,6 +294,7 @@ header h1 {
 }
 
 .export-btn {
+  display: inline-block;
   padding: 8px 14px;
   border-radius: 999px;
   border: 1px solid var(--border);
@@ -303,6 +304,7 @@ header h1 {
   font-size: 0.85rem;
   font-family: inherit;
   white-space: nowrap;
+  text-decoration: none;
 }
 
 .export-btn:hover {

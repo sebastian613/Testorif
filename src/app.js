@@ -13,6 +13,13 @@ const RECENT_MAX = 12;
 
 const TAB_LABELS = { words: "Words", phrases: "Phrases", verses: "Verses (Tanakh)" };
 
+// A sandboxed preview frame (e.g. an embedded Artifact panel) blocks both
+// window.print() and script-driven window.open() popups outright — but a
+// real <a target="_blank"> the user clicks directly is an ordinary
+// top-level navigation, not a popup, and isn't blocked the same way. See
+// wireInputs() and updateExportLink() below.
+const FRAMED = window.self !== window.top;
+
 const state = {
   datasets: null,
   inputValue: DEFAULT_VALUE,
@@ -102,23 +109,32 @@ function wireInputs() {
     renderResultsList();
   });
 
-  el.exportBtn.addEventListener("click", exportPdf);
+  if (FRAMED) {
+    // Swap the button for a real link: a script-driven window.open() popup
+    // gets blocked here the same way window.print() does, but a genuine
+    // <a target="_blank"> click is an ordinary navigation the browser
+    // won't treat as a popup. updateExportLink() keeps its href pointed at
+    // the current search.
+    const link = document.createElement("a");
+    link.id = el.exportBtn.id;
+    link.className = el.exportBtn.className;
+    link.textContent = el.exportBtn.textContent;
+    link.target = "_blank";
+    link.rel = "noopener";
+    el.exportBtn.replaceWith(link);
+    el.exportBtn = link;
+  } else {
+    el.exportBtn.addEventListener("click", () => window.print());
+  }
 }
 
-/**
- * window.print() is silently blocked in a sandboxed preview frame (e.g. an
- * embedded Artifact side panel) — printing needs a real top-level tab. When
- * this page is itself framed, open the current search in a fresh tab and
- * print there instead of failing with no feedback in place.
- */
-function exportPdf() {
-  if (window.self !== window.top) {
-    const url = new URL(location.href);
-    url.searchParams.set("q", el.nameInput.value);
-    url.searchParams.set("print", "1");
-    if (window.open(url.toString(), "_blank")) return;
-  }
-  window.print();
+/** Keeps the framed-mode export link pointed at the current search. No-op otherwise. */
+function updateExportLink() {
+  if (!FRAMED) return;
+  const url = new URL(location.href);
+  url.searchParams.set("q", el.nameInput.value);
+  url.searchParams.set("print", "1");
+  el.exportBtn.href = url.toString();
 }
 
 function recompute() {
@@ -145,6 +161,7 @@ function recompute() {
   renderValueDisplay();
   renderNotableValue();
   recomputeMatches();
+  updateExportLink();
   el.resultsSection.hidden = false;
 }
 
