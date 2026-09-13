@@ -27,6 +27,19 @@ already shown elsewhere in the app. Confirmed Public Domain on a spot check
 across all six sedarim before adopting it; the license is version-specific
 and worth re-verifying (via the versions endpoint above) if Sefaria's
 licensing terms could have changed since.
+
+English translation: "Mishnah Yomit by Dr. Joshua Kulp" — checked
+**CC-BY** (attribution required, commercial use permitted, unlike the
+Talmud's CC-BY-NC Steinsaltz translation) across all six sedarim
+including obscure tractates (Oktzin, Kinnim, Zavim). Unlike the Hebrew,
+English chapter/halacha structure is
+matched against the Hebrew per tractate rather than trusted blindly: a
+handful of tractates have a known printed-edition variant (Bikkurim's
+English carries an extra 4th "appendix" chapter the Hebrew doesn't have),
+so translation is only attached to a given Hebrew mishnah when the
+English text has that exact (chapter, halacha) position — anything beyond
+what the Hebrew structure covers is silently not attached rather than
+risking a misaligned translation.
 """
 import json
 import os
@@ -41,6 +54,7 @@ DATA_DIR = os.path.join(REPO_ROOT, "data")
 CACHE_DIR = os.path.join(REPO_ROOT, ".cache", "mishnah_raw")
 MAX_OCC = 8  # matches the cap used for hebrew-words.json/hebrew-phrases.json
 VERSION_TITLE = "Torat Emet 357"
+EN_VERSION_TITLE = "Mishnah Yomit by Dr. Joshua Kulp"
 
 # (Sefaria's category folder, tractate name, real chapter count — used only
 # to sanity-check the fetch; a mismatch is logged, not fatal, since a couple
@@ -118,6 +132,29 @@ def fetch_tractate(seder, name, expected_chapters):
     return record
 
 
+def fetch_tractate_english(name):
+    cache_path = os.path.join(CACHE_DIR, f"Mishnah_{name.replace(' ', '_').replace(chr(39), '')}_en.json")
+    if os.path.exists(cache_path):
+        return json.load(open(cache_path, encoding="utf-8"))
+
+    slug = "Mishnah_" + name.replace(" ", "_")
+    version = urllib.parse.quote(EN_VERSION_TITLE)
+    url = f"https://www.sefaria.org/api/v3/texts/{urllib.parse.quote(slug)}?version=english|{version}"
+    with urllib.request.urlopen(url, timeout=20) as resp:
+        d = json.loads(resp.read().decode("utf-8"))
+    versions = d.get("versions") or []
+    if not versions:
+        raise RuntimeError(f"{name}: no {EN_VERSION_TITLE!r} English version returned")
+    v = versions[0]
+    license_ = v.get("license")
+    if license_ != "CC-BY":
+        raise RuntimeError(f"{name}: expected CC-BY, got {license_!r} — investigate before using")
+    record = {"name": name, "license": license_, "text": v.get("text")}
+    os.makedirs(CACHE_DIR, exist_ok=True)
+    json.dump(record, open(cache_path, "w", encoding="utf-8"), ensure_ascii=False)
+    return record
+
+
 def tokenize(text):
     """[(bare_word, start, end), ...] for each token, offsets into the vocalized text."""
     tokens = []
@@ -129,31 +166,50 @@ def tokenize(text):
 
 
 def main():
-    print(f"Fetching {len(TRACTATES)} tractates (version: {VERSION_TITLE!r})...")
+    print(f"Fetching {len(TRACTATES)} tractates (Hebrew: {VERSION_TITLE!r}, English: {EN_VERSION_TITLE!r})...")
     tractates = []
     for i, (seder, name, expected) in enumerate(TRACTATES, 1):
         d = fetch_tractate(seder, name, expected)
+        d["en"] = fetch_tractate_english(name)
         tractates.append(d)
-        print(f"  [{i}/{len(TRACTATES)}] {name}: {d['license']}")
+        print(f"  [{i}/{len(TRACTATES)}] {name}: he={d['license']} en={d['en']['license']}")
         time.sleep(0.1)
 
     licenses = {d["license"] for d in tractates}
-    assert licenses == {"Public Domain"}, f"unexpected licenses found: {licenses}"
+    assert licenses == {"Public Domain"}, f"unexpected Hebrew licenses found: {licenses}"
+    en_licenses = {d["en"]["license"] for d in tractates}
+    assert en_licenses == {"CC-BY"}, f"unexpected English licenses found: {en_licenses}"
 
     print("Building data/mishnah.json...")
     mishnah_passages = []
+    en_attached, en_skipped = 0, 0
     for d in tractates:
+        en_chapters = d["en"]["text"]
         for ch_idx, chapter in enumerate(d["text"], start=1):
+            en_chapter = en_chapters[ch_idx - 1] if ch_idx - 1 < len(en_chapters) else []
             for m_idx, m_text in enumerate(chapter, start=1):
                 text = clean_text(m_text)
                 if not text:
                     continue
-                mishnah_passages.append({
+                passage = {
                     "ref": f"Mishnah {d['name']} {ch_idx}:{m_idx}",
                     "he": f"משנה {d.get('heTitle') or d['name']}",
                     "text": text,
-                })
-    print(f"  {len(mishnah_passages)} mishnayot")
+                }
+                # English is only attached when it has this exact (chapter,
+                # halacha) position — some tractates' English carries extra
+                # trailing chapters the Hebrew doesn't (e.g. Bikkurim's
+                # appendix), and attaching by position rather than assuming
+                # 1:1 correspondence avoids ever pairing the wrong text.
+                en_text = en_chapter[m_idx - 1] if m_idx - 1 < len(en_chapter) else None
+                en_clean = clean_text(en_text) if en_text else ""
+                if en_clean:
+                    passage["en"] = en_clean
+                    en_attached += 1
+                else:
+                    en_skipped += 1
+                mishnah_passages.append(passage)
+    print(f"  {len(mishnah_passages)} mishnayot ({en_attached} with English, {en_skipped} without)")
     json.dump(mishnah_passages, open(os.path.join(DATA_DIR, "mishnah.json"), "w", encoding="utf-8"),
               ensure_ascii=False, separators=(",", ":"))
 

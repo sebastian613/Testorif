@@ -18,14 +18,28 @@ test("mishnah.json: all 63 tractates present", () => {
   assert.equal(mishnah.length, 4187);
 });
 
-test("mishnah.json: every entry has a clean ref/he/text, no leftover markup, no translation", () => {
+test("mishnah.json: every entry has a clean ref/he/text, no leftover markup", () => {
   for (const p of mishnah) {
     assert.match(p.ref, /^Mishnah .+ \d+:\d+$/, `bad ref: ${p.ref}`);
     assert.ok(p.he.startsWith("משנה "), `he should name the tractate: ${p.he}`);
     assert.ok(p.text.length > 0);
     assert.doesNotMatch(p.text, /<[a-zA-Z/]/, `leftover HTML in ${p.ref}: ${p.text.slice(0, 60)}`);
-    assert.equal(p.en, undefined, "Mishnah entries should not carry an (unlicensed) translation field");
   }
+});
+
+test("mishnah.json: every entry has a clean English translation (Joshua Kulp, CC-BY)", () => {
+  // Attached by (chapter, halacha) position, not assumed 1:1 with the
+  // Hebrew — a few tractates' English carries extra trailing chapters the
+  // Hebrew doesn't (e.g. Bikkurim's appendix chapter), and this verifies
+  // build_mishnah.py's alignment check didn't silently drop coverage.
+  let withEnglish = 0;
+  for (const p of mishnah) {
+    if (p.en === undefined) continue;
+    withEnglish++;
+    assert.ok(p.en.length > 0, `empty en for ${p.ref}`);
+    assert.doesNotMatch(p.en, /<[a-zA-Z/]/, `leftover HTML in ${p.ref}'s en: ${p.en.slice(0, 60)}`);
+  }
+  assert.equal(withEnglish, mishnah.length, "every mishnah should have an English translation");
 });
 
 test("phrase entries are two space-separated words, in every corpus", () => {

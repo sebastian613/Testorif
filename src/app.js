@@ -288,14 +288,16 @@ function renderResultsList() {
       const li = document.createElement("li");
       const item = dataset.items[i];
       if (tab === "passages") {
-        li.innerHTML = renderPassageBlock(item);
-        li.querySelector(".verse-ref").appendChild(makeCopyButton(() => buildCopyText("passage", item)));
+        li.innerHTML = renderPassageBlock(item, corpus.translationLabel);
+        li.querySelector(".verse-ref").appendChild(
+          makeCopyButton(() => buildCopyText("passage", item, null, corpus.translationLabel))
+        );
       } else {
         const headline = document.createElement("div");
         headline.className = "result-headline";
         headline.dir = "rtl";
         headline.textContent = textOf[tab](item);
-        headline.appendChild(makeCopyButton(() => buildCopyText(tab, item, passageDataset)));
+        headline.appendChild(makeCopyButton(() => buildCopyText(tab, item, passageDataset, corpus.translationLabel)));
         li.appendChild(headline);
 
         const occurrences = item[1];
@@ -318,7 +320,7 @@ function renderResultsList() {
             `<span class="occurrence-count"> · ${escapeHtml(label)}</span></span>` +
             `<span class="verse-text" dir="rtl">${highlightSpan(passage.text, start, end)}</span>` +
             (passage.en
-              ? `<span class="lang-label">JPS 1917 translation</span><span class="verse-text verse-text-en" dir="ltr">${
+              ? `<span class="lang-label">${escapeHtml(corpus.translationLabel)} translation</span><span class="verse-text verse-text-en" dir="ltr">${
                   enStart !== -1
                     ? highlightSpan(passage.en, enStart, enEnd)
                     : escapeHtml(passage.en)
@@ -334,12 +336,12 @@ function renderResultsList() {
   el.loadMoreBtn.hidden = visible.length >= indices.length;
 }
 
-function renderPassageBlock(p) {
+function renderPassageBlock(p, translationLabel) {
   return (
     `<span class="verse-ref">${escapeHtml(p.ref)}</span>` +
     `<span class="verse-text" dir="rtl">${escapeHtml(p.text)}</span>` +
     (p.en
-      ? `<span class="lang-label">JPS 1917 translation</span><span class="verse-text verse-text-en" dir="ltr">${escapeHtml(p.en)}</span>`
+      ? `<span class="lang-label">${escapeHtml(translationLabel)} translation</span><span class="verse-text verse-text-en" dir="ltr">${escapeHtml(p.en)}</span>`
       : "")
   );
 }
@@ -347,16 +349,16 @@ function renderPassageBlock(p) {
 // --- Copy / share ------------------------------------------------------------
 
 /** Builds the plain-text summary a result's Copy button puts on the clipboard. */
-function buildCopyText(kind, item, passageDataset) {
+function buildCopyText(kind, item, passageDataset, translationLabel) {
   if (kind === "passage") {
-    return [item.ref, item.text, item.en ? `JPS 1917: ${item.en}` : null].filter(Boolean).join("\n");
+    return [item.ref, item.text, item.en ? `${translationLabel}: ${item.en}` : null].filter(Boolean).join("\n");
   }
   const [text, occurrences] = item;
   const lines = [`${text} — ${HECHRACHI_INFO.label} ${state.value}`];
   if (occurrences && occurrences.length) {
     const passage = passageDataset.items[occurrences[0][0]];
     lines.push(passage.ref, passage.text);
-    if (passage.en) lines.push(`JPS 1917: ${passage.en}`);
+    if (passage.en) lines.push(`${translationLabel}: ${passage.en}`);
   }
   return lines.join("\n");
 }
@@ -374,7 +376,8 @@ function buildCopyText(kind, item, passageDataset) {
  */
 function buildMarkdownReport() {
   const tab = state.activeTab;
-  const corpusLabel = CORPORA.find((c) => c.key === state.corpus).label;
+  const corpus = CORPORA.find((c) => c.key === state.corpus);
+  const corpusLabel = corpus.label;
   const corpusData = state.datasets[state.corpus];
   const passageDataset = corpusData.passages;
   const indices = state.matches[tab].slice(0, state.visibleCount[tab]);
@@ -388,7 +391,7 @@ function buildMarkdownReport() {
   if (indices.length === 0) {
     lines.push("_No matches found._");
   } else if (tab === "passages") {
-    for (const i of indices) lines.push(...markdownForPassage(passageDataset.items[i]), "");
+    for (const i of indices) lines.push(...markdownForPassage(passageDataset.items[i], corpus.translationLabel), "");
   } else {
     const dataset = corpusData[tab];
     for (const i of indices) {
@@ -396,7 +399,7 @@ function buildMarkdownReport() {
       lines.push(`### ${textOf[tab](item)}`);
       const occurrences = item[1];
       if (occurrences && occurrences.length) {
-        lines.push(...markdownForPassage(passageDataset.items[occurrences[0][0]]));
+        lines.push(...markdownForPassage(passageDataset.items[occurrences[0][0]], corpus.translationLabel));
       }
       lines.push("");
     }
@@ -406,9 +409,9 @@ function buildMarkdownReport() {
 }
 
 /** Renders one passage citation as a Markdown blockquote (original text, then translation if any). */
-function markdownForPassage(p) {
+function markdownForPassage(p, translationLabel) {
   const lines = [`**${p.ref}**`, `> ${p.text}`];
-  if (p.en) lines.push(">", `> *JPS 1917:* ${p.en}`);
+  if (p.en) lines.push(">", `> *${translationLabel}:* ${p.en}`);
   return lines;
 }
 

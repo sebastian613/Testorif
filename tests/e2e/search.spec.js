@@ -20,6 +20,17 @@ test("typing a Hebrew word updates the Standard Value and finds real matches", a
   await expect(page.locator(".tab").first()).toContainText("Words (41)");
 });
 
+test("Mishnah results show the Joshua Kulp English translation, not JPS", async ({ page }) => {
+  // Mishnah has its own CC-BY English translation (see build_mishnah.py)
+  // distinct from Tanakh's JPS 1917 — the "lang-label" text is per-corpus,
+  // not the hardcoded "JPS 1917 translation" string it used to be.
+  await page.fill("#name-input", "501");
+  await page.click('.corpus-tab:has-text("Mishnah")');
+  await page.waitForTimeout(300);
+  await expect(page.locator(".lang-label").first()).toHaveText("Joshua Kulp translation");
+  await expect(page.locator(".verse-text-en").first()).not.toHaveText("");
+});
+
 test("switching the corpus tab searches a completely separate index", async ({ page }) => {
   await page.fill("#name-input", "יאשיהו דוד עזריאל לישאביץ");
   await expect(page.locator(".value-number")).toHaveText("1107");

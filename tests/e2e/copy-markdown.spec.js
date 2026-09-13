@@ -44,6 +44,16 @@ test("Copy as Markdown follows the active tab and corpus", async ({ page }) => {
   expect(mishnahClipboard).toContain("## Mishnah Phrases");
 });
 
+test("Mishnah's Copy as Markdown cites Joshua Kulp, not JPS 1917", async ({ page }) => {
+  await page.fill("#name-input", "501");
+  await page.click('.corpus-tab:has-text("Mishnah")');
+  await page.waitForTimeout(300);
+  await page.locator("#copy-markdown").click();
+  const clipboardText = await page.evaluate(() => navigator.clipboard.readText());
+  expect(clipboardText).toContain("*Joshua Kulp:*");
+  expect(clipboardText).not.toContain("JPS 1917");
+});
+
 test("Copy Link puts a ?q= link on the clipboard without ever touching the address bar on its own", async ({
   page,
 }) => {

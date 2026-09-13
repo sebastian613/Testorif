@@ -41,9 +41,11 @@ translation. One thing, done thoroughly: there is no other mode.
   passage it comes from: the original text with that exact occurrence
   highlighted, cited by its reference, plus — for Tanakh citations — the
   JPS 1917 translation with the corresponding English word(s) highlighted
-  too, wherever that can be identified with confidence (see below); Mishnah
-  and Mishneh Torah citations show the original Hebrew only, since no
-  equivalently freely-licensed English translation is wired in yet. A word
+  too, wherever that can be identified with confidence (see below), and —
+  for Mishnah citations — the Joshua Kulp translation (no word-level
+  highlighting there, just the full passage translation); Mishneh Torah
+  citations show the original Hebrew only, since no equivalently
+  freely-licensed English translation is wired in yet. A word
   or phrase that occurs more than once shows its first occurrence plus an
   occurrence count. The Passages tab (whole-passage matches) shows the same
   citation for an entire verse, mishnah, or halacha, unhighlighted (there's
@@ -58,7 +60,16 @@ translation. One thing, done thoroughly: there is no other mode.
   tractates**, unlike Sefaria's own default/"merged" text for the same
   tractates, which turned out to be CC-BY-NC for 38 of them (see
   **Regenerating the data** below for how that was found and worked
-  around). **Mishneh Torah is complete — all 88 treatises — and carries no
+  around). Its English translation is "Mishnah Yomit" by Dr. Joshua Kulp —
+  checked **CC-BY across all six sedarim**, including obscure tractates
+  (Oktzin, Kinnim, Zavim) — attribution required, commercial use fine,
+  unlike the Talmud's CC-BY-NC Steinsaltz translation mentioned below.
+  Attached per (chapter, halacha) position rather than assumed 1:1 with
+  the Hebrew, since a handful of tractates' English carries extra trailing
+  content the Hebrew doesn't (e.g. Bikkurim's English has an appendix
+  4th chapter the Hebrew's 3-chapter structure doesn't); every one of the
+  4,187 mishnayot ended up with a translation attached, with zero silently
+  dropped. **Mishneh Torah is complete — all 88 treatises — and carries no
   restrictively-licensed text**, which took three sources, because no
   single Hebrew edition covers the whole work and Sefaria's per-version
   license tags have gaps. "Torat Emet 363" is Public Domain for 72
@@ -75,8 +86,8 @@ translation. One thing, done thoroughly: there is no other mode.
   by `scripts/build_mishneh_torah.py`, never assumed from a spot check,
   and the result is recorded in `data/mishneh-torah-sources.json` so it's
   auditable without re-running anything. No
-  English translation is wired in for the Mishnah or Mishneh Torah yet
-  either way. Talmud and Zohar are natural next corpora — their original
+  English translation is wired in for Mishneh Torah yet.
+  Talmud and Zohar are natural next corpora — their original
   text is equally public domain — but both are far larger than Mishneh
   Torah, and for the Talmud specifically, the only readily available
   complete English translation (the Steinsaltz/William Davidson Edition) is
@@ -212,7 +223,7 @@ data/hebrew-phrases.json   # Tanakh two-word phrases, same shape
 data/mishnah.json          # all 63 tractates, {ref, he, text} per mishnah — no `en`, see Corpora above
 data/mishnah-words.json    # Mishnah words: [bareWord, [[passageIndex, heStart, heEnd], ...]] — own index, not Tanakh's
 data/mishnah-phrases.json  # Mishnah two-word phrases, same shape
-scripts/build_mishnah.py   # fetches Sefaria's Torat Emet 357 Mishnah text, builds the three mishnah-*.json files
+scripts/build_mishnah.py   # fetches Sefaria's Torat Emet 357 Hebrew + Joshua Kulp English, builds the three mishnah-*.json files
 data/mishneh-torah.json           # all 88 treatises, {ref, text} per halacha — no `en`, and no `he` (unused; see below)
 data/mishneh-torah-sources.json   # which edition + license each treatise came from, so the licensing is auditable
 data/mishneh-torah-words.json     # Mishneh Torah words, same shape as mishnah-words.json — own index
@@ -224,9 +235,12 @@ tests/e2e/                 # Playwright: drives the real served app in a browser
 playwright.config.js       # e2e test config (auto-starts/stops the static server)
 ```
 
-An occurrence is `[passageIndex, heStart, heEnd, enStart, enEnd]` (the last
-two omitted for Mishnah and Mishneh Torah, which have no translation to
-highlight). `passageIndex` is always local to that corpus's own passage
+An occurrence is `[passageIndex, heStart, heEnd, enStart, enEnd]` — the last
+two (the English highlight offsets) are Tanakh-only, since only Tanakh has
+a word-aligned interlinear source to derive them from. Mishnah's passages
+carry a full-passage `en` translation (see below) but no per-word English
+highlight; Mishneh Torah has no `en` at all yet. `passageIndex` is always
+local to that corpus's own passage
 file — Tanakh occurrences index into `tanakh.json`, Mishnah occurrences
 into `mishnah.json`, Mishneh Torah occurrences into `mishneh-torah.json`;
 none of the three are ever mixed or offset against each other, since
@@ -307,6 +321,19 @@ requests it explicitly via the v3 API
 returned license actually is `"Public Domain"` before using it, so a
 future change on Sefaria's end fails loudly instead of silently
 reintroducing a licensing problem.
+
+The English translation ("Mishnah Yomit" by Dr. Joshua Kulp, requested via
+`/api/v3/texts/<title>?version=english|Mishnah Yomit by Dr. Joshua Kulp`
+the same way) is checked and attached the same cautious way: the script
+asserts `"CC-BY"` per tractate rather than assuming it holds everywhere,
+and pairs Hebrew to English by exact `(chapter, halacha)` position rather
+than trusting the two texts share one structure. That mattered in
+practice — Bikkurim's English carries an extra 4th "appendix" chapter its
+3-chapter Hebrew doesn't have, a known printed-edition variant already
+called out above. Iterating the Hebrew's own structure and only pulling
+in English where that exact position exists sidesteps it automatically:
+the extra English chapter is simply never visited, and every one of the
+4,187 mishnayot still ends up with a translation attached (0 dropped).
 
 `data/mishneh-torah.json`, `data/mishneh-torah-words.json`, and
 `data/mishneh-torah-phrases-1.json`/`-2.json` are generated by

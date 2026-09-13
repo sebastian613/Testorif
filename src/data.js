@@ -11,11 +11,15 @@ export const CORPORA = [
     key: "tanakh",
     label: "Tanakh",
     files: { words: "data/hebrew-words.json", phrases: "data/hebrew-phrases.json", passages: "data/tanakh.json" },
+    translationLabel: "JPS 1917",
   },
   {
     key: "mishnah",
     label: "Mishnah",
     files: { words: "data/mishnah-words.json", phrases: "data/mishnah-phrases.json", passages: "data/mishnah.json" },
+    // CC-BY (attribution required, commercial use fine) — see
+    // scripts/build_mishnah.py for the licensing verification.
+    translationLabel: "Joshua Kulp",
   },
   {
     key: "mishneh-torah",

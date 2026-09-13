@@ -35,3 +35,17 @@ test("copying a passage result puts its citation and translation on the clipboar
   expect(clipboardText).toMatch(/\d/); // contains a chapter:verse citation
   expect(clipboardText).toContain("JPS 1917:");
 });
+
+test("copying a Mishnah word result cites Joshua Kulp, not JPS 1917", async ({ page }) => {
+  await page.fill("#name-input", "501");
+  await page.click('.corpus-tab:has-text("Mishnah")');
+  await page.waitForTimeout(300);
+
+  const copyBtn = page.locator("#results-list li").first().locator(".copy-btn");
+  await copyBtn.click();
+  await expect(copyBtn).toHaveText("Copied!");
+
+  const clipboardText = await page.evaluate(() => navigator.clipboard.readText());
+  expect(clipboardText).toContain("Joshua Kulp:");
+  expect(clipboardText).not.toContain("JPS 1917");
+});
