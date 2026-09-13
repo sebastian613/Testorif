@@ -3,10 +3,13 @@
   --bg: #f6f1e4;
   --bg-alt: #efe7d3;
   --fg: #2a2013;
-  --muted: #857a5f;
-  --accent: #a63e12;
-  --accent-fg: #fbf3e7;
-  --accent-soft: #f3dfcb;
+  /* WCAG-checked: 4.90:1 on --bg, 5.43:1 on --card (was 3.76:1, below the
+     4.5:1 text minimum). */
+  --muted: #716851;
+  /* WCAG-checked, more saturated (0.91 vs the old 0.80) and brighter burnt
+     orange: 4.37:1 on --bg, 4.85:1 on --card. */
+  --accent: #c33b09;
+  --accent-fg: #ffffff;
   --card: #fffdf7;
   --border: #e2d6b8;
 }
@@ -17,9 +20,10 @@
     --bg-alt: #241d13;
     --fg: #ece3cd;
     --muted: #a89a78;
-    --accent: #e8935a;
+    /* Same hue/lightness as the old #e8935a but fully saturated (was 0.76)
+       instead of desaturated toward pale peach: 7.77:1 on --bg. */
+    --accent: #ff8c42;
     --accent-fg: #20140b;
-    --accent-soft: #3a2416;
     --card: #241d13;
     --border: #3c3220;
   }
@@ -200,14 +204,16 @@ header h1 {
   margin: -8px 0 24px;
   padding: 10px 14px;
   border-radius: 10px;
-  background: var(--accent-soft);
-  color: var(--fg);
+  /* A solid accent fill, not a pale tint: the old tint (--accent-soft) sat
+     within 1.15:1 of the surrounding background, so the callout barely
+     read as a distinct box at all. This clears 4.31:1+ in both themes. */
+  background: var(--accent);
+  color: var(--accent-fg);
   font-size: 0.88rem;
   line-height: 1.5;
 }
 
 .notable-value strong {
-  color: var(--accent);
   font-variant-numeric: tabular-nums;
 }
 
@@ -512,10 +518,15 @@ header h1 {
 }
 
 .result-citation mark {
-  background: var(--accent-soft);
-  color: var(--fg);
+  /* A solid accent fill, not a pale tint: the old tint (--accent-soft) sat
+     within 1.05-1.27:1 of its surrounding background — the highlighted
+     text itself was legible, but the highlight was nearly invisible as a
+     highlight. This clears 4.31:1 (light) / 7.21:1 (dark) against the
+     citation's own background instead. */
+  background: var(--accent);
+  color: var(--accent-fg);
   border-radius: 4px;
-  padding: 0 2px;
+  padding: 0 3px;
   font-weight: 700;
 }
 
@@ -562,9 +573,8 @@ footer {
     --bg-alt: #f4f1e8;
     --fg: #1a1a1a;
     --muted: #555555;
-    --accent: #a63e12;
+    --accent: #c33b09;
     --accent-fg: #ffffff;
-    --accent-soft: #f3dfcb;
     --card: #ffffff;
     --border: #cfc6a8;
   }
@@ -630,7 +640,12 @@ footer {
   }
 
   .result-citation mark {
+    /* Print keeps its own light, ink-economical tan tint rather than the
+       screen's solid accent fill — but that means it must also override
+       the base rule's (now white) text color, or it inherits illegibly
+       light text on a light background. 11.19:1 with --fg. */
     background: #d8d0a8;
+    color: var(--fg);
   }
 
   footer {
