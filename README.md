@@ -1,6 +1,6 @@
-# Samizdaat — Gematria Calculator
+# Torahscope — Hebrew Gematria by Samizdaat
 
-A static, browser-based app that calculates the **Standard Value** (Mispar
+**Torahscope**, from Samizdaat, is a static, browser-based app that calculates the **Standard Value** (Mispar
 Hechrachi) Hebrew gematria of a name or word and finds every word, phrase,
 and passage that shares the same value in a source text of your choosing —
 the Tanakh (Hebrew Bible), the Mishnah, or Rambam's Mishneh Torah, searched

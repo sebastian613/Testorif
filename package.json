@@ -1,7 +1,7 @@
 {
   "name": "samizdaat",
   "version": "1.0.0",
-  "description": "Samizdaat: calculates the gematria of a name or phrase and finds matching words, phrases, and Bible verses.",
+  "description": "Torahscope (by Samizdaat): calculates the Hebrew gematria of a name or phrase and finds matching words, phrases, and passages in the Tanakh, Mishnah, and Mishneh Torah.",
   "private": true,
   "type": "module",
   "scripts": {
