@@ -1,0 +1,7 @@
+{
+  "sourceUrl": "https://raw.githubusercontent.com/Sefaria/Sefaria-Project/121350b2659ef01e08ef618cf7bbefd54f8799ed/static/js/sefaria/sefaria.js",
+  "repositoryCommit": "121350b2659ef01e08ef618cf7bbefd54f8799ed",
+  "firstLine": 1138,
+  "excerpt": "  getLicenseMap: function() {\n    const licenseMap = {\n      \"Public Domain\": \"https://en.wikipedia.org/wiki/Public_domain\",\n      \"CC0\": \"https://creativecommons.org/publicdomain/zero/1.0/\",\n      \"CC-BY\": \"https://creativecommons.org/licenses/by/3.0/\",\n      \"CC-BY-SA\": \"https://creativecommons.org/licenses/by-sa/3.0/\",\n      \"CC-BY-NC\": \"https://creativecommons.org/licenses/by-nc/4.0/\",\n      \"CC-BY-NC-ND\": \"https://creativecommons.org/licenses/by-nc-nd/4.0/\",\n      \"unknown\": \"#\"\n    }\n    return licenseMap;\n  },\n  _textUrl: function(ref, settings) {\n    // copy the parts of settings that are used as parameters, but not other\n    const params = param({",
+  "checkedAt": "2026-10-19"
+}

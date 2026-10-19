@@ -29,7 +29,8 @@ and worth re-verifying (via the versions endpoint above) if Sefaria's
 licensing terms could have changed since.
 
 English translation: "Mishnah Yomit by Dr. Joshua Kulp" — checked
-**CC-BY** (attribution required, commercial use permitted, unlike the
+**CC-BY** (Sefaria maps this label to CC BY 3.0; attribution required,
+commercial use permitted subject to the license conditions, unlike the
 Talmud's CC-BY-NC Steinsaltz translation) across all six sedarim
 including obscure tractates (Oktzin, Kinnim, Zavim). Unlike the Hebrew,
 English chapter/halacha structure is

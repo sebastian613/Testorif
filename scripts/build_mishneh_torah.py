@@ -12,41 +12,11 @@ Idempotent-ish: cached raw fetches live in .cache/mishneh_torah_raw/ so
 re-runs after a partial failure don't re-fetch treatises already saved.
 Delete that directory to force a clean re-fetch.
 
-ALL 88 treatises are included. Getting there took three different sources,
-because no single Hebrew edition on Sefaria covers the whole work, and
-because Sefaria's per-version license tags have gaps. Every treatise's
-license is checked live at build time (never assumed from a spot check):
-
-  1. "Torat Emet 363" — Public Domain, and covers 72 treatises: all of
-     Sefer Madda, and everything from Sefer Zemanim through Sefer Shoftim.
-     It does not cover Sefer Ahavah or the introductory list-books at all.
-  2. "Torat Emet 370" — the edition that covers Sefer Ahavah. Sefaria tags
-     it Public Domain for 2 of that book's 7 treatises (Reading the Shema;
-     Prayer and the Priestly Blessing) and leaves the license "unknown" on
-     the other 5 (Tefillin/Mezuzah/Torah Scroll, Fringes, Blessings,
-     Circumcision, The Order of Prayer). That is a tagging gap, not a
-     different license: all 7 are the same version title from the same
-     publisher at the same versionSource
-     (http://www.toratemetfreeware.com/index.html?downloads), and a
-     license does not vary book-by-book within one edition. Rather than
-     just assert that, this script PROVES it each run — see
-     SEFARIA_UNTAGGED_OK and the check in main(): an untagged version is
-     only accepted if that exact version title came back "Public Domain"
-     on some other treatise in the same run. If Sefaria ever retags it,
-     the build fails loudly instead of quietly shipping it.
-  3. Mechon Mamre (https://www.mechon-mamre.org) — a public domain,
-     fully vocalized edition — for the 4 introductory list-books. Sefaria
-     carries it for 2 of them (Transmission of the Oral Law; Positive
-     Mitzvot) and is used through the normal API path. For the other 2
-     (Negative Mitzvot; Overview of Mishneh Torah Contents) Sefaria's ONLY
-     Hebrew version is a CC-BY-SA Wikisource transcription, so those are
-     fetched straight from Mechon Mamre instead (see MECHON_MAMRE_DIRECT).
-     That avoids a share-alike license on this corpus entirely and, as a
-     bonus, yields vocalized text matching the rest of the corpus where
-     the Wikisource transcription is unvocalized.
-
-Net result: 88 of 88 treatises, no CC-BY-SA or CC-BY-NC text anywhere in
-this corpus.
+The checked-in corpus contains all 88 treatises. Permissions for five
+Torat Emet 370 treatises and two direct Mechon Mamre downloads remain
+unresolved. Shared edition names are not proof of permission. See
+docs/SOURCE-LICENSING.md. This builder refuses unverified records before
+writing any datasets, including legacy cached records.
 """
 import html
 import json
@@ -74,12 +44,9 @@ MAX_OCC = 2
 # vocalized editions that match the rest of the app's Hebrew typography.
 PREFERRED_VERSION_PREFIXES = ("Torat Emet", "Mechon")
 
-# Treatises where Sefaria lists the right edition but left its license
-# untagged ("unknown"). Accepted ONLY if the same version title came back
-# "Public Domain" on some other treatise in the same run — see the check
-# in main(). See the module docstring for why this is a tagging gap rather
-# than a real licensing difference.
-SEFARIA_UNTAGGED_OK = {
+# Historical unverified sources, retained to identify affected records.
+# These are NOT approved by matching another treatise's edition title.
+SEFARIA_UNVERIFIED_VERSIONS = {
     "Mishneh Torah, Tefillin, Mezuzah and the Torah Scroll": "Torat Emet 370",
     "Mishneh Torah, Fringes": "Torat Emet 370",
     "Mishneh Torah, Blessings": "Torat Emet 370",
@@ -88,7 +55,7 @@ SEFARIA_UNTAGGED_OK = {
 }
 
 # Treatises where Sefaria's only Hebrew version is CC-BY-SA, fetched
-# straight from Mechon Mamre's public domain vocalized edition instead.
+# straight from Mechon Mamre; direct-download permissions are unresolved.
 # Values are the page number in https://www.mechon-mamre.org/i/<n>n.htm.
 MECHON_MAMRE_DIRECT = {
     "Mishneh Torah, Negative Mitzvot": ("0002", "משנה תורה, מצוות לא תעשה"),
@@ -211,13 +178,7 @@ def cache_path_for(title):
 
 
 def pick_version(title):
-    """Chooses the Hebrew version to use for this treatise.
-
-    Returns (versionTitle, license, tagged) where `tagged` is False for a
-    version Sefaria left license-"unknown" that SEFARIA_UNTAGGED_OK allows
-    — main() only accepts those once the same version title has proven
-    itself Public Domain on another treatise in the same run.
-    """
+    """Choose a version; return unknown explicitly for historical untagged sources."""
     url = f"https://www.sefaria.org/api/texts/versions/{urllib.parse.quote(title.replace(' ', '_'))}"
     with urllib.request.urlopen(url, timeout=20) as resp:
         versions = json.loads(resp.read().decode("utf-8"))
@@ -231,9 +192,9 @@ def pick_version(title):
     if public_domain:
         return public_domain[0], "Public Domain", True
 
-    allowed = SEFARIA_UNTAGGED_OK.get(title)
+    allowed = SEFARIA_UNVERIFIED_VERSIONS.get(title)
     if allowed and any(vt == allowed for vt, _ in he):
-        return allowed, "Public Domain (untagged by Sefaria on this treatise)", False
+        return allowed, "unknown", False
     return None, None, False
 
 
@@ -246,7 +207,7 @@ MM_ITEM_RE = re.compile(r'<A NAME="[^"]*">\s*</A>\s*<(H2|P)(?:\s[^>]*)?>(.*?)</\
 
 
 def fetch_mechon_mamre(title, page):
-    """Fetches one of Mechon Mamre's public domain vocalized pages and
+    """Fetches one of Mechon Mamre's vocalized pages and
     returns its items as a flat list of plain-text strings."""
     req = urllib.request.Request(
         MECHON_MAMRE_URL.format(page=page),
@@ -280,9 +241,9 @@ def fetch_treatise(seder, title):
             "seder": seder,
             "name": title,
             "heTitle": he_title,
-            "license": "Public Domain",
+            "license": "unknown",
             "versionTitle": f"Mechon Mamre (mechon-mamre.org/i/{page}n.htm)",
-            "tagged": True,
+            "tagged": False,
             "text": fetch_mechon_mamre(title, page),
         }
     else:
@@ -350,41 +311,30 @@ def tokenize(text):
     return tokens
 
 
+def validate_permissions(treatises):
+    """Refuse unknown permissions, even in legacy cache entries claiming PD."""
+    unresolved = [d["name"] for d in treatises
+                  if not d.get("tagged", True) or d.get("license") != "Public Domain"
+                  or d["name"] in MECHON_MAMRE_DIRECT]
+    if unresolved:
+        raise RuntimeError("Unresolved source permissions: " + "; ".join(unresolved)
+                           + ". Verify exact editions before rebuilding; see docs/SOURCE-LICENSING.md")
+
+
 def main():
     print(f"Checking/fetching all {len(TREATISES)} Mishneh Torah treatises...")
     treatises = []
     for i, (seder, title) in enumerate(TREATISES, 1):
         d = fetch_treatise(seder, title)
         treatises.append(d)
-        mark = "" if d.get("tagged", True) else "  [untagged — verified below]"
+        mark = "" if d.get("tagged", True) else "  [permissions unresolved]"
         print(f"  [{i}/{len(TREATISES)}] {title}: {d['license']} ({d['versionTitle']}){mark}")
         time.sleep(0.1)
 
     if len(treatises) != 88:
         raise RuntimeError(f"expected all 88 treatises, built {len(treatises)}")
 
-    # Prove, rather than assume, that an untagged version really is the same
-    # Public Domain edition: the identical version title must have come back
-    # explicitly Public Domain on at least one other treatise this run.
-    proven_public_domain = {
-        d["versionTitle"] for d in treatises if d.get("tagged", True) and d["license"] == "Public Domain"
-    }
-    for d in treatises:
-        if d.get("tagged", True):
-            continue
-        if d["versionTitle"] not in proven_public_domain:
-            raise RuntimeError(
-                f"{d['name']}: {d['versionTitle']!r} is untagged here and no longer comes back "
-                "Public Domain on any other treatise, so the inference that it's the same "
-                "Public Domain edition no longer holds. Re-check Sefaria's licensing before building."
-            )
-        print(f"  verified: {d['name']} — {d['versionTitle']!r} is tagged Public Domain on other treatises")
-
-    unexpected = {d["license"] for d in treatises} - {
-        "Public Domain", "Public Domain (untagged by Sefaria on this treatise)"
-    }
-    if unexpected:
-        raise RuntimeError(f"unexpected licenses found: {unexpected}")
+    validate_permissions(treatises)
 
     sources = [
         {"treatise": d["name"], "book": d["seder"], "versionTitle": d["versionTitle"],

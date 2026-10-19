@@ -17,15 +17,17 @@
   "treatise": "Mishneh Torah, Negative Mitzvot",
   "book": "Introduction",
   "versionTitle": "Mechon Mamre (mechon-mamre.org/i/0002n.htm)",
-  "license": "Public Domain",
-  "sefariaLicenseTagged": true
+  "license": "unknown",
+  "sefariaLicenseTagged": false,
+  "permissionsStatus": "unresolved"
  },
  {
   "treatise": "Mishneh Torah, Overview of Mishneh Torah Contents",
   "book": "Introduction",
   "versionTitle": "Mechon Mamre (mechon-mamre.org/i/0003n.htm)",
-  "license": "Public Domain",
-  "sefariaLicenseTagged": true
+  "license": "unknown",
+  "sefariaLicenseTagged": false,
+  "permissionsStatus": "unresolved"
  },
  {
   "treatise": "Mishneh Torah, Foundations of the Torah",
@@ -80,36 +82,41 @@
   "treatise": "Mishneh Torah, Tefillin, Mezuzah and the Torah Scroll",
   "book": "Sefer Ahavah",
   "versionTitle": "Torat Emet 370",
-  "license": "Public Domain (untagged by Sefaria on this treatise)",
-  "sefariaLicenseTagged": false
+  "license": "unknown",
+  "sefariaLicenseTagged": false,
+  "permissionsStatus": "unresolved"
  },
  {
   "treatise": "Mishneh Torah, Fringes",
   "book": "Sefer Ahavah",
   "versionTitle": "Torat Emet 370",
-  "license": "Public Domain (untagged by Sefaria on this treatise)",
-  "sefariaLicenseTagged": false
+  "license": "unknown",
+  "sefariaLicenseTagged": false,
+  "permissionsStatus": "unresolved"
  },
  {
   "treatise": "Mishneh Torah, Blessings",
   "book": "Sefer Ahavah",
   "versionTitle": "Torat Emet 370",
-  "license": "Public Domain (untagged by Sefaria on this treatise)",
-  "sefariaLicenseTagged": false
+  "license": "unknown",
+  "sefariaLicenseTagged": false,
+  "permissionsStatus": "unresolved"
  },
  {
   "treatise": "Mishneh Torah, Circumcision",
   "book": "Sefer Ahavah",
   "versionTitle": "Torat Emet 370",
-  "license": "Public Domain (untagged by Sefaria on this treatise)",
-  "sefariaLicenseTagged": false
+  "license": "unknown",
+  "sefariaLicenseTagged": false,
+  "permissionsStatus": "unresolved"
  },
  {
   "treatise": "Mishneh Torah, The Order of Prayer",
   "book": "Sefer Ahavah",
   "versionTitle": "Torat Emet 370",
-  "license": "Public Domain (untagged by Sefaria on this treatise)",
-  "sefariaLicenseTagged": false
+  "license": "unknown",
+  "sefariaLicenseTagged": false,
+  "permissionsStatus": "unresolved"
  },
  {
   "treatise": "Mishneh Torah, Sabbath",

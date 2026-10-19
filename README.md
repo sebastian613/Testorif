@@ -52,7 +52,7 @@ translation. One thing, done thoroughly: there is no other mode.
   no single word to point to).
 - **Licensing, per corpus**: adding a text here only ever needs two things
   settled first — is the original-language text actually public domain
-  (rabbinic and biblical text always is, being centuries to millennia old),
+  (ancient works and modern editions must be assessed separately),
   and is there a translation licensed for how it'll be shown/used. Tanakh's
   JPS 1917 translation is fully public domain, so it's shown everywhere
   without restriction. The Mishnah's Hebrew is Sefaria's "Torat Emet 357"
@@ -61,7 +61,7 @@ translation. One thing, done thoroughly: there is no other mode.
   tractates, which turned out to be CC-BY-NC for 38 of them (see
   **Regenerating the data** below for how that was found and worked
   around). Its English translation is "Mishnah Yomit" by Dr. Joshua Kulp —
-  checked **CC-BY across all six sedarim**, including obscure tractates
+  checked **CC-BY across all six sedarim** (Sefaria maps this to CC BY 3.0), including obscure tractates
   (Oktzin, Kinnim, Zavim) — attribution required, commercial use fine,
   unlike the Talmud's CC-BY-NC Steinsaltz translation mentioned below.
   Attached per (chapter, halacha) position rather than assumed 1:1 with
@@ -69,24 +69,14 @@ translation. One thing, done thoroughly: there is no other mode.
   content the Hebrew doesn't (e.g. Bikkurim's English has an appendix
   4th chapter the Hebrew's 3-chapter structure doesn't); every one of the
   4,187 mishnayot ended up with a translation attached, with zero silently
-  dropped. **Mishneh Torah is complete — all 88 treatises — and carries no
-  restrictively-licensed text**, which took three sources, because no
-  single Hebrew edition covers the whole work and Sefaria's per-version
-  license tags have gaps. "Torat Emet 363" is Public Domain for 72
-  treatises but doesn't cover Sefer Ahavah; "Torat Emet 370" covers Sefer
-  Ahavah but is tagged Public Domain on only 2 of its 7 treatises and left
-  `"unknown"` on the other 5 — same version title, same publisher, same
-  source URL, so that's a tagging gap rather than a real licensing
-  difference, and the build script *proves* that each run rather than
-  assuming it (see **Regenerating the data**). The 4 introductory
-  list-books come from Mechon Mamre's public domain vocalized edition
-  instead, 2 of them through Sefaria and 2 fetched directly, which avoids
-  the CC-BY-SA Wikisource transcription that was Sefaria's only Hebrew
-  option for those. Every treatise's license is checked live per treatise
-  by `scripts/build_mishneh_torah.py`, never assumed from a spot check,
-  and the result is recorded in `data/mishneh-torah-sources.json` so it's
-  auditable without re-running anything. No
-  English translation is wired in for Mishneh Torah yet.
+  dropped. **Mishneh Torah includes all 88 treatises, with unresolved edition
+  permissions.** Sefaria tags Torat Emet 363 Public Domain for 77 treatises,
+  and Torat Emet 370 Public Domain for 2. Five further Torat Emet 370
+  treatises have unknown permissions; matching edition names do not prove
+  permission. Four introductory texts use Mechon Mamre, two fetched directly;
+  the direct downloads need their own permission verification. See the
+  [source licensing audit](docs/SOURCE-LICENSING.md) and source manifest.
+  No English translation is wired in for Mishneh Torah yet.
   Talmud and Zohar are natural next corpora — their original
   text is equally public domain — but both are far larger than Mishneh
   Torah, and for the Talmud specifically, the only readily available
@@ -98,7 +88,8 @@ translation. One thing, done thoroughly: there is no other mode.
   hasn't been checked yet.
 - **Hebrew text source**: the Westminster Leningrad Codex, via the
   [Open Scriptures Hebrew Bible](https://github.com/openscriptures/morphhb)
-  project (public domain). Verses use the Qere (traditional spoken reading)
+  project (underlying Westminster text is public domain; the project specifies
+  CC BY 4.0 and an attribution statement, retained in credits and copied results). Verses use the Qere (traditional spoken reading)
   wherever the text has a Ketiv/Qere variant. Words/phrases are matched on
   their bare consonants (niqqud-independent) but cited and highlighted using
   the fully vocalized verse text.
@@ -359,30 +350,19 @@ against `/api/texts/versions/<title>` (rather than assuming Mishnah's
 single-version-covers-everything pattern would repeat) turned up a messier
 picture: the work is split across two independently-licensed Hebrew
 editions, neither complete, and it took **three** sources to assemble all
-88 treatises without pulling in restrictively-licensed text:
+88 treatises, with the unresolved permissions described below:
 
-1. **"Torat Emet 363"** — Public Domain, covers 72 treatises (all of Sefer
+1. **"Torat Emet 363"** — Public Domain, covers 77 treatises (all of Sefer
    Madda, and everything from Sefer Zemanim through Sefer Shoftim). It
    doesn't cover Sefer Ahavah or the introductory list-books at all.
-2. **"Torat Emet 370"** — the edition that does cover Sefer Ahavah.
-   Sefaria tags it Public Domain on 2 of that book's 7 treatises (Reading
-   the Shema; Prayer and the Priestly Blessing) and leaves the license
-   `"unknown"` on the other 5. That's a tagging gap, not a licensing
-   difference: all 7 are the same version title from the same publisher at
-   the same `versionSource`, and a license doesn't vary book-by-book
-   within one edition. The script doesn't just assert that — it **proves
-   it every run**: an untagged version is only accepted if that exact
-   version title came back `"Public Domain"` on some other treatise in the
-   same run, so if Sefaria ever retags it the build fails loudly instead
-   of quietly shipping it.
-3. **Mechon Mamre** — a public domain, fully vocalized edition — for the 4
-   introductory list-books. Sefaria carries it for 2 of them (Transmission
-   of the Oral Law; Positive Mitzvot). For the other 2 (Negative Mitzvot;
-   Overview of Contents) Sefaria's only Hebrew version is a CC-BY-SA
-   Wikisource transcription, so the script fetches those straight from
-   mechon-mamre.org instead. That keeps share-alike text out of the corpus
-   entirely and, as a bonus, yields vocalized text where the Wikisource
-   transcription is unvocalized.
+2. **"Torat Emet 370"** covers Sefer Ahavah. Two treatises are tagged
+   Public Domain; the other five are unknown. The former same-edition
+   inference did not establish permission. The builder now refuses unverified
+   records, including legacy cached records, before writing datasets.
+3. **Mechon Mamre** supplies four introductory texts, two via Sefaria and two
+   direct downloads. The latter were previously labeled Public Domain without
+   independent evidence. Their permissions remain unresolved. See the audit
+   for the exact texts and verification needed before commercial reuse.
 
 The result: **88 of 88 treatises, 15,895 halachot**, with every treatise's
 edition and license recorded in `data/mishneh-torah-sources.json`.
@@ -449,3 +429,13 @@ per entry to bound file size).
    text. `enStart`/`enEnd` are only set when a candidate is found as a whole
    word exactly once in the verse (for phrases, both words must be unique
    and land within 45 characters of each other); otherwise they're `-1`.
+
+
+### Source attribution and licensing audit
+
+See [docs/SOURCE-LICENSING.md](docs/SOURCE-LICENSING.md) for the October 19,
+2026 audit, authoritative evidence, and unresolved permissions. Mishnah English
+is *Mishnah Yomit* by Dr. Joshua Kulp, via Sefaria, [CC BY 3.0](https://creativecommons.org/licenses/by/3.0/).
+The footer and copies retain title, creator, source and license links, and identify
+HTML removal and whitespace normalization. Attribution does not license the app's
+own code or resolve the outstanding Mishneh Torah edition permissions.
