@@ -54,24 +54,17 @@ test("mishneh-torah.json: the 9 once-missing treatises are really present", () =
   assert.equal(positive.length, 248);
 });
 
-test("mishneh-torah-sources.json: no restrictively-licensed text anywhere in the corpus", () => {
-  // The whole point of the three-source build: no CC-BY-SA (share-alike)
-  // or CC-BY-NC (non-commercial) text ends up in this corpus.
-  for (const s of sources) {
-    assert.match(s.license, /^Public Domain/, `${s.treatise} carries license ${s.license}`);
-    assert.doesNotMatch(s.license, /CC-BY/, `${s.treatise} carries a Creative Commons license`);
+test("source manifest distinguishes unverified permissions from public domain metadata", () => {
+  const unresolved = sources.filter((s) => s.permissionsStatus === "unresolved");
+  assert.equal(unresolved.length, 7);
+  assert.equal(unresolved.filter((s) => s.versionTitle === "Torat Emet 370").length, 5);
+  for (const s of unresolved) {
+    assert.equal(s.license, "unknown");
+    assert.equal(s.sefariaLicenseTagged, false);
   }
-  // The treatises Sefaria left license-untagged must come from an edition
-  // that IS tagged Public Domain on other treatises — that's what makes
-  // the inference checkable rather than just asserted.
-  const taggedPublicDomainEditions = new Set(
-    sources.filter((s) => s.sefariaLicenseTagged).map((s) => s.versionTitle)
-  );
-  for (const s of sources.filter((s) => !s.sefariaLicenseTagged)) {
-    assert.ok(
-      taggedPublicDomainEditions.has(s.versionTitle),
-      `${s.treatise} uses untagged ${s.versionTitle}, which isn't tagged Public Domain on any other treatise`
-    );
+  for (const s of sources.filter((s) => s.permissionsStatus !== "unresolved")) {
+    assert.equal(s.license, "Public Domain");
+    assert.equal(s.sefariaLicenseTagged, true);
   }
 });
 

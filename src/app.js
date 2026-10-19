@@ -3,6 +3,8 @@ import { CORPORA, loadDatasets, findMatches, textOf } from "./data.js";
 import { findNotableValue } from "./notable-values.js";
 import { POPULAR_NUMBERS, POPULAR_PHRASES } from "./popular-searches.js";
 
+import { resultAttribution } from "./attribution.js";
+
 const PAGE_SIZE = 100;
 // Default occurrence cap — must match MAX_OCC used when a corpus's data
 // files were generated, once an item's occurrence list reaches this length
@@ -290,14 +292,14 @@ function renderResultsList() {
       if (tab === "passages") {
         li.innerHTML = renderPassageBlock(item, corpus.translationLabel);
         li.querySelector(".verse-ref").appendChild(
-          makeCopyButton(() => buildCopyText("passage", item, null, corpus.translationLabel))
+          makeCopyButton(() => buildCopyText("passage", item, null, corpus))
         );
       } else {
         const headline = document.createElement("div");
         headline.className = "result-headline";
         headline.dir = "rtl";
         headline.textContent = textOf[tab](item);
-        headline.appendChild(makeCopyButton(() => buildCopyText(tab, item, passageDataset, corpus.translationLabel)));
+        headline.appendChild(makeCopyButton(() => buildCopyText(tab, item, passageDataset, corpus)));
         li.appendChild(headline);
 
         const occurrences = item[1];
@@ -349,9 +351,10 @@ function renderPassageBlock(p, translationLabel) {
 // --- Copy / share ------------------------------------------------------------
 
 /** Builds the plain-text summary a result's Copy button puts on the clipboard. */
-function buildCopyText(kind, item, passageDataset, translationLabel) {
+function buildCopyText(kind, item, passageDataset, corpus) {
+  const { translationLabel } = corpus;
   if (kind === "passage") {
-    return [item.ref, item.text, item.en ? `${translationLabel}: ${item.en}` : null].filter(Boolean).join("\n");
+    return [item.ref, item.text, item.en ? `${translationLabel}: ${item.en}` : null, resultAttribution(corpus, [item])].filter(Boolean).join("\n");
   }
   const [text, occurrences] = item;
   const lines = [`${text} — ${HECHRACHI_INFO.label} ${state.value}`];
@@ -359,8 +362,9 @@ function buildCopyText(kind, item, passageDataset, translationLabel) {
     const passage = passageDataset.items[occurrences[0][0]];
     lines.push(passage.ref, passage.text);
     if (passage.en) lines.push(`${translationLabel}: ${passage.en}`);
+    lines.push(resultAttribution(corpus, [passage]));
   }
-  return lines.join("\n");
+  return lines.filter(Boolean).join("\n");
 }
 
 /**
@@ -378,6 +382,7 @@ function buildMarkdownReport() {
   const tab = state.activeTab;
   const corpus = CORPORA.find((c) => c.key === state.corpus);
   const corpusLabel = corpus.label;
+  const exportedPassages = [];
   const corpusData = state.datasets[state.corpus];
   const passageDataset = corpusData.passages;
   const indices = state.matches[tab].slice(0, state.visibleCount[tab]);
@@ -391,7 +396,10 @@ function buildMarkdownReport() {
   if (indices.length === 0) {
     lines.push("_No matches found._");
   } else if (tab === "passages") {
-    for (const i of indices) lines.push(...markdownForPassage(passageDataset.items[i], corpus.translationLabel), "");
+    for (const i of indices) {
+      exportedPassages.push(passageDataset.items[i]);
+      lines.push(...markdownForPassage(passageDataset.items[i], corpus.translationLabel), "");
+    }
   } else {
     const dataset = corpusData[tab];
     for (const i of indices) {
@@ -399,12 +407,15 @@ function buildMarkdownReport() {
       lines.push(`### ${textOf[tab](item)}`);
       const occurrences = item[1];
       if (occurrences && occurrences.length) {
+        exportedPassages.push(passageDataset.items[occurrences[0][0]]);
         lines.push(...markdownForPassage(passageDataset.items[occurrences[0][0]], corpus.translationLabel));
       }
       lines.push("");
     }
   }
 
+  const credit = resultAttribution(corpus, exportedPassages);
+  if (credit) lines.push(credit, "");
   return lines.join("\n").trim() + "\n";
 }
 

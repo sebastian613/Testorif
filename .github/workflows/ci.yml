@@ -21,6 +21,9 @@ jobs:
       - name: Run unit tests
         run: npm run test:unit
 
+      - name: Check source permission guard
+        run: python3 -m unittest discover -s tests -p 'test_source_permissions.py'
+
       - name: Install Playwright's browser
         run: npx playwright install --with-deps chromium
 

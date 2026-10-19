@@ -51,6 +51,9 @@ test("Mishnah's Copy as Markdown cites Joshua Kulp, not JPS 1917", async ({ page
   await page.locator("#copy-markdown").click();
   const clipboardText = await page.evaluate(() => navigator.clipboard.readText());
   expect(clipboardText).toContain("*Joshua Kulp:*");
+  expect(clipboardText).toContain("Mishnah Yomit by Dr. Joshua Kulp");
+  expect(clipboardText.match(/CC BY 3\.0/g)).toHaveLength(1);
+  expect(clipboardText).toContain("https://creativecommons.org/licenses/by/3.0/");
   expect(clipboardText).not.toContain("JPS 1917");
 });
 

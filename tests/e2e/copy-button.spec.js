@@ -47,5 +47,9 @@ test("copying a Mishnah word result cites Joshua Kulp, not JPS 1917", async ({ p
 
   const clipboardText = await page.evaluate(() => navigator.clipboard.readText());
   expect(clipboardText).toContain("Joshua Kulp:");
+  expect(clipboardText).toContain("Mishnah Yomit by Dr. Joshua Kulp");
+  expect(clipboardText).toContain("https://creativecommons.org/licenses/by/3.0/");
+  expect(clipboardText).toContain("Source: https://www.sefaria.org/");
+  expect(clipboardText).toContain("HTML markup removed");
   expect(clipboardText).not.toContain("JPS 1917");
 });
