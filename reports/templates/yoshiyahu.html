@@ -1,0 +1,544 @@
+<title>Yoshiyahu David Azriel Lishavitz</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Frank+Ruhl+Libre:wght@400;500;700;900&family=Assistant:wght@400;500;600;700&display=swap">
+<style>
+/* Layout: one parchment column like a scroll's sheet; each section is a "column" of the scroll, set off by a hairline and a Hebrew catchword. Torahscope's own palette and faces. */
+:root {
+  --bg: #f6f1e4;
+  --sheet: #fffdf7;
+  --fg: #2a2013;
+  --muted: #716851;
+  --rule: #e2d6b8;
+  --accent: #c33b09;
+  --n1: #c33b09;  /* Yoshiyahu */
+  --n2: #1d6a72;  /* David */
+  --n3: #5246a8;  /* Azriel */
+  --n4: #876500;  /* Lishavitz */
+  --display: "Frank Ruhl Libre", "Times New Roman", serif;
+  --body: "Assistant", "Segoe UI", system-ui, sans-serif;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #1b160f; --sheet: #241d13; --fg: #ece3cd; --muted: #a89a78; --rule: #3c3220;
+    --accent: #ff8c42; --n1: #ff8c42; --n2: #5cc3c9; --n3: #a9a2ff; --n4: #e0b84a;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #1b160f; --sheet: #241d13; --fg: #ece3cd; --muted: #a89a78; --rule: #3c3220;
+  --accent: #ff8c42; --n1: #ff8c42; --n2: #5cc3c9; --n3: #a9a2ff; --n4: #e0b84a;
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+body {
+  background: var(--bg); color: var(--fg); font-family: var(--body);
+  font-size: 17px; line-height: 1.6;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+  padding-block: 32px 64px;
+}
+.sheet {
+  max-width: 920px; margin: 0 auto; background: var(--sheet);
+  border: 1px solid var(--rule); border-radius: 4px;
+  padding-block: 8px 40px; padding-inline: clamp(18px, 5vw, 64px);
+}
+.he { font-family: var(--display); direction: rtl; unicode-bidi: isolate; }
+h1, h2, h3 { font-family: var(--display); text-wrap: balance; margin: 0; font-weight: 700; }
+h2 { font-size: clamp(26px, 4vw, 34px); line-height: 1.15; }
+h3 { font-size: 21px; }
+p { margin: 0; max-width: 64ch; }
+a { color: var(--accent); }
+.eyebrow { font-size: 12px; letter-spacing: .14em; text-transform: uppercase; color: var(--muted); font-weight: 600; }
+.num { font-variant-numeric: tabular-nums; }
+.muted { color: var(--muted); }
+.small { font-size: 14px; }
+
+/* Hero */
+.hero { display: grid; gap: 18px; padding-block: 40px 36px; border-bottom: 1px solid var(--rule); }
+.hero h1 { font-size: clamp(44px, 9vw, 92px); line-height: 1.02; font-weight: 900; letter-spacing: -.01em; }
+.hero h1 span { white-space: nowrap; }
+.hero .translit { font-size: 20px; color: var(--muted); font-family: var(--display); }
+.facts { display: flex; flex-wrap: wrap; gap: 10px 36px; margin-top: 8px; }
+.fact { display: grid; }
+.fact b { font-family: var(--display); font-size: 34px; line-height: 1.1; font-weight: 700; }
+.fact span { font-size: 13px; color: var(--muted); }
+
+/* Sections */
+section { display: grid; gap: 20px; padding-block: 44px; border-bottom: 1px solid var(--rule); }
+section:last-of-type { border-bottom: 0; }
+.sec-head { display: grid; gap: 8px; }
+.catch { font-family: var(--display); color: var(--accent); font-size: 18px; direction: rtl; }
+
+/* Name cards */
+.names { display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 14px; }
+.name-card { border-top: 3px solid var(--c); padding-top: 12px; display: grid; gap: 10px; align-content: start; }
+.name-card .he-name { font-size: 32px; line-height: 1.1; font-weight: 700; }
+.tiles { display: flex; flex-direction: row-reverse; justify-content: flex-end; flex-wrap: wrap; gap: 4px; }
+.tile { display: grid; justify-items: center; min-width: 30px; padding: 4px 2px 2px; border: 1px solid var(--rule); border-radius: 3px; }
+.tile .l { font-family: var(--display); font-size: 20px; line-height: 1.1; }
+.tile .v { font-size: 11px; color: var(--muted); font-variant-numeric: tabular-nums; }
+.name-card .total { font-family: var(--display); font-size: 30px; color: var(--c); line-height: 1; }
+.sum { font-family: var(--display); font-size: clamp(22px, 4vw, 30px); display: flex; flex-wrap: wrap; gap: 6px 12px; align-items: baseline; }
+.sum .eq { color: var(--muted); }
+.sum .big { color: var(--accent); font-weight: 900; font-size: 1.4em; }
+
+/* Alphabet grid */
+.alef-bet { display: grid; grid-template-columns: repeat(11, minmax(0, 1fr)); gap: 6px; direction: rtl; }
+.ab { border: 1px solid var(--rule); border-radius: 3px; text-align: center; padding: 6px 0 4px; display: grid; }
+.ab .l { font-family: var(--display); font-size: 24px; line-height: 1.1; color: var(--muted); opacity: .45; }
+.ab .c { font-size: 11px; color: var(--muted); height: 15px; }
+.ab.on { border-color: var(--accent); }
+.ab.on .l { color: var(--fg); opacity: 1; }
+.ab.on .c { color: var(--accent); font-weight: 700; }
+@media (max-width: 520px) { .alef-bet { grid-template-columns: repeat(6, minmax(0, 1fr)); } }
+
+/* Name-in-Tanakh blocks */
+.person { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 18px 36px; padding-top: 18px; border-top: 1px dashed var(--rule); }
+.person:first-of-type { border-top: 0; padding-top: 0; }
+.person .who { display: grid; gap: 10px; align-content: start; }
+.person .who h3 { color: var(--c); display: flex; gap: 12px; align-items: baseline; flex-wrap: wrap; }
+.person .who h3 .he { font-size: 26px; }
+.count-line { font-size: 15px; color: var(--muted); }
+.count-line b { color: var(--fg); font-size: 18px; }
+@media (max-width: 720px) { .person { grid-template-columns: minmax(0, 1fr); } }
+
+.bars { display: grid; gap: 3px; font-size: 13px; align-content: start; }
+.bar { display: grid; grid-template-columns: 104px minmax(0, 1fr) 40px; gap: 8px; align-items: center; }
+.bar .track { height: 10px; position: relative; }
+.bar .fill { position: absolute; inset: 0 auto 0 0; background: var(--c); border-radius: 0 2px 2px 0; min-width: 2px; }
+.bar .n { text-align: right; font-variant-numeric: tabular-nums; color: var(--muted); }
+.bar .b { color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+/* Verses */
+.verse { display: grid; gap: 6px; padding: 14px 0 14px 18px; border-left: 2px solid var(--c, var(--accent)); }
+.verse .t { font-family: var(--display); direction: rtl; font-size: 22px; line-height: 1.7; text-align: right; }
+.verse .t mark { background: none; color: var(--c, var(--accent)); font-weight: 700; }
+.verse .en { font-size: 15px; color: var(--fg); }
+.verse .ref { font-size: 12px; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); font-weight: 600; }
+.verse .note { font-size: 15px; color: var(--muted); }
+.verses { display: grid; gap: 6px; }
+
+.callout { background: var(--bg); border-radius: 4px; padding: 20px 22px; display: grid; gap: 10px; }
+.callout .k { font-family: var(--display); font-size: 22px; font-weight: 700; }
+
+/* Siblings */
+.sibs { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 24px; }
+.sib { display: grid; gap: 8px; align-content: start; }
+.sib h3 { display: flex; justify-content: space-between; align-items: baseline; border-bottom: 2px solid var(--c); padding-bottom: 6px; }
+.sib h3 .v { font-size: 30px; color: var(--c); }
+.sib ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 6px; }
+.sib li { display: grid; grid-template-columns: auto minmax(0, 1fr) auto; gap: 10px; align-items: baseline; }
+.sib li .w { font-family: var(--display); font-size: 21px; direction: rtl; }
+.sib li .g { font-size: 14px; color: var(--muted); }
+.sib li .x { font-size: 12px; color: var(--muted); font-variant-numeric: tabular-nums; }
+.sib .foot { font-size: 13px; color: var(--muted); }
+
+/* Name verses */
+.nv { display: grid; gap: 10px; padding-top: 16px; border-top: 1px dashed var(--rule); }
+.nv:first-of-type { border-top: 0; padding-top: 0; }
+.nv-head { display: flex; gap: 14px; align-items: baseline; flex-wrap: wrap; }
+.nv-head .he { font-size: 26px; color: var(--c); font-weight: 700; }
+.nv-head .rule { font-size: 14px; color: var(--muted); }
+.nv-head .rule .he { font-size: 18px; color: var(--fg); }
+.alts { font-size: 14px; color: var(--muted); }
+
+/* Scroll map */
+.map-wrap { display: grid; grid-template-columns: minmax(0, 1fr) 260px; gap: 28px; align-items: start; }
+@media (max-width: 760px) { .map-wrap { grid-template-columns: minmax(0, 1fr); } }
+.map { position: relative; max-width: 100%; aspect-ratio: 552 / 553; }
+.map canvas { width: 100%; height: 100%; display: block; border-radius: 2px; image-rendering: pixelated; }
+.map .bk { position: absolute; left: 6px; font-size: 11px; letter-spacing: .08em; text-transform: uppercase; font-weight: 700; color: var(--fg); background: var(--sheet); padding: 0 5px; border-radius: 2px; transform: translateY(2px); opacity: .9; }
+.legend { display: grid; gap: 16px; font-size: 14px; }
+.legend .item { display: grid; gap: 4px; }
+.legend .item .k { display: flex; gap: 8px; align-items: center; font-weight: 700; }
+.legend .dot { width: 12px; height: 12px; border-radius: 50%; border: 2.5px solid var(--c); flex: none; }
+.legend .item p { color: var(--muted); }
+
+.freq { display: grid; gap: 4px; }
+.freq .row { display: grid; grid-template-columns: 34px minmax(0, 1fr) 56px; gap: 10px; align-items: center; font-size: 13px; }
+.freq .row .l { font-family: var(--display); font-size: 20px; text-align: center; }
+.freq .row .track { height: 12px; background: var(--bg); border-radius: 2px; position: relative; }
+.freq .row .fill { position: absolute; inset: 0 auto 0 0; background: var(--accent); border-radius: 2px; }
+.freq .row .n { text-align: right; color: var(--muted); font-variant-numeric: tabular-nums; }
+
+/* ELS table */
+.tbl-wrap { overflow-x: auto; }
+table { border-collapse: collapse; width: 100%; font-size: 15px; min-width: 560px; }
+th, td { text-align: right; padding: 10px 8px; border-bottom: 1px solid var(--rule); font-variant-numeric: tabular-nums; }
+th:first-child, td:first-child { text-align: left; }
+th { font-size: 12px; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); font-weight: 600; }
+td .he { font-size: 19px; }
+.pill { display: inline-block; font-size: 12px; font-weight: 700; padding: 2px 8px; border-radius: 999px; border: 1px solid var(--rule); color: var(--muted); white-space: nowrap; }
+.pill.warn { border-color: var(--accent); color: var(--accent); }
+
+.cols { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 18px 36px; }
+footer { display: grid; gap: 10px; padding-top: 32px; font-size: 14px; color: var(--muted); }
+footer p { max-width: 80ch; }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+</style>
+
+<div class="sheet">
+
+<header class="hero">
+  <div class="eyebrow">Torahscope profile · Samizdaat</div>
+  <h1 class="he"><span>יאשיהו</span> <span>דוד</span> <span>עזריאל</span> <span>לישאביץ</span></h1>
+  <div class="translit">Yoshiyahu David Azriel Lishavitz</div>
+  <div class="facts">
+    <div class="fact"><b class="num">1107</b><span>gematria of the full name</span></div>
+    <div class="fact"><b class="num">22</b><span>letters, one for each letter of the alef-bet</span></div>
+    <div class="fact"><b class="num" id="f-tanakh">1,146</b><span>times your names appear in the Tanakh</span></div>
+    <div class="fact"><b class="num">304,850</b><span>Torah letters searched</span></div>
+  </div>
+</header>
+
+<section id="number">
+  <div class="sec-head">
+    <div class="catch">מִסְפָּר</div>
+    <h2>Your number</h2>
+    <p class="muted">Each Hebrew letter carries a value, from א = 1 to ת = 400. A word's gematria is the sum of its letters. This report uses the standard method (<i>mispar hechrachi</i>), the same one Torahscope's search uses.</p>
+  </div>
+  <div class="names" id="name-cards"></div>
+  <div class="sum num" id="sum"></div>
+</section>
+
+<section id="letters">
+  <div class="sec-head">
+    <div class="catch">כ״ב אוֹתִיּוֹת</div>
+    <h2>Twenty-two letters</h2>
+    <p>Your full name is exactly 22 letters long, the length of the Hebrew alphabet. It uses 12 different letters. The other 10 never appear in it.</p>
+  </div>
+  <div class="alef-bet" id="alef-bet"></div>
+  <p class="small muted">Final forms (ץ in Lishavitz) are counted with their base letter here. The number under each letter is how many times it appears in your name.</p>
+</section>
+
+<section id="tanakh">
+  <div class="sec-head">
+    <div class="catch">בַּתַּנַ״ךְ</div>
+    <h2>Your names in the Tanakh</h2>
+    <p class="muted">Every appearance of each name in the 23,213 verses of the Hebrew Bible, including forms with a prefix (לדוד, "to David") and the Bible's alternate spellings (דויד, יאשיה).</p>
+  </div>
+
+  <div class="person" style="--c: var(--n1)">
+    <div class="who">
+      <h3><span class="he">יאשיהו</span> Yoshiyahu · Josiah</h3>
+      <div class="count-line"><b class="num" data-count="0">52</b> appearances in <span data-verses="0">47</span> verses</div>
+      <p>Josiah was the king of Judah who rediscovered the Torah. In the eighteenth year of his reign, workers repairing the Temple found a scroll of the Law. Josiah read it aloud to the whole nation and renewed the covenant (2 Kings 22–23). He is also one of the few people in the Bible named in a prophecy generations before his birth.</p>
+    </div>
+    <div class="bars" id="bars-0" style="--c: var(--n1)"></div>
+    <div class="verses" style="grid-column: 1 / -1; --c: var(--n1)">
+      <div class="verse"><div class="t">וַיֹּאמֶר חִלְקִיָּהוּ הַכֹּהֵן הַגָּדוֹל עַל־שָׁפָן הַסֹּפֵר <mark>סֵפֶר הַתּוֹרָה מָצָאתִי</mark> בְּבֵית יְהוָה</div><div class="en">And Hilkiah the high priest said unto Shaphan the scribe: ‘I have found the book of the Law in the house of the LORD.’</div><div class="ref">2 Kings 22:8</div></div>
+      <div class="verse"><div class="t">הִנֵּה־בֵן נוֹלָד לְבֵית־<mark>דָּוִד</mark> <mark>יֹאשִׁיָּהוּ</mark> שְׁמוֹ</div><div class="en">Behold, a son shall be born unto the house of David, Josiah by name.</div><div class="ref">1 Kings 13:2</div><div class="note">Both of your first two names in one phrase.</div></div>
+    </div>
+  </div>
+
+  <div class="person" style="--c: var(--n2)">
+    <div class="who">
+      <h3><span class="he">דוד</span> David</h3>
+      <div class="count-line"><b class="num" data-count="1">1,091</b> appearances in <span data-verses="1">925</span> verses</div>
+      <p>The shepherd, psalmist and king, and the root of the royal line that Josiah came from. The name is built on the root ד־ו־ד, "beloved." It appears in 22 books of the Tanakh, from Ruth to Chronicles, but never in the Torah itself as a name.</p>
+    </div>
+    <div class="bars" id="bars-1" style="--c: var(--n2)"></div>
+  </div>
+
+  <div class="person" style="--c: var(--n3)">
+    <div class="who">
+      <h3><span class="he">עזריאל</span> Azriel</h3>
+      <div class="count-line"><b class="num" data-count="2">3</b> appearances, each a different man</div>
+      <p>"My help is God." A rare name: one clan leader of Manasseh, the father of a royal officer in Jeremiah's day, and the father of the tribal officer over Naphtali under David.</p>
+    </div>
+    <div class="verses" style="--c: var(--n3)">
+      <div class="verse"><div class="t">וְאֵלֶּה רָאשֵׁי בֵית־אֲבוֹתָם … <mark>וְעַזְרִיאֵל</mark> … אֲנָשִׁים גִּבּוֹרֵי חַיִל <mark>אַנְשֵׁי שֵׁמוֹת</mark></div><div class="en">…Eliel, and Azriel, and Jeremiah… mighty men of valour, famous men, heads of their fathers’ houses.</div><div class="ref">1 Chronicles 5:24</div><div class="note">The phrase אַנְשֵׁי שֵׁמוֹת, "men of names," adds up to 1107, the value of your full name, in the same verse as Azriel.</div></div>
+      <div class="verse"><div class="t">וְאֶת־שְׂרָיָהוּ בֶן־<mark>עַזְרִיאֵל</mark></div><div class="en">…and Seraiah the son of Azriel…</div><div class="ref">Jeremiah 36:26</div></div>
+      <div class="verse"><div class="t">לְנַפְתָּלִי יְרִימוֹת בֶּן־<mark>עַזְרִיאֵל</mark></div><div class="en">…of Naphtali, Jerimoth the son of Azriel.</div><div class="ref">1 Chronicles 27:19</div></div>
+    </div>
+  </div>
+
+  <div class="person" style="--c: var(--n4)">
+    <div class="who">
+      <h3><span class="he">לישאביץ</span> Lishavitz</h3>
+      <div class="count-line"><b class="num">0</b> appearances</div>
+      <p>A family name from Eastern Europe, so it does not appear in the Bible. Its letters still carry a value, 443, and the Tanakh words that share it are some of the most striking in this report. See <a href="#siblings">Words that share your numbers</a>.</p>
+    </div>
+  </div>
+</section>
+
+<section id="full">
+  <div class="sec-head">
+    <div class="catch">אֶלֶף קָ״ז</div>
+    <h2>1107 in the text</h2>
+    <p>Only <b class="num" id="v1107">6</b> verses in the whole Tanakh have letters that add up to exactly 1107. Three of them are about names.</p>
+  </div>
+  <div class="verses">
+    <div class="verse"><div class="t">וַיְהִי בָהֶם מִבְּנֵי יְהוּדָה דָּנִיֵּאל חֲנַנְיָה מִישָׁאֵל <mark>וַעֲזַרְיָה</mark></div><div class="en">Now among these were, of the children of Judah, Daniel, Hananiah, Mishael, and Azariah.</div><div class="ref">Daniel 1:6 · 1107</div><div class="note">A verse that is a list of names. Azariah, "God has helped," is built from the same root and the same idea as Azriel.</div></div>
+    <div class="verse"><div class="t">הַלְלוּ יָהּ הַלְלוּ עַבְדֵי יְהוָה הַלְלוּ <mark>אֶת־שֵׁם</mark> יְהוָה</div><div class="en">Hallelujah. Praise, O ye servants of the LORD, Praise the name of the LORD.</div><div class="ref">Psalms 113:1 · 1107</div><div class="note">Psalm 135:1 uses the same words in a different order, so it totals 1107 as well.</div></div>
+    <div class="verse"><div class="t">אַבְנֵי־שֹׁהַם וְאַבְנֵי מִלֻּאִים לָאֵפֹד וְלַחֹשֶׁן</div><div class="en">Onyx stones, and stones to be set, for the ephod, and for the breastplate.</div><div class="ref">Exodus 25:7 · 1107</div><div class="note">The only Torah verse with your number. These are the stones the High Priest wore, and Exodus 28:9 says what was engraved on them: "the names of the children of Israel."</div></div>
+  </div>
+  <div class="callout">
+    <div class="eyebrow">Two-word phrases worth 1107</div>
+    <p>The Tanakh has <b class="num" id="p1107">69</b> different two-word phrases worth 1107. The most frequent:</p>
+    <div class="cols small" id="phrases"></div>
+  </div>
+  <p class="small muted">Your initials, י־ד־ע־ל, total <span class="num">114</span>. Your names' final letters, ו־ד־ל־ץ, total <span class="num">130</span>. In the reduced method (<i>mispar katan</i>), which drops zeros so that 300 counts as 3, the full name totals <span class="num">72</span>.</p>
+</section>
+
+<section id="siblings">
+  <div class="sec-head">
+    <div class="catch">שָׁוֶה בְּשָׁוֶה</div>
+    <h2>Words that share your numbers</h2>
+    <p class="muted">Every distinct word in the Tanakh with the same gematria as each of your names, counted in full. These are the most meaningful of them. The number beside each word is how often it occurs.</p>
+  </div>
+  <div class="sibs" id="sibs"></div>
+  <div class="callout">
+    <div class="k"><span class="he">עזריאל</span> = 318 = <span class="he">אליעזר</span></div>
+    <p>Azriel and Eliezer have the same value, and they have the same meaning. Azriel is "my help is God," and Eliezer is "my God is help." The number 318 is also famous on its own: Abraham went to war with 318 men of his household (Genesis 14:14). The Talmud (Nedarim 32a) reads that number as Eliezer, Abraham's servant, alone.</p>
+  </div>
+  <div class="callout">
+    <div class="k"><span class="he">לישאביץ</span> = 443 = <span class="he">הַלֻּחֹת</span></div>
+    <p>Your family name has the same value as "the tablets," the stone tablets of the covenant. That word occurs 12 times in the Tanakh, and 11 of them are in the Torah. The same value belongs to <span class="he">בֶּאֱמֶת</span>, "in truth."</p>
+  </div>
+</section>
+
+<section id="name-verses">
+  <div class="sec-head">
+    <div class="catch">פָּסוּק לִשְׁמוֹ</div>
+    <h2>Your name verses</h2>
+    <p>An old custom has each person recite, at the end of the Amidah, a verse that begins with the first letter of their name and ends with its last letter. The search found every verse in the Tanakh that fits each of your names. The featured verse in each case was chosen by our editor for its meaning; the alternates follow.</p>
+  </div>
+  <div id="nv"></div>
+</section>
+
+<section id="scroll">
+  <div class="sec-head">
+    <div class="catch">בַּסֵּפֶר</div>
+    <h2>Your names in the scroll</h2>
+    <p>This is the whole Torah. Each of the 304,850 pixels is one letter, in order, read right to left in rows of 552, starting from the first letter of Genesis at the top. Darker pixels are letters with a higher value. The rings mark where your names appear.</p>
+  </div>
+  <div class="map-wrap">
+    <div class="map" id="map"><canvas id="map-canvas" width="1656" height="1659" role="img" aria-label="The Torah as a grid of 304,850 letters, with the positions of your names marked"></canvas></div>
+    <div class="legend">
+      <div class="item" style="--c: var(--n2)"><div class="k"><span class="dot"></span>David, written out</div><p>Nine times, always inside other words. Five are in Genesis 30, in <span class="he">דּוּדָאִים</span>, the "love-flowers" Leah and Rachel bargain over. They share David's root, "beloved."</p></div>
+      <div class="item" style="--c: var(--n1)"><div class="k"><span class="dot"></span>Yoshiyahu, every 4th letter</div><p>Josiah never appears written out in the Torah. The closest spacing is every fourth letter, reading backward, in Exodus 36:25–26, where the boards of the Tabernacle are made.</p></div>
+      <div class="item" style="--c: var(--n3)"><div class="k"><span class="dot"></span>Azriel, every 294th letter</div><p>Spelled across six verses of Numbers 22, the story of Balaam and his talking donkey.</p></div>
+      <div class="item" style="--c: var(--n4)"><div class="k"><span class="dot"></span>Lishavitz</div><p>Not found, written out or at any spacing up to every 1000th letter.</p></div>
+    </div>
+  </div>
+  <div class="sec-head" style="margin-top: 12px">
+    <h3>How common your letters are</h3>
+    <p class="muted small">Each letter of your name, by its share of all Torah letters. Yod is the most common letter in the Torah. Final tsadi, which ends Lishavitz, is the second rarest of all 27 forms.</p>
+  </div>
+  <div class="freq" id="freq"></div>
+</section>
+
+<section id="codes">
+  <div class="sec-head">
+    <div class="catch">צֹפֶן?</div>
+    <h2>Is your name a hidden code?</h2>
+    <p>"Torah codes" are words spelled out at equal spacing, like Azriel at every 294th letter above. Any long text contains thousands of these by pure chance, so a count only means something next to a fair comparison. We searched all spacings from every 2nd to every 1000th letter, forward and backward, then ran the same search on ten scrambled copies of the Torah.</p>
+  </div>
+  <div class="tbl-wrap">
+    <table>
+      <thead><tr><th>Name</th><th>Found in the Torah</th><th>Plain scramble</th><th>Fair scramble</th><th>Verdict</th></tr></thead>
+      <tbody id="els"></tbody>
+    </table>
+  </div>
+  <div class="cols">
+    <p class="small">A <b>plain scramble</b> shuffles all 304,850 letters at once. With it, David looks like a signal, about five standard deviations above chance.</p>
+    <p class="small">A <b>fair scramble</b> shuffles letters only within stretches of 5,000, keeping each passage's own mix of letters. Some passages are dense in ד and ו and others are not, and the plain scramble erases that. Measured fairly, David's excess drops by half, and Yoshiyahu falls a similar distance below chance. Two names drifting by the same amount in opposite directions is what noise looks like.</p>
+  </div>
+  <div class="callout">
+    <div class="k">Our finding</div>
+    <p>Your names appear at equal spacings about as often as chance predicts. We report it plainly because the rest of this profile, the verses, the numbers and the letters, is real and you can check every line of it.</p>
+  </div>
+</section>
+
+<footer>
+  <div class="eyebrow">Method and sources</div>
+  <p>Torah letters: the Westminster Leningrad Codex as written (<i>ketiv</i>), via the Open Scriptures Hebrew Bible project, 304,850 letters. Tanakh verses and word counts: the same codex as read aloud (<i>qere</i>), with the JPS 1917 English translation. Gematria counts every letter at its standard value, with final forms equal to their base letters. All counts are complete; nothing is sampled or capped. The hidden-sequence test uses ten scrambled copies for each control. The featured name verses and the commentary are editorial; every number is computed from the texts.</p>
+  <p>Torahscope by Samizdaat. Generated November 2026.</p>
+</footer>
+</div>
+
+<script id="report-data" type="application/json">__REPORT__</script>
+<script>
+(function () {
+  const R = JSON.parse(document.getElementById("report-data").textContent);
+  const TORAH = "__TORAH__";
+  const LETTERS = "אבגדהוזחטיכךלמםנןסעפףצץקרשת";
+  const VALUES = [1,2,3,4,5,6,7,8,9,10,20,20,30,40,40,50,50,60,70,80,80,90,90,100,200,300,400];
+  const COLORS = ["--n1", "--n2", "--n3", "--n4"];
+  const EN = ["Yoshiyahu", "David", "Azriel", "Lishavitz"];
+  const fmt = (n) => n.toLocaleString("en-US");
+  const el = (tag, cls, html) => { const e = document.createElement(tag); if (cls) e.className = cls; if (html != null) e.innerHTML = html; return e; };
+
+  // Name cards and sum.
+  const cards = document.getElementById("name-cards");
+  R.parts.forEach((p, i) => {
+    const c = el("div", "name-card");
+    c.style.setProperty("--c", `var(${COLORS[i]})`);
+    c.append(el("div", "eyebrow", EN[i]));
+    c.append(el("div", "he he-name", p.word));
+    const tiles = el("div", "tiles");
+    p.letters.forEach((l) => tiles.append(el("div", "tile", `<span class="l">${l.ch}</span><span class="v">${l.value}</span>`)));
+    c.append(tiles);
+    c.append(el("div", "total num", p.value));
+    cards.append(c);
+  });
+  document.getElementById("sum").innerHTML =
+    R.parts.map((p, i) => `<span style="color: var(${COLORS[i]})">${p.value}</span>`).join('<span class="eq">+</span>') +
+    `<span class="eq">=</span><span class="big">${R.full.value}</span>`;
+
+  // Alphabet coverage.
+  const base = { "ך": "כ", "ם": "מ", "ן": "נ", "ף": "פ", "ץ": "צ" };
+  const counts = {};
+  [...R.parts.map((p) => p.word).join("")].forEach((ch) => { const b = base[ch] || ch; counts[b] = (counts[b] || 0) + 1; });
+  const ab = document.getElementById("alef-bet");
+  "אבגדהוזחטיכלמנסעפצקרשת".split("").forEach((ch) => {
+    const n = counts[ch] || 0;
+    ab.append(el("div", "ab" + (n ? " on" : ""), `<span class="l">${ch}</span><span class="c num">${n ? "×" + n : ""}</span>`));
+  });
+
+  // Counts in the Tanakh.
+  let tanTotal = 0;
+  R.parts.forEach((p, i) => {
+    tanTotal += p.inTanakh.occurrences;
+    document.querySelectorAll(`[data-count="${i}"]`).forEach((e) => (e.textContent = fmt(p.inTanakh.occurrences)));
+    document.querySelectorAll(`[data-verses="${i}"]`).forEach((e) => (e.textContent = fmt(p.inTanakh.verses)));
+    const box = document.getElementById("bars-" + i);
+    if (!box) return;
+    const rows = p.inTanakh.byBook;
+    const max = Math.max(...rows.map((r) => r[1]));
+    box.append(el("div", "eyebrow", "Where the name appears"));
+    rows.forEach(([b, n]) => {
+      const r = el("div", "bar", `<span class="b">${b}</span><span class="track"><span class="fill" style="width:${(100 * n) / max}%"></span></span><span class="n">${fmt(n)}</span>`);
+      box.append(r);
+    });
+  });
+  document.getElementById("f-tanakh").textContent = fmt(tanTotal);
+  document.getElementById("v1107").textContent = R.full.versesCount;
+  document.getElementById("p1107").textContent = R.full.phrases.count;
+
+  // 1107 phrases.
+  const ph = document.getElementById("phrases");
+  R.full.phrases.top.slice(0, 6).forEach((x) => {
+    ph.append(el("div", "", `<span class="he" style="font-size:20px">${x.phrase}</span> <span class="muted num">×${x.count} · first in ${x.first.ref}</span>`));
+  });
+
+  // Siblings, with editorial glosses.
+  const GLOSS = {
+    "יאשיהו": [["יאשיהו", "Josiah"], ["מבצר", "fortress"], ["ישכב", "he will lie down"], ["לבש", "clothed"], ["השבכה", "the lattice"]],
+    "דוד": [["דוד", "David"], ["זהב", "gold"], ["יד", "hand"], ["אהבו", "they loved"], ["גיא", "valley"]],
+    "עזריאל": [["וישב", "and he dwelt"], ["ישוב", "he will return"], ["ויקרב", "and he drew near"], ["יזרעאל", "Jezreel"], ["אליעזר", "Eliezer"]],
+    "לישאביץ": [["אבתם", "their fathers"], ["גדלות", "great things"], ["באמת", "in truth"], ["בתולה", "maiden"], ["הלחת", "the tablets"]],
+  };
+  const sibs = document.getElementById("sibs");
+  R.parts.forEach((p, i) => {
+    const s = el("div", "sib");
+    s.style.setProperty("--c", `var(${COLORS[i]})`);
+    s.append(el("h3", "", `<span class="he">${p.word}</span><span class="v num">${p.value}</span>`));
+    const ul = el("ul");
+    const top = Object.fromEntries(p.siblings.top.map((x) => [x.word, x]));
+    GLOSS[p.word].forEach(([w, g]) => {
+      const n = top[w] ? top[w].count : 0;
+      ul.append(el("li", "", `<span class="w">${w}</span><span class="g">${g}</span><span class="x">×${fmt(n)}</span>`));
+    });
+    s.append(ul);
+    s.append(el("div", "foot", `${fmt(p.siblings.distinctForms)} words in the Tanakh share this value, ${fmt(p.siblings.occurrences)} occurrences in all.`));
+    sibs.append(s);
+  });
+
+  // Name verses: editor's featured pick first, then the next two candidates.
+  const FEATURED = ["Psalms 103:7", "Psalms 105:4", "Isaiah 8:10", "Psalms 139:15"];
+  const WHY = [
+    "“He made known His ways unto Moses.” For the king who brought the Torah back to the people.",
+    "“Seek His face continually.” A verse of the Psalms, from David’s own book.",
+    "Ends “for God is with us,” the same promise held in the name Azriel.",
+    "“My frame was not hidden from Thee.” A verse about how each person is made.",
+  ];
+  const nv = document.getElementById("nv");
+  R.parts.forEach((p, i) => {
+    const picks = p.nameVerses.picks;
+    const f = picks.find((v) => v.ref === FEATURED[i]) || picks[0];
+    const alts = picks.filter((v) => v !== f && v.en && !/death/i.test(v.en)).slice(0, 2);
+    const box = el("div", "nv");
+    box.style.setProperty("--c", `var(${COLORS[i]})`);
+    box.append(el("div", "nv-head", `<span class="he">${p.word}</span><span class="rule">begins with <span class="he">${p.word[0]}</span>, ends with <span class="he">${p.word[p.word.length - 1]}</span> · ${fmt(p.nameVerses.candidates)} verses fit</span>`));
+    const v = el("div", "verse");
+    v.style.setProperty("--c", `var(${COLORS[i]})`);
+    v.append(el("div", "t", f.he.replace(/[֑-ֽ֯׀׃]/g, "")));
+    v.append(el("div", "en", f.en));
+    v.append(el("div", "ref", f.ref));
+    v.append(el("div", "note", WHY[i]));
+    box.append(v);
+    if (alts.length) box.append(el("div", "alts", "Also: " + alts.map((a) => `${a.ref}, “${a.en}”`).join(" · ")));
+    nv.append(box);
+  });
+
+  // Letter frequencies (distinct letters in the name, Torah share).
+  const freq = document.getElementById("freq");
+  const seen = new Map();
+  R.parts.forEach((p) => p.letterStats.forEach((s) => seen.set(s.ch, s)));
+  const fl = [...seen.values()].sort((a, b) => b.pct - a.pct);
+  const fmax = fl[0].pct;
+  fl.forEach((s) => freq.append(el("div", "row", `<span class="l">${s.ch}</span><span class="track"><span class="fill" style="width:${(100 * s.pct) / fmax}%"></span></span><span class="n">${s.pct.toFixed(2)}%</span>`)));
+
+  // ELS table.
+  const tb = document.getElementById("els");
+  R.parts.forEach((p, i) => {
+    const e = p.els, a = e.controls.fullShuffle, b = e.controls.blockShuffle;
+    const z = (x) => (x >= 0 ? "+" : "−") + Math.abs(x).toFixed(1) + "σ";
+    const verdict = e.real === 0 && b.mean < 1 ? "Too long to occur" : Math.abs(b.z) < 3 ? "Chance level" : "Check further";
+    tb.append(el("tr", "", `<td><span class="he" style="color:var(${COLORS[i]})">${p.word}</span> ${EN[i]}</td><td>${fmt(e.real)}</td><td>${fmt(Math.round(a.mean))} <span class="muted">(${z(a.z)})</span></td><td>${fmt(Math.round(b.mean))} <span class="muted">(${z(b.z)})</span></td><td><span class="pill">${verdict}</span></td>`));
+  });
+
+  // Scroll map.
+  const W = 552, H = Math.ceil(TORAH.length / W), S = 3;
+  const canvas = document.getElementById("map-canvas");
+  const map = document.getElementById("map");
+  R.meta.bookStarts.forEach(([b, off]) => {
+    const t = el("span", "bk", b);
+    t.style.top = ((Math.floor(off / W) / H) * 100) + "%";
+    map.append(t);
+  });
+  const xy = (pos) => { const row = Math.floor(pos / W), col = pos % W; return [(W - 1 - col) * S + S / 2, row * S + S / 2]; };
+  const hex = (v) => { v = v.trim(); if (v[0] === "#") v = v.slice(1); return [0, 2, 4].map((k) => parseInt(v.slice(k, k + 2), 16)); };
+  function draw() {
+    const cs = getComputedStyle(document.documentElement);
+    const bg = hex(cs.getPropertyValue("--sheet")), fg = hex(cs.getPropertyValue("--fg"));
+    const off = document.createElement("canvas"); off.width = W; off.height = H;
+    const octx = off.getContext("2d");
+    const img = octx.createImageData(W, H);
+    const lut = VALUES.map((v) => 0.06 + 0.42 * (Math.log(v) / Math.log(400)));
+    for (let i = 0; i < TORAH.length; i++) {
+      const t = lut[TORAH.charCodeAt(i) - 97];
+      const row = Math.floor(i / W), col = W - 1 - (i % W);
+      const k = (row * W + col) * 4;
+      img.data[k] = bg[0] + (fg[0] - bg[0]) * t;
+      img.data[k + 1] = bg[1] + (fg[1] - bg[1]) * t;
+      img.data[k + 2] = bg[2] + (fg[2] - bg[2]) * t;
+      img.data[k + 3] = 255;
+    }
+    octx.putImageData(img, 0, 0);
+    const ctx = canvas.getContext("2d");
+    ctx.imageSmoothingEnabled = false;
+    ctx.fillStyle = `rgb(${bg})`; ctx.fillRect(0, 0, canvas.width, canvas.height);
+    ctx.drawImage(off, 0, 0, W * S, H * S);
+    const ring = (pos, color, r) => { const [x, y] = xy(pos); ctx.beginPath(); ctx.arc(x, y, r, 0, Math.PI * 2); ctx.lineWidth = 6; ctx.strokeStyle = `rgb(${bg})`; ctx.stroke(); ctx.lineWidth = 3.5; ctx.strokeStyle = color; ctx.stroke(); };
+    R.parts.forEach((p, i) => {
+      const color = cs.getPropertyValue(COLORS[i]).trim();
+      p.torahString.positions.forEach((pos) => ring(pos, color, 22));
+      const m = p.els.minSkip;
+      if (m && !p.torahString.positions.length) {
+        m.positions.forEach((pos) => ring(pos, color, 12));
+        m.positions.forEach((pos) => { const [x, y] = xy(pos); ctx.fillStyle = color; ctx.fillRect(x - 4, y - 4, 8, 8); });
+      }
+    });
+  }
+  draw();
+  try {
+    matchMedia("(prefers-color-scheme: dark)").addEventListener("change", draw);
+    new MutationObserver(draw).observe(document.documentElement, { attributes: true, attributeFilter: ["data-theme"] });
+  } catch (e) {}
+})();
+</script>

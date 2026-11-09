@@ -13,6 +13,7 @@ markers are not letters and are excluded.
 Outputs (run from the repo root: python3 scripts/build_torah_letters.py):
   data/torah-string.txt   the whole Torah as one unbroken string of consonants
   data/torah-letters.json letter counts (all 27 forms) -- total and per book
+  data/torah-verses.json  [ref, start offset] per verse, to map a string position to its verse
 """
 import json
 import os
@@ -69,11 +70,15 @@ def count(s):
 
 def main():
     books, verses, words_total, parts = [], 0, 0, []
+    offsets, cursor = [], 0
     for osis, name in BOOKS:
         tree = fetch(osis)
         text, nverses, nwords = [], 0, 0
         for v in tree.iter(NS + "verse"):
             ws = [w for w in verse_words(v) if w]
+            _, ch, vs = v.get("osisID").split(".")
+            offsets.append([f"{name} {ch}:{vs}", cursor])
+            cursor += sum(map(len, ws))
             nverses += 1
             nwords += len(ws)
             text.extend(ws)
@@ -101,6 +106,10 @@ def main():
     root = os.path.join(os.path.dirname(__file__), "..", "data")
     with open(os.path.join(root, "torah-string.txt"), "w", encoding="utf-8") as f:
         f.write(torah + "\n")
+    assert cursor == len(torah)
+    with open(os.path.join(root, "torah-verses.json"), "w", encoding="utf-8") as f:
+        json.dump(offsets, f, ensure_ascii=False, separators=(",", ":"))
+        f.write("\n")
     with open(os.path.join(root, "torah-letters.json"), "w", encoding="utf-8") as f:
         json.dump(out, f, ensure_ascii=False, indent=1)
         f.write("\n")

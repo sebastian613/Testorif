@@ -1,0 +1,2889 @@
+{
+ "name": "יאשיהו דוד עזריאל לישאביץ",
+ "parts": [
+  {
+   "word": "יאשיהו",
+   "value": 332,
+   "katan": 17,
+   "letters": [
+    {
+     "ch": "י",
+     "value": 10
+    },
+    {
+     "ch": "א",
+     "value": 1
+    },
+    {
+     "ch": "ש",
+     "value": 300
+    },
+    {
+     "ch": "י",
+     "value": 10
+    },
+    {
+     "ch": "ה",
+     "value": 5
+    },
+    {
+     "ch": "ו",
+     "value": 6
+    }
+   ],
+   "inTanakh": {
+    "occurrences": 52,
+    "verses": 47,
+    "forms": [
+     [
+      "יאשיהו",
+      50
+     ],
+     [
+      "ליאשיהו",
+      1
+     ],
+     [
+      "יאשיה",
+      1
+     ]
+    ],
+    "byBook": [
+     [
+      "1 Kings",
+      1
+     ],
+     [
+      "2 Kings",
+      13
+     ],
+     [
+      "Jeremiah",
+      17
+     ],
+     [
+      "Zephaniah",
+      1
+     ],
+     [
+      "Zechariah",
+      1
+     ],
+     [
+      "1 Chronicles",
+      2
+     ],
+     [
+      "2 Chronicles",
+      17
+     ]
+    ],
+    "first": {
+     "ref": "1 Kings 13:2",
+     "he": "וַיִּקְרָ֤א עַל־הַמִּזְבֵּ֨חַ֙ בִּדְבַ֣ר יְהוָ֔ה וַיֹּ֨אמֶר֙ מִזְבֵּ֣חַ מִזְבֵּ֔חַ כֹּ֖ה אָמַ֣ר יְהוָ֑ה הִנֵּֽה־בֵ֞ן נוֹלָ֤ד לְבֵית־דָּוִד֙ יֹאשִׁיָּ֣הוּ שְׁמ֔וֹ וְזָבַ֣ח עָלֶ֗יךָ אֶת־כֹּהֲנֵ֤י הַבָּמוֹת֙ הַמַּקְטִרִ֣ים עָלֶ֔יךָ וְעַצְמ֥וֹת אָדָ֖ם יִשְׂרְפ֥וּ עָלֶֽיךָ׃",
+     "en": "And he cried against the altar by the word of the LORD, and said: ‘O altar, altar, thus saith the LORD: Behold, a son shall be born unto the house of David, Josiah by name; and upon thee shall he sacrifice the priests of the high places that offer upon thee, and men’s bones shall they burn upon thee.’",
+     "highlight": null
+    },
+    "all": [
+     "1 Kings 13:2",
+     "2 Kings 21:24",
+     "2 Kings 21:26",
+     "2 Kings 22:1",
+     "2 Kings 22:3",
+     "2 Kings 23:16",
+     "2 Kings 23:19",
+     "2 Kings 23:23",
+     "2 Kings 23:24",
+     "2 Kings 23:28",
+     "2 Kings 23:29",
+     "2 Kings 23:30",
+     "2 Kings 23:34",
+     "Jeremiah 1:2",
+     "Jeremiah 1:3",
+     "Jeremiah 3:6",
+     "Jeremiah 22:11",
+     "Jeremiah 22:18",
+     "Jeremiah 25:1",
+     "Jeremiah 25:3",
+     "Jeremiah 26:1",
+     "Jeremiah 35:1",
+     "Jeremiah 36:1",
+     "Jeremiah 36:2",
+     "Jeremiah 36:9",
+     "Jeremiah 37:1",
+     "Jeremiah 45:1",
+     "Jeremiah 46:2",
+     "Zephaniah 1:1",
+     "Zechariah 6:10",
+     "1 Chronicles 3:14",
+     "1 Chronicles 3:15",
+     "2 Chronicles 33:25",
+     "2 Chronicles 34:1",
+     "2 Chronicles 34:33",
+     "2 Chronicles 35:1",
+     "2 Chronicles 35:7",
+     "2 Chronicles 35:16",
+     "2 Chronicles 35:18",
+     "2 Chronicles 35:19",
+     "2 Chronicles 35:20",
+     "2 Chronicles 35:22",
+     "2 Chronicles 35:23",
+     "2 Chronicles 35:24",
+     "2 Chronicles 35:25",
+     "2 Chronicles 35:26",
+     "2 Chronicles 36:1"
+    ]
+   },
+   "siblings": {
+    "distinctForms": 42,
+    "occurrences": 187,
+    "inTorah": 27,
+    "top": [
+     {
+      "word": "יאשיהו",
+      "count": 50,
+      "torah": 0
+     },
+     {
+      "word": "מבצר",
+      "count": 18,
+      "torah": 2
+     },
+     {
+      "word": "לבקר",
+      "count": 18,
+      "torah": 3
+     },
+     {
+      "word": "ישכב",
+      "count": 17,
+      "torah": 14
+     },
+     {
+      "word": "לבש",
+      "count": 14,
+      "torah": 1
+     },
+     {
+      "word": "מערבך",
+      "count": 7,
+      "torah": 0
+     },
+     {
+      "word": "לקבר",
+      "count": 5,
+      "torah": 3
+     },
+     {
+      "word": "השבכה",
+      "count": 5,
+      "torah": 0
+     },
+     {
+      "word": "שכבי",
+      "count": 4,
+      "torah": 1
+     },
+     {
+      "word": "וכרמינו",
+      "count": 4,
+      "torah": 0
+     },
+     {
+      "word": "וישוי",
+      "count": 3,
+      "torah": 1
+     },
+     {
+      "word": "ונערו",
+      "count": 3,
+      "torah": 0
+     },
+     {
+      "word": "שוכו",
+      "count": 3,
+      "torah": 0
+     },
+     {
+      "word": "וכוש",
+      "count": 2,
+      "torah": 1
+     },
+     {
+      "word": "לברק",
+      "count": 2,
+      "torah": 0
+     },
+     {
+      "word": "ויחבשו",
+      "count": 2,
+      "torah": 0
+     },
+     {
+      "word": "ערבני",
+      "count": 2,
+      "torah": 0
+     },
+     {
+      "word": "בשל",
+      "count": 2,
+      "torah": 0
+     },
+     {
+      "word": "הזרעים",
+      "count": 2,
+      "torah": 0
+     },
+     {
+      "word": "ומרומם",
+      "count": 2,
+      "torah": 0
+     },
+     {
+      "word": "בצמר",
+      "count": 1,
+      "torah": 1
+     },
+     {
+      "word": "עברכם",
+      "count": 1,
+      "torah": 0
+     },
+     {
+      "word": "שביך",
+      "count": 1,
+      "torah": 0
+     },
+     {
+      "word": "בפרים",
+      "count": 1,
+      "torah": 0
+     }
+    ],
+    "otherCorpora": {
+     "Tanakh": {
+      "distinctForms": 42,
+      "occurrences": 187
+     },
+     "Mishnah": {
+      "distinctForms": 32,
+      "occurrences": 182
+     },
+     "Mishneh Torah": {
+      "distinctForms": 74,
+      "occurrences": 801
+     }
+    },
+    "byBook": [
+     [
+      "Genesis",
+      8
+     ],
+     [
+      "Exodus",
+      3
+     ],
+     [
+      "Leviticus",
+      13
+     ],
+     [
+      "Numbers",
+      2
+     ],
+     [
+      "Deuteronomy",
+      1
+     ],
+     [
+      "Joshua",
+      3
+     ],
+     [
+      "Judges",
+      4
+     ],
+     [
+      "1 Samuel",
+      3
+     ],
+     [
+      "2 Samuel",
+      3
+     ],
+     [
+      "1 Kings",
+      8
+     ],
+     [
+      "2 Kings",
+      22
+     ],
+     [
+      "Isaiah",
+      6
+     ],
+     [
+      "Jeremiah",
+      22
+     ],
+     [
+      "Ezekiel",
+      14
+     ],
+     [
+      "Joel",
+      1
+     ],
+     [
+      "Amos",
+      5
+     ],
+     [
+      "Micah",
+      1
+     ],
+     [
+      "Habakkuk",
+      1
+     ],
+     [
+      "Zephaniah",
+      3
+     ],
+     [
+      "Zechariah",
+      1
+     ],
+     [
+      "Psalms",
+      10
+     ],
+     [
+      "Job",
+      6
+     ],
+     [
+      "Proverbs",
+      3
+     ],
+     [
+      "Ruth",
+      2
+     ],
+     [
+      "Song of Songs",
+      1
+     ],
+     [
+      "Ecclesiastes",
+      1
+     ],
+     [
+      "Lamentations",
+      1
+     ],
+     [
+      "Esther",
+      1
+     ],
+     [
+      "Daniel",
+      2
+     ],
+     [
+      "Ezra",
+      1
+     ],
+     [
+      "Nehemiah",
+      5
+     ],
+     [
+      "1 Chronicles",
+      8
+     ],
+     [
+      "2 Chronicles",
+      22
+     ]
+    ]
+   },
+   "nameVerses": {
+    "candidates": 110,
+    "picks": [
+     {
+      "ref": "Psalms 116:15",
+      "he": "יָ֭קָר בְּעֵינֵ֣י יְהוָ֑ה הַ֝מָּ֗וְתָה לַחֲסִידָֽיו׃",
+      "en": "Precious in the sight of the LORD Is the death of His saints.",
+      "highlight": null,
+      "containsName": false
+     },
+     {
+      "ref": "Psalms 2:4",
+      "he": "יוֹשֵׁ֣ב בַּשָּׁמַ֣יִם יִשְׂחָ֑ק אֲ֝דֹנָ֗י יִלְעַג־לָֽמוֹ׃",
+      "en": "He that sitteth in heaven laugheth, the Lord hath them in derision.",
+      "highlight": null,
+      "containsName": false
+     },
+     {
+      "ref": "Psalms 20:10",
+      "he": "יְהוָ֥ה הוֹשִׁ֑יעָה הַ֝מֶּ֗לֶךְ יַעֲנֵ֥נוּ בְיוֹם־קָרְאֵֽנוּ׃",
+      "en": "Save, LORD; Let the King answer us in the day that we call.",
+      "highlight": null,
+      "containsName": false
+     },
+     {
+      "ref": "Psalms 25:9",
+      "he": "יַדְרֵ֣ךְ עֲ֭נָוִים בַּמִּשְׁפָּ֑ט וִֽילַמֵּ֖ד עֲנָוִ֣ים דַּרְכּֽוֹ׃",
+      "en": "He guideth The humble in justice; And He teacheth the humble His way.",
+      "highlight": null,
+      "containsName": false
+     },
+     {
+      "ref": "Psalms 47:4",
+      "he": "יַדְבֵּ֣ר עַמִּ֣ים תַּחְתֵּ֑ינוּ וּ֝לְאֻמִּ֗ים תַּ֣חַת רַגְלֵֽינוּ׃",
+      "en": "He subdueth peoples under us, and nations under our feet.",
+      "highlight": null,
+      "containsName": false
+     },
+     {
+      "ref": "Psalms 73:8",
+      "he": "יָמִ֤יקוּ וִידַבְּר֣וּ בְרָ֣ע עֹ֑שֶׁק מִמָּר֥וֹם יְדַבֵּֽרוּ׃",
+      "en": "They scoff, and in wickedness utter oppression; they speak as if there were none on high.",
+      "highlight": null,
+      "containsName": false
+     },
+     {
+      "ref": "Psalms 83:18",
+      "he": "יֵבֹ֖שׁוּ וְיִבָּהֲל֥וּ עֲדֵי־עַ֗ד וְֽיַחְפְּר֥וּ וְיֹאבֵֽדוּ׃",
+      "en": "Let them be ashamed and affrighted for ever; Yea, let them be abashed and perish;",
+      "highlight": null,
+      "containsName": false
+     },
+     {
+      "ref": "Psalms 103:7",
+      "he": "יוֹדִ֣יעַ דְּרָכָ֣יו לְמֹשֶׁ֑ה לִבְנֵ֥י יִ֝שְׂרָאֵ֗ל עֲלִילֽוֹתָיו׃",
+      "en": "He made known His ways unto Moses, His doings unto the children of Israel.",
+      "highlight": null,
+      "containsName": false
+     },
+     {
+      "ref": "Psalms 118:2",
+      "he": "יֹֽאמַר־נָ֥א יִשְׂרָאֵ֑ל כִּ֖י לְעוֹלָ֣ם חַסְדּֽוֹ׃",
+      "en": "So let Israel now say, For His mercy endureth for ever,",
+      "highlight": null,
+      "containsName": false
+     },
+     {
+      "ref": "Psalms 122:3",
+      "he": "יְרוּשָׁלִַ֥ם הַבְּנוּיָ֑ה כְּ֝עִ֗יר שֶׁחֻבְּרָה־לָּ֥הּ יַחְדָּֽו׃",
+      "en": "Jerusalem, that art builded as a city that is compact together;",
+      "highlight": null,
+      "containsName": false
+     },
+     {
+      "ref": "Psalms 10:16",
+      "he": "יְהוָ֣ה מֶ֭לֶךְ עוֹלָ֣ם וָעֶ֑ד אָבְד֥וּ ג֝וֹיִ֗ם מֵֽאַרְצֽוֹ׃",
+      "en": "The LORD is King for ever and ever; The nations are perished out of His land.",
+      "highlight": null,
+      "containsName": false
+     },
+     {
+      "ref": "Psalms 24:5",
+      "he": "יִשָּׂ֣א בְ֭רָכָה מֵאֵ֣ת יְהוָ֑ה וּ֝צְדָקָ֗ה מֵאֱלֹהֵ֥י יִשְׁעֽוֹ׃",
+      "en": "He shall receive a blessing from the LORD, and righteousness from the God of his salvation.",
+      "highlight": null,
+      "containsName": false
+     }
+    ]
+   },
+   "letterStats": [
+    {
+     "ch": "י",
+     "count": 31556,
+     "pct": 10.351320321469576
+    },
+    {
+     "ch": "א",
+     "count": 27060,
+     "pct": 8.876496637690668
+    },
+    {
+     "ch": "ש",
+     "count": 15595,
+     "pct": 5.115630638018698
+    },
+    {
+     "ch": "י",
+     "count": 31556,
+     "pct": 10.351320321469576
+    },
+    {
+     "ch": "ה",
+     "count": 28055,
+     "pct": 9.202886665573233
+    },
+    {
+     "ch": "ו",
+     "count": 30533,
+     "pct": 10.015745448581269
+    }
+   ],
+   "surprisalBits": 21.088464507525973,
+   "torahString": {
+    "count": 0,
+    "positions": [],
+    "hits": []
+   },
+   "els": {
+    "maxSkip": 1000,
+    "block": 5000,
+    "real": 225,
+    "controls": {
+     "fullShuffle": {
+      "runs": [
+       263,
+       250,
+       269,
+       292,
+       261,
+       259,
+       298,
+       269,
+       280,
+       279
+      ],
+      "mean": 272.0,
+      "z": -3.2730566901587896
+     },
+     "blockShuffle": {
+      "runs": [
+       264,
+       301,
+       285,
+       276,
+       275,
+       247,
+       284,
+       241,
+       252,
+       272
+      ],
+      "mean": 269.7,
+      "z": -2.5081900417133376
+     }
+    },
+    "minSkip": {
+     "skip": -4,
+     "positions": [
+      134119,
+      134115,
+      134111,
+      134107,
+      134103,
+      134099
+     ],
+     "refs": [
+      "Exodus 36:25",
+      "Exodus 36:26"
+     ]
+    }
+   }
+  },
+  {
+   "word": "דוד",
+   "value": 14,
+   "katan": 14,
+   "letters": [
+    {
+     "ch": "ד",
+     "value": 4
+    },
+    {
+     "ch": "ו",
+     "value": 6
+    },
+    {
+     "ch": "ד",
+     "value": 4
+    }
+   ],
+   "inTanakh": {
+    "occurrences": 1091,
+    "verses": 925,
+    "forms": [
+     [
+      "דוד",
+      600
+     ],
+     [
+      "דויד",
+      251
+     ],
+     [
+      "לדוד",
+      134
+     ],
+     [
+      "ודוד",
+      38
+     ],
+     [
+      "לדויד",
+      24
+     ],
+     [
+      "בדוד",
+      15
+     ],
+     [
+      "כדוד",
+      7
+     ],
+     [
+      "ודויד",
+      6
+     ],
+     [
+      "שדוד",
+      4
+     ],
+     [
+      "כדויד",
+      3
+     ],
+     [
+      "מדוד",
+      3
+     ],
+     [
+      "בדויד",
+      2
+     ],
+     [
+      "ולדוד",
+      1
+     ],
+     [
+      "הדוד",
+      1
+     ],
+     [
+      "והדוד",
+      1
+     ],
+     [
+      "לשדוד",
+      1
+     ]
+    ],
+    "byBook": [
+     [
+      "Judges",
+      1
+     ],
+     [
+      "1 Samuel",
+      295
+     ],
+     [
+      "2 Samuel",
+      285
+     ],
+     [
+      "1 Kings",
+      78
+     ],
+     [
+      "2 Kings",
+      18
+     ],
+     [
+      "Isaiah",
+      11
+     ],
+     [
+      "Jeremiah",
+      19
+     ],
+     [
+      "Ezekiel",
+      4
+     ],
+     [
+      "Hosea",
+      1
+     ],
+     [
+      "Amos",
+      2
+     ],
+     [
+      "Micah",
+      1
+     ],
+     [
+      "Zechariah",
+      6
+     ],
+     [
+      "Psalms",
+      89
+     ],
+     [
+      "Job",
+      1
+     ],
+     [
+      "Proverbs",
+      1
+     ],
+     [
+      "Ruth",
+      2
+     ],
+     [
+      "Song of Songs",
+      3
+     ],
+     [
+      "Ecclesiastes",
+      1
+     ],
+     [
+      "Ezra",
+      3
+     ],
+     [
+      "Nehemiah",
+      8
+     ],
+     [
+      "1 Chronicles",
+      188
+     ],
+     [
+      "2 Chronicles",
+      74
+     ]
+    ],
+    "first": {
+     "ref": "Judges 5:27",
+     "he": "בֵּ֣ין רַגְלֶ֔יהָ כָּרַ֥ע נָפַ֖ל שָׁכָ֑ב בֵּ֤ין רַגְלֶ֨יהָ֙ כָּרַ֣ע נָפָ֔ל בַּאֲשֶׁ֣ר כָּרַ֔ע שָׁ֖ם נָפַ֥ל שָׁדֽוּד׃",
+     "en": "At her feet he sunk, he fell, he lay; At her feet he sunk, he fell; Where he sunk, there he fell down dead.",
+     "highlight": null
+    },
+    "all": [
+     "Judges 5:27",
+     "1 Samuel 2:14",
+     "1 Samuel 10:14",
+     "1 Samuel 10:15",
+     "1 Samuel 14:50",
+     "1 Samuel 16:13",
+     "1 Samuel 16:19",
+     "1 Samuel 16:20",
+     "1 Samuel 16:21",
+     "1 Samuel 16:22",
+     "1 Samuel 16:23",
+     "1 Samuel 17:12",
+     "1 Samuel 17:14",
+     "1 Samuel 17:15",
+     "1 Samuel 17:17",
+     "1 Samuel 17:20",
+     "1 Samuel 17:22",
+     "1 Samuel 17:23",
+     "1 Samuel 17:26",
+     "1 Samuel 17:28",
+     "1 Samuel 17:29",
+     "1 Samuel 17:31",
+     "1 Samuel 17:32",
+     "1 Samuel 17:33",
+     "1 Samuel 17:34",
+     "1 Samuel 17:37",
+     "1 Samuel 17:38",
+     "1 Samuel 17:39",
+     "1 Samuel 17:41",
+     "1 Samuel 17:42",
+     "1 Samuel 17:43",
+     "1 Samuel 17:44",
+     "1 Samuel 17:45",
+     "1 Samuel 17:48",
+     "1 Samuel 17:49",
+     "1 Samuel 17:50",
+     "1 Samuel 17:51",
+     "1 Samuel 17:54",
+     "1 Samuel 17:55",
+     "1 Samuel 17:57",
+     "1 Samuel 17:58",
+     "1 Samuel 18:1",
+     "1 Samuel 18:3",
+     "1 Samuel 18:4",
+     "1 Samuel 18:5",
+     "1 Samuel 18:6",
+     "1 Samuel 18:7",
+     "1 Samuel 18:8",
+     "1 Samuel 18:9",
+     "1 Samuel 18:10",
+     "1 Samuel 18:11",
+     "1 Samuel 18:12",
+     "1 Samuel 18:14",
+     "1 Samuel 18:16",
+     "1 Samuel 18:17",
+     "1 Samuel 18:18",
+     "1 Samuel 18:19",
+     "1 Samuel 18:20",
+     "1 Samuel 18:21",
+     "1 Samuel 18:22",
+     "1 Samuel 18:23",
+     "1 Samuel 18:24",
+     "1 Samuel 18:25",
+     "1 Samuel 18:26",
+     "1 Samuel 18:27",
+     "1 Samuel 18:28",
+     "1 Samuel 18:29",
+     "1 Samuel 18:30",
+     "1 Samuel 19:1",
+     "1 Samuel 19:2",
+     "1 Samuel 19:4",
+     "1 Samuel 19:5",
+     "1 Samuel 19:7",
+     "1 Samuel 19:8",
+     "1 Samuel 19:9",
+     "1 Samuel 19:10",
+     "1 Samuel 19:11",
+     "1 Samuel 19:12",
+     "1 Samuel 19:14",
+     "1 Samuel 19:15",
+     "1 Samuel 19:18",
+     "1 Samuel 19:19",
+     "1 Samuel 19:20",
+     "1 Samuel 19:22",
+     "1 Samuel 20:1",
+     "1 Samuel 20:3",
+     "1 Samuel 20:4",
+     "1 Samuel 20:5",
+     "1 Samuel 20:6",
+     "1 Samuel 20:10",
+     "1 Samuel 20:11",
+     "1 Samuel 20:12",
+     "1 Samuel 20:15",
+     "1 Samuel 20:16",
+     "1 Samuel 20:17",
+     "1 Samuel 20:24",
+     "1 Samuel 20:25",
+     "1 Samuel 20:27",
+     "1 Samuel 20:28",
+     "1 Samuel 20:33",
+     "1 Samuel 20:34",
+     "1 Samuel 20:35",
+     "1 Samuel 20:39",
+     "1 Samuel 20:41",
+     "1 Samuel 20:42",
+     "1 Samuel 21:2",
+     "1 Samuel 21:3",
+     "1 Samuel 21:5",
+     "1 Samuel 21:6",
+     "1 Samuel 21:9",
+     "1 Samuel 21:10",
+     "1 Samuel 21:11",
+     "1 Samuel 21:12",
+     "1 Samuel 21:13",
+     "1 Samuel 22:1",
+     "1 Samuel 22:3",
+     "1 Samuel 22:4",
+     "1 Samuel 22:5",
+     "1 Samuel 22:6",
+     "1 Samuel 22:14",
+     "1 Samuel 22:17",
+     "1 Samuel 22:20",
+     "1 Samuel 22:21",
+     "1 Samuel 22:22",
+     "1 Samuel 23:1",
+     "1 Samuel 23:2",
+     "1 Samuel 23:3",
+     "1 Samuel 23:4",
+     "1 Samuel 23:5",
+     "1 Samuel 23:6",
+     "1 Samuel 23:7",
+     "1 Samuel 23:8",
+     "1 Samuel 23:9",
+     "1 Samuel 23:10",
+     "1 Samuel 23:12",
+     "1 Samuel 23:13",
+     "1 Samuel 23:14",
+     "1 Samuel 23:15",
+     "1 Samuel 23:16",
+     "1 Samuel 23:18",
+     "1 Samuel 23:19",
+     "1 Samuel 23:24",
+     "1 Samuel 23:25",
+     "1 Samuel 23:26",
+     "1 Samuel 23:28",
+     "1 Samuel 24:1",
+     "1 Samuel 24:2",
+     "1 Samuel 24:3",
+     "1 Samuel 24:4",
+     "1 Samuel 24:5",
+     "1 Samuel 24:6",
+     "1 Samuel 24:8",
+     "1 Samuel 24:9",
+     "1 Samuel 24:10",
+     "1 Samuel 24:17",
+     "1 Samuel 24:18",
+     "1 Samuel 24:23",
+     "1 Samuel 25:1",
+     "1 Samuel 25:4",
+     "1 Samuel 25:5",
+     "1 Samuel 25:8",
+     "1 Samuel 25:9",
+     "1 Samuel 25:10",
+     "1 Samuel 25:12",
+     "1 Samuel 25:13",
+     "1 Samuel 25:14",
+     "1 Samuel 25:20",
+     "1 Samuel 25:21",
+     "1 Samuel 25:22",
+     "1 Samuel 25:23",
+     "1 Samuel 25:32",
+     "1 Samuel 25:35",
+     "1 Samuel 25:39",
+     "1 Samuel 25:40",
+     "1 Samuel 25:42",
+     "1 Samuel 25:43",
+     "1 Samuel 25:44",
+     "1 Samuel 26:1",
+     "1 Samuel 26:2",
+     "1 Samuel 26:3",
+     "1 Samuel 26:4",
+     "1 Samuel 26:5",
+     "1 Samuel 26:6",
+     "1 Samuel 26:7",
+     "1 Samuel 26:8",
+     "1 Samuel 26:9",
+     "1 Samuel 26:10",
+     "1 Samuel 26:12",
+     "1 Samuel 26:13",
+     "1 Samuel 26:14",
+     "1 Samuel 26:15",
+     "1 Samuel 26:17",
+     "1 Samuel 26:21",
+     "1 Samuel 26:22",
+     "1 Samuel 26:25",
+     "1 Samuel 27:1",
+     "1 Samuel 27:2",
+     "1 Samuel 27:3",
+     "1 Samuel 27:4",
+     "1 Samuel 27:5",
+     "1 Samuel 27:7",
+     "1 Samuel 27:8",
+     "1 Samuel 27:9",
+     "1 Samuel 27:10",
+     "1 Samuel 27:11",
+     "1 Samuel 27:12",
+     "1 Samuel 28:1",
+     "1 Samuel 28:2",
+     "1 Samuel 28:17",
+     "1 Samuel 29:2",
+     "1 Samuel 29:3",
+     "1 Samuel 29:5",
+     "1 Samuel 29:6",
+     "1 Samuel 29:8",
+     "1 Samuel 29:9",
+     "1 Samuel 29:11",
+     "1 Samuel 30:1",
+     "1 Samuel 30:3",
+     "1 Samuel 30:4",
+     "1 Samuel 30:5",
+     "1 Samuel 30:6",
+     "1 Samuel 30:7",
+     "1 Samuel 30:8",
+     "1 Samuel 30:9",
+     "1 Samuel 30:10",
+     "1 Samuel 30:11",
+     "1 Samuel 30:13",
+     "1 Samuel 30:15",
+     "1 Samuel 30:17",
+     "1 Samuel 30:18",
+     "1 Samuel 30:19",
+     "1 Samuel 30:20",
+     "1 Samuel 30:21",
+     "1 Samuel 30:22",
+     "1 Samuel 30:23",
+     "1 Samuel 30:26",
+     "1 Samuel 30:31",
+     "2 Samuel 1:1",
+     "2 Samuel 1:2",
+     "2 Samuel 1:3",
+     "2 Samuel 1:4",
+     "2 Samuel 1:5",
+     "2 Samuel 1:11",
+     "2 Samuel 1:13",
+     "2 Samuel 1:14",
+     "2 Samuel 1:15",
+     "2 Samuel 1:16",
+     "2 Samuel 1:17",
+     "2 Samuel 2:1",
+     "2 Samuel 2:2",
+     "2 Samuel 2:3",
+     "2 Samuel 2:4",
+     "2 Samuel 2:5",
+     "2 Samuel 2:10",
+     "2 Samuel 2:11",
+     "2 Samuel 2:13",
+     "2 Samuel 2:15",
+     "2 Samuel 2:17",
+     "2 Samuel 2:30",
+     "2 Samuel 2:31",
+     "2 Samuel 3:1",
+     "2 Samuel 3:2",
+     "2 Samuel 3:5",
+     "2 Samuel 3:6",
+     "2 Samuel 3:8",
+     "2 Samuel 3:9",
+     "2 Samuel 3:10",
+     "2 Samuel 3:12",
+     "2 Samuel 3:14",
+     "2 Samuel 3:17",
+     "2 Samuel 3:18",
+     "2 Samuel 3:19",
+     "2 Samuel 3:20",
+     "2 Samuel 3:21",
+     "2 Samuel 3:22",
+     "2 Samuel 3:26",
+     "2 Samuel 3:28",
+     "2 Samuel 3:31",
+     "2 Samuel 3:35",
+     "2 Samuel 4:8",
+     "2 Samuel 4:9",
+     "2 Samuel 4:12",
+     "2 Samuel 5:1",
+     "2 Samuel 5:3",
+     "2 Samuel 5:4",
+     "2 Samuel 5:6",
+     "2 Samuel 5:7",
+     "2 Samuel 5:8",
+     "2 Samuel 5:9",
+     "2 Samuel 5:10",
+     "2 Samuel 5:11",
+     "2 Samuel 5:12",
+     "2 Samuel 5:13",
+     "2 Samuel 5:17",
+     "2 Samuel 5:19",
+     "2 Samuel 5:20",
+     "2 Samuel 5:21",
+     "2 Samuel 5:23",
+     "2 Samuel 5:25",
+     "2 Samuel 6:1",
+     "2 Samuel 6:2",
+     "2 Samuel 6:5",
+     "2 Samuel 6:8",
+     "2 Samuel 6:9",
+     "2 Samuel 6:10",
+     "2 Samuel 6:12",
+     "2 Samuel 6:14",
+     "2 Samuel 6:15",
+     "2 Samuel 6:16",
+     "2 Samuel 6:17",
+     "2 Samuel 6:18",
+     "2 Samuel 6:20",
+     "2 Samuel 6:21",
+     "2 Samuel 7:5",
+     "2 Samuel 7:8",
+     "2 Samuel 7:17",
+     "2 Samuel 7:18",
+     "2 Samuel 7:20",
+     "2 Samuel 7:26",
+     "2 Samuel 8:1",
+     "2 Samuel 8:2",
+     "2 Samuel 8:3",
+     "2 Samuel 8:4",
+     "2 Samuel 8:5",
+     "2 Samuel 8:6",
+     "2 Samuel 8:7",
+     "2 Samuel 8:8",
+     "2 Samuel 8:9",
+     "2 Samuel 8:10",
+     "2 Samuel 8:11",
+     "2 Samuel 8:13",
+     "2 Samuel 8:14",
+     "2 Samuel 8:15",
+     "2 Samuel 8:18",
+     "2 Samuel 9:1",
+     "2 Samuel 9:2",
+     "2 Samuel 9:5",
+     "2 Samuel 9:6",
+     "2 Samuel 9:7",
+     "2 Samuel 10:2",
+     "2 Samuel 10:3",
+     "2 Samuel 10:4",
+     "2 Samuel 10:5",
+     "2 Samuel 10:6",
+     "2 Samuel 10:7",
+     "2 Samuel 10:17",
+     "2 Samuel 10:18",
+     "2 Samuel 11:1",
+     "2 Samuel 11:2",
+     "2 Samuel 11:3",
+     "2 Samuel 11:4",
+     "2 Samuel 11:5",
+     "2 Samuel 11:6",
+     "2 Samuel 11:7",
+     "2 Samuel 11:8",
+     "2 Samuel 11:10",
+     "2 Samuel 11:11",
+     "2 Samuel 11:12",
+     "2 Samuel 11:13",
+     "2 Samuel 11:14",
+     "2 Samuel 11:17",
+     "2 Samuel 11:18",
+     "2 Samuel 11:22",
+     "2 Samuel 11:23",
+     "2 Samuel 11:25",
+     "2 Samuel 11:27",
+     "2 Samuel 12:1",
+     "2 Samuel 12:5",
+     "2 Samuel 12:7",
+     "2 Samuel 12:13",
+     "2 Samuel 12:15",
+     "2 Samuel 12:16",
+     "2 Samuel 12:18",
+     "2 Samuel 12:19",
+     "2 Samuel 12:20",
+     "2 Samuel 12:24",
+     "2 Samuel 12:27",
+     "2 Samuel 12:29",
+     "2 Samuel 12:30",
+     "2 Samuel 12:31",
+     "2 Samuel 13:1",
+     "2 Samuel 13:3",
+     "2 Samuel 13:7",
+     "2 Samuel 13:21",
+     "2 Samuel 13:30",
+     "2 Samuel 13:32",
+     "2 Samuel 13:39",
+     "2 Samuel 15:12",
+     "2 Samuel 15:13",
+     "2 Samuel 15:14",
+     "2 Samuel 15:22",
+     "2 Samuel 15:30",
+     "2 Samuel 15:31",
+     "2 Samuel 15:32",
+     "2 Samuel 15:33",
+     "2 Samuel 15:37",
+     "2 Samuel 16:1",
+     "2 Samuel 16:5",
+     "2 Samuel 16:6",
+     "2 Samuel 16:10"
+    ]
+   },
+   "siblings": {
+    "distinctForms": 35,
+    "occurrences": 1502,
+    "inTorah": 190,
+    "top": [
+     {
+      "word": "דוד",
+      "count": 600,
+      "torah": 0
+     },
+     {
+      "word": "די",
+      "count": 338,
+      "torah": 4
+     },
+     {
+      "word": "זהב",
+      "count": 245,
+      "torah": 117
+     },
+     {
+      "word": "יד",
+      "count": 146,
+      "torah": 28
+     },
+     {
+      "word": "בזה",
+      "count": 30,
+      "torah": 10
+     },
+     {
+      "word": "אביא",
+      "count": 17,
+      "torah": 1
+     },
+     {
+      "word": "גיא",
+      "count": 15,
+      "torah": 0
+     },
+     {
+      "word": "האח",
+      "count": 15,
+      "torah": 0
+     },
+     {
+      "word": "אהבו",
+      "count": 10,
+      "torah": 1
+     },
+     {
+      "word": "הזב",
+      "count": 9,
+      "torah": 9
+     },
+     {
+      "word": "והבא",
+      "count": 7,
+      "torah": 1
+     },
+     {
+      "word": "דדו",
+      "count": 7,
+      "torah": 3
+     },
+     {
+      "word": "ובו",
+      "count": 6,
+      "torah": 3
+     },
+     {
+      "word": "ובאה",
+      "count": 6,
+      "torah": 0
+     },
+     {
+      "word": "הט",
+      "count": 6,
+      "torah": 0
+     },
+     {
+      "word": "בבי",
+      "count": 6,
+      "torah": 0
+     },
+     {
+      "word": "ואז",
+      "count": 4,
+      "torah": 2
+     },
+     {
+      "word": "הבגד",
+      "count": 4,
+      "torah": 4
+     },
+     {
+      "word": "ואהב",
+      "count": 3,
+      "torah": 1
+     },
+     {
+      "word": "דואג",
+      "count": 3,
+      "torah": 0
+     },
+     {
+      "word": "בגדה",
+      "count": 3,
+      "torah": 0
+     },
+     {
+      "word": "הובא",
+      "count": 2,
+      "torah": 2
+     },
+     {
+      "word": "זבה",
+      "count": 2,
+      "torah": 2
+     },
+     {
+      "word": "ודאג",
+      "count": 2,
+      "torah": 0
+     }
+    ],
+    "otherCorpora": {
+     "Tanakh": {
+      "distinctForms": 35,
+      "occurrences": 1502
+     },
+     "Mishnah": {
+      "distinctForms": 24,
+      "occurrences": 388
+     },
+     "Mishneh Torah": {
+      "distinctForms": 41,
+      "occurrences": 2015
+     }
+    },
+    "byBook": [
+     [
+      "Genesis",
+      15
+     ],
+     [
+      "Exodus",
+      107
+     ],
+     [
+      "Leviticus",
+      30
+     ],
+     [
+      "Numbers",
+      28
+     ],
+     [
+      "Deuteronomy",
+      10
+     ],
+     [
+      "Joshua",
+      5
+     ],
+     [
+      "Judges",
+      13
+     ],
+     [
+      "1 Samuel",
+      276
+     ],
+     [
+      "2 Samuel",
+      251
+     ],
+     [
+      "1 Kings",
+      99
+     ],
+     [
+      "2 Kings",
+      34
+     ],
+     [
+      "Isaiah",
+      38
+     ],
+     [
+      "Jeremiah",
+      37
+     ],
+     [
+      "Ezekiel",
+      31
+     ],
+     [
+      "Hosea",
+      2
+     ],
+     [
+      "Micah",
+      3
+     ],
+     [
+      "Nahum",
+      1
+     ],
+     [
+      "Habakkuk",
+      1
+     ],
+     [
+      "Zephaniah",
+      1
+     ],
+     [
+      "Haggai",
+      1
+     ],
+     [
+      "Zechariah",
+      8
+     ],
+     [
+      "Malachi",
+      3
+     ],
+     [
+      "Psalms",
+      30
+     ],
+     [
+      "Job",
+      13
+     ],
+     [
+      "Proverbs",
+      17
+     ],
+     [
+      "Ruth",
+      3
+     ],
+     [
+      "Song of Songs",
+      4
+     ],
+     [
+      "Ecclesiastes",
+      2
+     ],
+     [
+      "Lamentations",
+      2
+     ],
+     [
+      "Esther",
+      13
+     ],
+     [
+      "Daniel",
+      242
+     ],
+     [
+      "Ezra",
+      106
+     ],
+     [
+      "Nehemiah",
+      9
+     ],
+     [
+      "1 Chronicles",
+      20
+     ],
+     [
+      "2 Chronicles",
+      47
+     ]
+    ]
+   },
+   "nameVerses": {
+    "candidates": 4,
+    "picks": [
+     {
+      "ref": "Psalms 105:4",
+      "he": "דִּרְשׁ֣וּ יְהוָ֣ה וְעֻזּ֑וֹ בַּקְּשׁ֖וּ פָנָ֣יו תָּמִֽיד׃",
+      "en": "Seek ye the LORD and His strength; Seek His face continually.",
+      "highlight": null,
+      "containsName": false
+     },
+     {
+      "ref": "1 Chronicles 16:11",
+      "he": "דִּרְשׁ֤וּ יְהוָה֙ וְעֻזּ֔וֹ בַּקְּשׁ֥וּ פָנָ֖יו תָּמִֽיד׃",
+      "en": "Seek ye the LORD and His strength; Seek His face continually.",
+      "highlight": null,
+      "containsName": false
+     },
+     {
+      "ref": "Ecclesiastes 12:11",
+      "he": "דִּבְרֵ֤י חֲכָמִים֙ כַּדָּ֣רְבֹנ֔וֹת וּֽכְמַשְׂמְר֥וֹת נְטוּעִ֖ים בַּעֲלֵ֣י אֲסֻפּ֑וֹת נִתְּנ֖וּ מֵרֹעֶ֥ה אֶחָֽד׃",
+      "en": "The words of the wise are as goads, and as nails well fastened are those that are composed in collections; they are given from one shepherd.",
+      "highlight": null,
+      "containsName": false
+     },
+     {
+      "ref": "Numbers 2:18",
+      "he": "דֶּ֣גֶל מַחֲנֵ֥ה אֶפְרַ֛יִם לְצִבְאֹתָ֖ם יָ֑מָּה וְנָשִׂיא֙ לִבְנֵ֣י אֶפְרַ֔יִם אֱלִישָׁמָ֖ע בֶּן־עַמִּיהֽוּד׃",
+      "en": "On the west side shall be the standard of the camp of Ephraim according to their hosts; the prince of the children of Ephraim being Elishama the son of Ammihud,",
+      "highlight": null,
+      "containsName": false
+     }
+    ]
+   },
+   "letterStats": [
+    {
+     "ch": "ד",
+     "count": 7032,
+     "pct": 2.3067082171559785
+    },
+    {
+     "ch": "ו",
+     "count": 30533,
+     "pct": 10.015745448581269
+    },
+    {
+     "ch": "ד",
+     "count": 7032,
+     "pct": 2.3067082171559785
+    }
+   ],
+   "surprisalBits": 14.195699623888093,
+   "torahString": {
+    "count": 9,
+    "positions": [
+     17972,
+     42029,
+     42075,
+     42113,
+     42147,
+     42210,
+     75955,
+     146660,
+     180915
+    ],
+    "hits": [
+     {
+      "pos": 17972,
+      "ref": "Genesis 15:14",
+      "context": "ויאשריעבדודןאנכיואח",
+      "offset": 8
+     },
+     {
+      "pos": 42029,
+      "ref": "Genesis 30:14",
+      "context": "טיםוימצאדודאיםבשדהו",
+      "offset": 8
+     },
+     {
+      "pos": 42075,
+      "ref": "Genesis 30:14",
+      "context": "תנינאלימדודאיבנךותא",
+      "offset": 8
+     },
+     {
+      "pos": 42113,
+      "ref": "Genesis 30:15",
+      "context": "לקחתגםאתדודאיבניותא",
+      "offset": 8
+     },
+     {
+      "pos": 42147,
+      "ref": "Genesis 30:15",
+      "context": "הלילהתחתדודאיבנךויב",
+      "offset": 8
+     },
+     {
+      "pos": 42210,
+      "ref": "Genesis 30:16",
+      "context": "רשכרתיךבדודאיבניויש",
+      "offset": 8
+     },
+     {
+      "pos": 75955,
+      "ref": "Genesis 49:19",
+      "context": "ייהוהגדגדודיגודנווה",
+      "offset": 8
+     },
+     {
+      "pos": 146660,
+      "ref": "Leviticus 5:7",
+      "context": "םלאתגיעידודישהוהביא",
+      "offset": 8
+     },
+     {
+      "pos": 180915,
+      "ref": "Leviticus 25:28",
+      "context": "םלאמצאהידודיהשיבלוו",
+      "offset": 8
+     }
+    ]
+   },
+   "els": {
+    "maxSkip": 1000,
+    "block": 5000,
+    "real": 33310,
+    "controls": {
+     "fullShuffle": {
+      "runs": [
+       32270,
+       32728,
+       32610,
+       32290,
+       32270,
+       32362,
+       32516,
+       32126,
+       32564,
+       32398
+      ],
+      "mean": 32413.4,
+      "z": 5.070601924336135
+     },
+     "blockShuffle": {
+      "runs": [
+       33274,
+       32664,
+       32928,
+       32562,
+       32854,
+       32786,
+       32692,
+       32550,
+       32614,
+       32508
+      ],
+      "mean": 32743.2,
+      "z": 2.584187844054833
+     }
+    },
+    "minSkip": {
+     "skip": 2,
+     "positions": [
+      4932,
+      4934,
+      4936
+     ],
+     "refs": [
+      "Genesis 4:16",
+      "Genesis 4:17"
+     ]
+    }
+   }
+  },
+  {
+   "word": "עזריאל",
+   "value": 318,
+   "katan": 21,
+   "letters": [
+    {
+     "ch": "ע",
+     "value": 70
+    },
+    {
+     "ch": "ז",
+     "value": 7
+    },
+    {
+     "ch": "ר",
+     "value": 200
+    },
+    {
+     "ch": "י",
+     "value": 10
+    },
+    {
+     "ch": "א",
+     "value": 1
+    },
+    {
+     "ch": "ל",
+     "value": 30
+    }
+   ],
+   "inTanakh": {
+    "occurrences": 3,
+    "verses": 3,
+    "forms": [
+     [
+      "עזריאל",
+      2
+     ],
+     [
+      "ועזריאל",
+      1
+     ]
+    ],
+    "byBook": [
+     [
+      "Jeremiah",
+      1
+     ],
+     [
+      "1 Chronicles",
+      2
+     ]
+    ],
+    "first": {
+     "ref": "Jeremiah 36:26",
+     "he": "וַיְצַוֶּ֣ה הַ֠מֶּלֶךְ אֶת־יְרַחְמְאֵ֨ל בֶּן־הַמֶּ֜לֶךְ וְאֶת־שְׂרָיָ֣הוּ בֶן־עַזְרִיאֵ֗ל וְאֶת־שֶֽׁלֶמְיָ֨הוּ֙ בֶּֽן־עַבְדְּאֵ֔ל לָקַ֨חַת֙ אֶת־בָּר֣וּךְ הַסֹּפֵ֔ר וְאֵ֖ת יִרְמְיָ֣הוּ הַנָּבִ֑יא וַיַּסְתִּרֵ֖ם יְהוָֽה׃",
+     "en": "And the king commanded Jerahmeel the king’s son, and Seraiah the son of Azriel, and Shelemiah the son of Abdeel, to take Baruch the scribe and Jeremiah the prophet; but the LORD hid them.",
+     "highlight": null
+    },
+    "all": [
+     "Jeremiah 36:26",
+     "1 Chronicles 5:24",
+     "1 Chronicles 27:19"
+    ]
+   },
+   "siblings": {
+    "distinctForms": 67,
+    "occurrences": 675,
+    "inTorah": 126,
+    "top": [
+     {
+      "word": "וישב",
+      "count": 239,
+      "torah": 61
+     },
+     {
+      "word": "יושב",
+      "count": 76,
+      "torah": 14
+     },
+     {
+      "word": "ישבו",
+      "count": 62,
+      "torah": 10
+     },
+     {
+      "word": "ישוב",
+      "count": 55,
+      "torah": 9
+     },
+     {
+      "word": "יבשו",
+      "count": 36,
+      "torah": 0
+     },
+     {
+      "word": "ויקבר",
+      "count": 29,
+      "torah": 2
+     },
+     {
+      "word": "ויקרב",
+      "count": 24,
+      "torah": 12
+     },
+     {
+      "word": "יזרעאל",
+      "count": 15,
+      "torah": 0
+     },
+     {
+      "word": "שובי",
+      "count": 11,
+      "torah": 1
+     },
+     {
+      "word": "פרזלא",
+      "count": 10,
+      "torah": 0
+     },
+     {
+      "word": "אליעזר",
+      "count": 6,
+      "torah": 2
+     },
+     {
+      "word": "לחרף",
+      "count": 6,
+      "torah": 0
+     },
+     {
+      "word": "ויבש",
+      "count": 6,
+      "torah": 0
+     },
+     {
+      "word": "יקברו",
+      "count": 6,
+      "torah": 0
+     },
+     {
+      "word": "שיח",
+      "count": 5,
+      "torah": 1
+     },
+     {
+      "word": "יקרבו",
+      "count": 5,
+      "torah": 3
+     },
+     {
+      "word": "ביקרו",
+      "count": 5,
+      "torah": 0
+     },
+     {
+      "word": "ירחק",
+      "count": 4,
+      "torah": 2
+     },
+     {
+      "word": "ושבי",
+      "count": 4,
+      "torah": 0
+     },
+     {
+      "word": "ישגה",
+      "count": 4,
+      "torah": 0
+     },
+     {
+      "word": "ושחד",
+      "count": 3,
+      "torah": 1
+     },
+     {
+      "word": "לחפר",
+      "count": 3,
+      "torah": 0
+     },
+     {
+      "word": "מעבור",
+      "count": 3,
+      "torah": 0
+     },
+     {
+      "word": "ומעבר",
+      "count": 3,
+      "torah": 0
+     }
+    ],
+    "otherCorpora": {
+     "Tanakh": {
+      "distinctForms": 67,
+      "occurrences": 675
+     },
+     "Mishnah": {
+      "distinctForms": 50,
+      "occurrences": 608
+     },
+     "Mishneh Torah": {
+      "distinctForms": 110,
+      "occurrences": 745
+     }
+    },
+    "byBook": [
+     [
+      "Genesis",
+      41
+     ],
+     [
+      "Exodus",
+      20
+     ],
+     [
+      "Leviticus",
+      16
+     ],
+     [
+      "Numbers",
+      27
+     ],
+     [
+      "Deuteronomy",
+      22
+     ],
+     [
+      "Joshua",
+      27
+     ],
+     [
+      "Judges",
+      41
+     ],
+     [
+      "1 Samuel",
+      30
+     ],
+     [
+      "2 Samuel",
+      30
+     ],
+     [
+      "1 Kings",
+      28
+     ],
+     [
+      "2 Kings",
+      51
+     ],
+     [
+      "Isaiah",
+      40
+     ],
+     [
+      "Jeremiah",
+      56
+     ],
+     [
+      "Ezekiel",
+      20
+     ],
+     [
+      "Hosea",
+      13
+     ],
+     [
+      "Joel",
+      5
+     ],
+     [
+      "Amos",
+      5
+     ],
+     [
+      "Obadiah",
+      1
+     ],
+     [
+      "Jonah",
+      5
+     ],
+     [
+      "Micah",
+      4
+     ],
+     [
+      "Zephaniah",
+      3
+     ],
+     [
+      "Zechariah",
+      8
+     ],
+     [
+      "Malachi",
+      1
+     ],
+     [
+      "Psalms",
+      47
+     ],
+     [
+      "Job",
+      22
+     ],
+     [
+      "Proverbs",
+      8
+     ],
+     [
+      "Ruth",
+      3
+     ],
+     [
+      "Song of Songs",
+      4
+     ],
+     [
+      "Ecclesiastes",
+      3
+     ],
+     [
+      "Lamentations",
+      2
+     ],
+     [
+      "Esther",
+      10
+     ],
+     [
+      "Daniel",
+      15
+     ],
+     [
+      "Ezra",
+      4
+     ],
+     [
+      "Nehemiah",
+      6
+     ],
+     [
+      "1 Chronicles",
+      32
+     ],
+     [
+      "2 Chronicles",
+      25
+     ]
+    ]
+   },
+   "nameVerses": {
+    "candidates": 23,
+    "picks": [
+     {
+      "ref": "Psalms 18:27",
+      "he": "עִם־נָבָ֥ר תִּתְבָּרָ֑ר וְעִם־עִ֝קֵּ֗שׁ תִּתְפַּתָּֽל׃",
+      "en": "With the pure Thou dost show Thyself pure; and with the crooked Thou dost show Thyself subtle.",
+      "highlight": null,
+      "containsName": false
+     },
+     {
+      "ref": "Psalms 104:12",
+      "he": "עֲ֭לֵיהֶם עוֹף־הַשָּׁמַ֣יִם יִשְׁכּ֑וֹן מִבֵּ֥ין עֳ֝פָאיִ֗ם יִתְּנוּ־קֽוֹל׃",
+      "en": "Beside them dwell the fowl of the heaven, From among the branches they sing.",
+      "highlight": null,
+      "containsName": false
+     },
+     {
+      "ref": "2 Samuel 22:27",
+      "he": "עִם־נָבָ֖ר תִּתָּבָ֑ר וְעִם־עִקֵּ֖שׁ תִּתַּפָּֽל׃",
+      "en": "With the pure Thou dost show Thyself pure; And with the crooked Thou dost show Thyself subtle.",
+      "highlight": null,
+      "containsName": false
+     },
+     {
+      "ref": "Job 40:18",
+      "he": "עֲ֭צָמָיו אֲפִיקֵ֣י נְחוּשָׁ֑ה גְּ֝רָמָ֗יו כִּמְטִ֥יל בַּרְזֶֽל׃",
+      "en": "His bones are as pipes of brass; His gristles are like bars of iron.",
+      "highlight": null,
+      "containsName": false
+     },
+     {
+      "ref": "Job 10:7",
+      "he": "עַֽל־דַּ֭עְתְּךָ כִּי־לֹ֣א אֶרְשָׁ֑ע וְאֵ֖ין מִיָּדְךָ֣ מַצִּֽיל׃",
+      "en": "Although Thou knowest that I shall not be condemned; And there is none that can deliver out of Thy hand?",
+      "highlight": null,
+      "containsName": false
+     },
+     {
+      "ref": "Proverbs 8:26",
+      "he": "עַד־לֹ֣א עָ֭שָׂה אֶ֣רֶץ וְחוּצ֑וֹת וְ֝רֹ֗אשׁ עָפְר֥וֹת תֵּבֵֽל׃",
+      "en": "While as yet He had not made the earth, nor the fields, Nor the beginning of the dust of the world.",
+      "highlight": null,
+      "containsName": false
+     },
+     {
+      "ref": "Isaiah 8:10",
+      "he": "עֻ֥צוּ עֵצָ֖ה וְתֻפָ֑ר דַּבְּר֤וּ דָבָר֙ וְלֹ֣א יָק֔וּם כִּ֥י עִמָּ֖נוּ אֵֽל׃",
+      "en": "Take counsel together, and it shall be brought to nought; Speak the word, and it shall not stand; For God is with us.",
+      "highlight": null,
+      "containsName": false
+     },
+     {
+      "ref": "Isaiah 24:15",
+      "he": "עַל־כֵּ֥ן בָּאֻרִ֖ים כַּבְּד֣וּ יְהוָ֑ה בְּאִיֵּ֣י הַיָּ֔ם שֵׁ֥ם יְהוָ֖ה אֱלֹהֵ֥י יִשְׂרָאֵֽל׃",
+      "en": "’Therefore glorify ye the LORD in the regions of light, Even the name of the LORD, the God of Israel, in the isles of the sea.’",
+      "highlight": null,
+      "containsName": false
+     },
+     {
+      "ref": "Micah 1:15",
+      "he": "עֹ֗ד הַיֹּרֵשׁ֙ אָ֣בִי לָ֔ךְ יוֹשֶׁ֖בֶת מָֽרֵשָׁ֑ה עַד־עֲדֻּלָּ֥ם יָב֖וֹא כְּב֥וֹד יִשְׂרָאֵֽל׃",
+      "en": "I will yet bring unto thee, O inhabitant of Mareshah, him that shall possess thee; The glory of Israel shall come even unto Adullam.",
+      "highlight": null,
+      "containsName": false
+     },
+     {
+      "ref": "Exodus 21:24",
+      "he": "עַ֚יִן תַּ֣חַת עַ֔יִן שֵׁ֖ן תַּ֣חַת שֵׁ֑ן יָ֚ד תַּ֣חַת יָ֔ד רֶ֖גֶל תַּ֥חַת רָֽגֶל׃",
+      "en": "eye for eye, tooth for tooth, hand for hand, foot for foot,",
+      "highlight": null,
+      "containsName": false
+     },
+     {
+      "ref": "Joshua 10:4",
+      "he": "עֲלֽוּ־אֵלַ֣י וְעִזְרֻ֔נִי וְנַכֶּ֖ה אֶת־גִּבְע֑וֹן כִּֽי־הִשְׁלִ֥ימָה אֶת־יְהוֹשֻׁ֖עַ וְאֶת־בְּנֵ֥י יִשְׂרָאֵֽל׃",
+      "en": "’Come up unto me, and help me, and let us smite Gibeon; for it hath made peace with Joshua and with the children of Israel.’",
+      "highlight": null,
+      "containsName": false
+     },
+     {
+      "ref": "Deuteronomy 33:19",
+      "he": "עַמִּים֙ הַר־יִקְרָ֔אוּ שָׁ֖ם יִזְבְּח֣וּ זִבְחֵי־צֶ֑דֶק כִּ֣י שֶׁ֤פַע יַמִּים֙ יִינָ֔קוּ וּשְׂפוּנֵ֖י טְמ֥וּנֵי חֽוֹל׃",
+      "en": "They shall call peoples unto the mountain; There shall they offer sacrifices of righteousness; For they shall suck the abundance of the seas, And the hidden treasures of the sand.",
+      "highlight": null,
+      "containsName": false
+     }
+    ]
+   },
+   "letterStats": [
+    {
+     "ch": "ע",
+     "count": 11250,
+     "pct": 3.6903395112350337
+    },
+    {
+     "ch": "ז",
+     "count": 2198,
+     "pct": 0.7210103329506314
+    },
+    {
+     "ch": "ר",
+     "count": 18125,
+     "pct": 5.94554699032311
+    },
+    {
+     "ch": "י",
+     "count": 31556,
+     "pct": 10.351320321469576
+    },
+    {
+     "ch": "א",
+     "count": 27060,
+     "pct": 8.876496637690668
+    },
+    {
+     "ch": "ל",
+     "count": 21570,
+     "pct": 7.075610956207971
+    }
+   ],
+   "surprisalBits": 26.534894198827605,
+   "torahString": {
+    "count": 0,
+    "positions": [],
+    "hits": []
+   },
+   "els": {
+    "maxSkip": 1000,
+    "block": 5000,
+    "real": 6,
+    "controls": {
+     "fullShuffle": {
+      "runs": [
+       4,
+       6,
+       7,
+       7,
+       4,
+       5,
+       4,
+       2,
+       6,
+       4
+      ],
+      "mean": 4.9,
+      "z": 0.7269004605005985
+     },
+     "blockShuffle": {
+      "runs": [
+       2,
+       5,
+       7,
+       5,
+       5,
+       10,
+       7,
+       3,
+       8,
+       6
+      ],
+      "mean": 5.8,
+      "z": 0.08980265101338752
+     }
+    },
+    "minSkip": {
+     "skip": 294,
+     "positions": [
+      225935,
+      226229,
+      226523,
+      226817,
+      227111,
+      227405
+     ],
+     "refs": [
+      "Numbers 22:12",
+      "Numbers 22:18",
+      "Numbers 22:23",
+      "Numbers 22:28",
+      "Numbers 22:33",
+      "Numbers 22:37"
+     ]
+    }
+   }
+  },
+  {
+   "word": "לישאביץ",
+   "value": 443,
+   "katan": 20,
+   "letters": [
+    {
+     "ch": "ל",
+     "value": 30
+    },
+    {
+     "ch": "י",
+     "value": 10
+    },
+    {
+     "ch": "ש",
+     "value": 300
+    },
+    {
+     "ch": "א",
+     "value": 1
+    },
+    {
+     "ch": "ב",
+     "value": 2
+    },
+    {
+     "ch": "י",
+     "value": 10
+    },
+    {
+     "ch": "ץ",
+     "value": 90
+    }
+   ],
+   "inTanakh": {
+    "occurrences": 0,
+    "verses": 0,
+    "forms": [],
+    "byBook": [],
+    "first": null,
+    "all": []
+   },
+   "siblings": {
+    "distinctForms": 39,
+    "occurrences": 197,
+    "inTorah": 75,
+    "top": [
+     {
+      "word": "אבתם",
+      "count": 44,
+      "torah": 40
+     },
+     {
+      "word": "גדלות",
+      "count": 30,
+      "torah": 2
+     },
+     {
+      "word": "באמת",
+      "count": 22,
+      "torah": 1
+     },
+     {
+      "word": "בתולה",
+      "count": 14,
+      "torah": 6
+     },
+     {
+      "word": "הלחת",
+      "count": 12,
+      "torah": 11
+     },
+     {
+      "word": "באתם",
+      "count": 11,
+      "torah": 8
+     },
+     {
+      "word": "בלהות",
+      "count": 9,
+      "torah": 0
+     },
+     {
+      "word": "גלית",
+      "count": 8,
+      "torah": 0
+     },
+     {
+      "word": "מגת",
+      "count": 5,
+      "torah": 0
+     },
+     {
+      "word": "ותגדל",
+      "count": 4,
+      "torah": 1
+     },
+     {
+      "word": "מאבת",
+      "count": 2,
+      "torah": 2
+     },
+     {
+      "word": "מתג",
+      "count": 2,
+      "torah": 0
+     },
+     {
+      "word": "תגיל",
+      "count": 2,
+      "torah": 0
+     },
+     {
+      "word": "יתאבל",
+      "count": 2,
+      "torah": 0
+     },
+     {
+      "word": "להבות",
+      "count": 2,
+      "torah": 0
+     },
+     {
+      "word": "תהבלו",
+      "count": 2,
+      "torah": 0
+     },
+     {
+      "word": "אולתו",
+      "count": 2,
+      "torah": 0
+     },
+     {
+      "word": "ואולת",
+      "count": 2,
+      "torah": 0
+     },
+     {
+      "word": "גדולת",
+      "count": 2,
+      "torah": 0
+     },
+     {
+      "word": "מגרר",
+      "count": 1,
+      "torah": 1
+     },
+     {
+      "word": "החייתי",
+      "count": 1,
+      "torah": 1
+     },
+     {
+      "word": "מחשמנה",
+      "count": 1,
+      "torah": 1
+     },
+     {
+      "word": "הנחשלים",
+      "count": 1,
+      "torah": 1
+     },
+     {
+      "word": "ולהבת",
+      "count": 1,
+      "torah": 0
+     }
+    ],
+    "otherCorpora": {
+     "Tanakh": {
+      "distinctForms": 39,
+      "occurrences": 197
+     },
+     "Mishnah": {
+      "distinctForms": 20,
+      "occurrences": 102
+     },
+     "Mishneh Torah": {
+      "distinctForms": 38,
+      "occurrences": 615
+     }
+    },
+    "byBook": [
+     [
+      "Genesis",
+      7
+     ],
+     [
+      "Exodus",
+      9
+     ],
+     [
+      "Leviticus",
+      3
+     ],
+     [
+      "Numbers",
+      40
+     ],
+     [
+      "Deuteronomy",
+      16
+     ],
+     [
+      "Joshua",
+      4
+     ],
+     [
+      "Judges",
+      5
+     ],
+     [
+      "1 Samuel",
+      8
+     ],
+     [
+      "2 Samuel",
+      6
+     ],
+     [
+      "1 Kings",
+      10
+     ],
+     [
+      "2 Kings",
+      4
+     ],
+     [
+      "Isaiah",
+      11
+     ],
+     [
+      "Jeremiah",
+      10
+     ],
+     [
+      "Ezekiel",
+      13
+     ],
+     [
+      "Amos",
+      1
+     ],
+     [
+      "Jonah",
+      1
+     ],
+     [
+      "Zechariah",
+      1
+     ],
+     [
+      "Psalms",
+      15
+     ],
+     [
+      "Job",
+      11
+     ],
+     [
+      "Proverbs",
+      6
+     ],
+     [
+      "Ecclesiastes",
+      1
+     ],
+     [
+      "Lamentations",
+      1
+     ],
+     [
+      "Esther",
+      2
+     ],
+     [
+      "Daniel",
+      2
+     ],
+     [
+      "Ezra",
+      1
+     ],
+     [
+      "Nehemiah",
+      3
+     ],
+     [
+      "1 Chronicles",
+      5
+     ],
+     [
+      "2 Chronicles",
+      1
+     ]
+    ]
+   },
+   "nameVerses": {
+    "candidates": 20,
+    "picks": [
+     {
+      "ref": "Psalms 66:1",
+      "he": "לַ֭מְנַצֵּחַ שִׁ֣יר מִזְמ֑וֹר הָרִ֥יעוּ לֵ֝אלֹהִים כָּל־הָאָֽרֶץ׃",
+      "en": "For the Leader. A Song, a Psalm. Shout unto God, all the earth;",
+      "highlight": null,
+      "containsName": false
+     },
+     {
+      "ref": "Psalms 17:4",
+      "he": "לִפְעֻלּ֣וֹת אָ֭דָם בִּדְבַ֣ר שְׂפָתֶ֑יךָ אֲנִ֥י שָׁ֝מַ֗רְתִּי אָרְח֥וֹת פָּרִֽיץ׃",
+      "en": "As for the doings of men, by the word of Thy lips I have kept me from the ways of the violent.",
+      "highlight": null,
+      "containsName": false
+     },
+     {
+      "ref": "Psalms 46:9",
+      "he": "לְֽכוּ־חֲ֭זוּ מִפְעֲל֣וֹת יְהוָ֑ה אֲשֶׁר־שָׂ֖ם שַׁמּ֣וֹת בָּאָֽרֶץ׃",
+      "en": "Come, behold the works of the LORD, Who hath made desolations in the earth.",
+      "highlight": null,
+      "containsName": false
+     },
+     {
+      "ref": "Psalms 10:18",
+      "he": "לִשְׁפֹּ֥ט יָת֗וֹם וָ֫דָ֥ךְ בַּל־יוֹסִ֥יף ע֑וֹד לַעֲרֹ֥ץ אֱ֝נ֗וֹשׁ מִן־הָאָֽרֶץ׃",
+      "en": "To right the fatherless and the oppressed, That man who is of the earth may be terrible no more.",
+      "highlight": null,
+      "containsName": false
+     },
+     {
+      "ref": "Psalms 82:5",
+      "he": "לֹ֤א יָֽדְע֨וּ וְלֹ֥א יָבִ֗ינוּ בַּחֲשֵׁכָ֥ה יִתְהַלָּ֑כוּ יִ֝מּ֗וֹטוּ כָּל־מ֥וֹסְדֵי אָֽרֶץ׃",
+      "en": "They know not, neither do they understand; they go about in darkness; all the foundations of the earth are moved.",
+      "highlight": null,
+      "containsName": false
+     },
+     {
+      "ref": "Psalms 139:15",
+      "he": "לֹא־נִכְחַ֥ד עָצְמִ֗י מִ֫מֶּ֥ךָּ אֲשֶׁר־עֻשֵּׂ֥יתִי בַסֵּ֑תֶר רֻ֝קַּ֗מְתִּי בְּֽתַחְתִּיּ֥וֹת אָֽרֶץ׃",
+      "en": "My frame was not hidden from Thee, When I was made in secret, And curiously wrought in the lowest parts of the earth.",
+      "highlight": null,
+      "containsName": false
+     },
+     {
+      "ref": "Lamentations 3:34",
+      "he": "לְדַכֵּא֙ תַּ֣חַת רַגְלָ֔יו כֹּ֖ל אֲסִ֥ירֵי אָֽרֶץ׃",
+      "en": "To crush under foot All the prisoners of the earth,",
+      "highlight": null,
+      "containsName": false
+     },
+     {
+      "ref": "Proverbs 12:27",
+      "he": "לֹא־יַחֲרֹ֣ךְ רְמִיָּ֣ה צֵיד֑וֹ וְהוֹן־אָדָ֖ם יָקָ֣ר חָרֽוּץ׃",
+      "en": "The slothful man shall not hunt his prey; But the precious substance of men is to be diligent.",
+      "highlight": null,
+      "containsName": false
+     },
+     {
+      "ref": "1 Kings 10:15",
+      "he": "לְבַד֙ מֵאַנְשֵׁ֣י הַתָּרִ֔ים וּמִסְחַ֖ר הָרֹכְלִ֑ים וְכָל־מַלְכֵ֥י הָעֶ֖רֶב וּפַח֥וֹת הָאָֽרֶץ׃",
+      "en": "beside that which came of the merchants, and of the traffic of the traders, and of all the kings of the mingled people and of the governors of the country.",
+      "highlight": null,
+      "containsName": false
+     },
+     {
+      "ref": "Isaiah 2:21",
+      "he": "לָבוֹא֙ בְּנִקְר֣וֹת הַצֻּרִ֔ים וּבִסְעִפֵ֖י הַסְּלָעִ֑ים מִפְּנֵ֞י פַּ֤חַד יְהוָה֙ וּמֵהֲדַ֣ר גְּאוֹנ֔וֹ בְּקוּמ֖וֹ לַעֲרֹ֥ץ הָאָֽרֶץ׃",
+      "en": "To go into the clefts of the rocks, And into the crevices of the crags, From before the terror of the LORD, And from the glory of His majesty, When he ariseth to shake mightily the earth.",
+      "highlight": null,
+      "containsName": false
+     },
+     {
+      "ref": "Exodus 20:4",
+      "he": "לֹֽ֣א תַֽעֲשֶׂ֨ה־לְךָ֥ פֶ֨סֶל֙ וְכָל־תְּמוּנָ֔ה אֲשֶׁ֤ר בַּשָּׁמַ֨יִם֙ מִמַּ֔עַל וַאֲשֶׁ֥ר בָּאָ֖רֶץ מִתָּ֑חַת וַאֲשֶׁ֥ר בַּמַּ֖יִם מִתַּ֥חַת לָאָֽרֶץ׃",
+      "en": "",
+      "highlight": null,
+      "containsName": false
+     },
+     {
+      "ref": "Deuteronomy 5:8",
+      "he": "לֹֽ֣א־תַעֲשֶׂ֥ה לְךָ֥ פֶ֨סֶל֙ כָּל־תְּמוּנָ֔ה אֲשֶׁ֤ר בַּשָּׁמַ֨יִם֙ מִמַּ֔עַל וַאֲשֶׁ֥ר בָּאָ֖רֶץ מִתָּ֑חַת וַאֲשֶׁ֥ר בַּמַּ֖יִם מִתַּ֥חַת לָאָֽרֶץ׃",
+      "en": "",
+      "highlight": null,
+      "containsName": false
+     }
+    ]
+   },
+   "letterStats": [
+    {
+     "ch": "ל",
+     "count": 21570,
+     "pct": 7.075610956207971
+    },
+    {
+     "ch": "י",
+     "count": 31556,
+     "pct": 10.351320321469576
+    },
+    {
+     "ch": "ש",
+     "count": 15595,
+     "pct": 5.115630638018698
+    },
+    {
+     "ch": "א",
+     "count": 27060,
+     "pct": 8.876496637690668
+    },
+    {
+     "ch": "ב",
+     "count": 16345,
+     "pct": 5.361653272101034
+    },
+    {
+     "ch": "י",
+     "count": 31556,
+     "pct": 10.351320321469576
+    },
+    {
+     "ch": "ץ",
+     "count": 1035,
+     "pct": 0.33951123503362307
+    }
+   ],
+   "surprisalBits": 30.571541182344156,
+   "torahString": {
+    "count": 0,
+    "positions": [],
+    "hits": []
+   },
+   "els": {
+    "maxSkip": 1000,
+    "block": 5000,
+    "real": 0,
+    "controls": {
+     "fullShuffle": {
+      "runs": [
+       0,
+       1,
+       0,
+       0,
+       1,
+       0,
+       0,
+       0,
+       0,
+       0
+      ],
+      "mean": 0.2,
+      "z": -0.49999999999999994
+     },
+     "blockShuffle": {
+      "runs": [
+       0,
+       0,
+       0,
+       1,
+       1,
+       0,
+       0,
+       0,
+       1,
+       0
+      ],
+      "mean": 0.3,
+      "z": -0.6546536707079772
+     }
+    },
+    "minSkip": null
+   }
+  }
+ ],
+ "full": {
+  "value": 1107,
+  "katan": 72,
+  "letterCount": 22,
+  "distinctLetters": [
+   "א",
+   "ב",
+   "ד",
+   "ה",
+   "ו",
+   "ז",
+   "י",
+   "ל",
+   "ע",
+   "צ",
+   "ר",
+   "ש"
+  ],
+  "missingLetters": [
+   "ג",
+   "ח",
+   "ט",
+   "כ",
+   "מ",
+   "נ",
+   "ס",
+   "פ",
+   "ק",
+   "ת"
+  ],
+  "words": [
+   {
+    "word": "תשאות",
+    "count": 4
+   },
+   {
+    "word": "ותפארתך",
+    "count": 1
+   },
+   {
+    "word": "ומסתרתא",
+    "count": 1
+   }
+  ],
+  "phrases": {
+   "count": 69,
+   "top": [
+    {
+     "phrase": "אשר דברת",
+     "count": 8,
+     "first": {
+      "ref": "Genesis 19:21",
+      "he": "וַיֹּ֣אמֶר אֵלָ֔יו הִנֵּה֙ נָשָׂ֣אתִי פָנֶ֔יךָ גַּ֖ם לַדָּבָ֣ר הַזֶּ֑ה לְבִלְתִּ֛י הָפְכִּ֥י אֶת־הָעִ֖יר אֲשֶׁ֥ר דִּבַּֽרְתָּ׃",
+      "en": "And he said unto him: ‘See, I have accepted thee concerning this thing also, that I will not overthrow the city of which thou hast spoken.",
+      "highlight": null
+     }
+    },
+    {
+     "phrase": "הראשנים אשר",
+     "count": 7,
+     "first": {
+      "ref": "Exodus 34:1",
+      "he": "וַיֹּ֤אמֶר יְהוָה֙ אֶל־מֹשֶׁ֔ה פְּסָל־לְךָ֛ שְׁנֵֽי־לֻחֹ֥ת אֲבָנִ֖ים כָּרִאשֹׁנִ֑ים וְכָתַבְתִּי֙ עַל־הַלֻּחֹ֔ת אֶת־הַדְּבָרִ֔ים אֲשֶׁ֥ר הָי֛וּ עַל־הַלֻּחֹ֥ת הָרִאשֹׁנִ֖ים אֲשֶׁ֥ר שִׁבַּֽרְתָּ׃",
+      "en": "And the LORD said unto Moses: ‘Hew thee two tables of stone like unto the first; and I will write upon the tables the words that were on the first tables, which thou didst break.",
+      "highlight": null
+     }
+    },
+    {
+     "phrase": "אשר תראה",
+     "count": 4,
+     "first": {
+      "ref": "Deuteronomy 3:28",
+      "he": "וְצַ֥ו אֶת־יְהוֹשֻׁ֖עַ וְחַזְּקֵ֣הוּ וְאַמְּצֵ֑הוּ כִּי־ה֣וּא יַעֲבֹ֗ר לִפְנֵי֙ הָעָ֣ם הַזֶּ֔ה וְהוּא֙ יַנְחִ֣יל אוֹתָ֔ם אֶת־הָאָ֖רֶץ אֲשֶׁ֥ר תִּרְאֶֽה׃",
+      "en": "But charge Joshua, and encourage him, and strengthen him; for he shall go over before this people, and he shall cause them to inherit the land which thou shalt see.’",
+      "highlight": null
+     }
+    },
+    {
+     "phrase": "לרעות את",
+     "count": 4,
+     "first": {
+      "ref": "Genesis 37:12",
+      "he": "וַיֵּלְכ֖וּ אֶחָ֑יו לִרְע֛וֹת אֶׄתׄ־צֹ֥אן אֲבִיהֶ֖ם בִּשְׁכֶֽם׃",
+      "en": "And his brethren went to feed their father’s flock in Shechem.",
+      "highlight": null
+     }
+    },
+    {
+     "phrase": "ארץ ממשלתו",
+     "count": 3,
+     "first": {
+      "ref": "1 Kings 9:19",
+      "he": "וְאֵ֨ת כָּל־עָרֵ֤י הַֽמִּסְכְּנוֹת֙ אֲשֶׁ֣ר הָי֣וּ לִשְׁלֹמֹ֔ה וְאֵת֙ עָרֵ֣י הָרֶ֔כֶב וְאֵ֖ת עָרֵ֣י הַפָּרָשִׁ֑ים וְאֵ֣ת חֵ֣שֶׁק שְׁלֹמֹ֗ה אֲשֶׁ֤ר חָשַׁק֙ לִבְנ֤וֹת בִּירוּשָׁלִַ֨ם֙ וּבַלְּבָנ֔וֹן וּבְכֹ֖ל אֶ֥רֶץ מֶמְשַׁלְתּֽוֹ׃",
+      "en": "and all the store-cities that Solomon had, and the cities for his chariots, and the cities for his horsemen, and that which Solomon desired to build for his pleasure in Jerusalem, and in Lebanon, and in all the land of his dominion.",
+      "highlight": null
+     }
+    },
+    {
+     "phrase": "אשר תדבר",
+     "count": 3,
+     "first": {
+      "ref": "Exodus 4:12",
+      "he": "וְעַתָּ֖ה לֵ֑ךְ וְאָנֹכִי֙ אֶֽהְיֶ֣ה עִם־פִּ֔יךָ וְהוֹרֵיתִ֖יךָ אֲשֶׁ֥ר תְּדַבֵּֽר׃",
+      "en": "Now therefore go, and I will be with thy mouth, and teach thee what thou shalt speak.’",
+      "highlight": null
+     }
+    },
+    {
+     "phrase": "הנשארים אשר",
+     "count": 3,
+     "first": {
+      "ref": "2 Kings 7:13",
+      "he": "וַיַּעַן֩ אֶחָ֨ד מֵעֲבָדָ֜יו וַיֹּ֗אמֶר וְיִקְחוּ־נָ֞א חֲמִשָּׁ֣ה מִן־הַסּוּסִים֮ הַֽנִּשְׁאָרִים֮ אֲשֶׁ֣ר נִשְׁאֲרוּ־בָהּ֒ הִנָּ֗ם כְּכָל־הֲמ֤וֹן יִשְׂרָאֵל֙ אֲשֶׁ֣ר נִשְׁאֲרוּ־בָ֔הּ הִנָּ֕ם כְּכָל־הֲמ֥וֹן יִשְׂרָאֵ֖ל אֲשֶׁר־תָּ֑מּוּ וְנִשְׁלְחָ֖ה וְנִרְאֶֽה׃",
+      "en": "And one of his servants answered and said: ‘Let some take, I pray thee, five of the horses that remain, which are left in the city— behold, they are as all the multitude of Israel that are left in it; behold, they are as all the multitude of Israel that are consumed—and let us send and see.’",
+      "highlight": null
+     }
+    },
+    {
+     "phrase": "אנשי שמות",
+     "count": 2,
+     "first": {
+      "ref": "1 Chronicles 5:24",
+      "he": "וְאֵ֖לֶּה רָאשֵׁ֣י בֵית־אֲבוֹתָ֑ם וְעֵ֡פֶר וְיִשְׁעִ֡י וֶאֱלִיאֵ֡ל וְ֠עַזְרִיאֵל וְיִרְמְיָ֨ה וְהוֹדַוְיָ֜ה וְיַחְדִּיאֵ֗ל אֲנָשִׁים֙ גִּבּ֣וֹרֵי חַ֔יִל אַנְשֵׁ֣י שֵׁמ֔וֹת רָאשִׁ֖ים לְבֵ֥ית אֲבוֹתָֽם׃",
+      "en": "And these were the heads of their fathers’houses: Epher, and Ishi, and Eliel, and Azriel, and Jeremiah, and Hodaviah, and Jahdiel, mighty men of valour, famous men, heads of their fathers’houses.",
+      "highlight": null
+     }
+    },
+    {
+     "phrase": "הבקר משתין",
+     "count": 2,
+     "first": {
+      "ref": "1 Samuel 25:22",
+      "he": "כֹּה־יַעֲשֶׂ֧ה אֱלֹהִ֛ים לְאֹיְבֵ֥י דָוִ֖ד וְכֹ֣ה יֹסִ֑יף אִם־אַשְׁאִ֧יר מִכָּל־אֲשֶׁר־ל֛וֹ עַד־הַבֹּ֖קֶר מַשְׁתִּ֥ין בְּקִֽיר׃",
+      "en": "God do so unto the enemies of David, and more also, if I leave of all that pertain to him by the morning light so much as one male.’—",
+      "highlight": null
+     }
+    },
+    {
+     "phrase": "השארית הנמצאה",
+     "count": 2,
+     "first": {
+      "ref": "2 Kings 19:4",
+      "he": "אוּלַ֡י יִשְׁמַע֩ יְהוָ֨ה אֱלֹהֶ֜יךָ אֵ֣ת כָּל־דִּבְרֵ֣י רַב־שָׁקֵ֗ה אֲשֶׁר֩ שְׁלָח֨וֹ מֶֽלֶךְ־אַשּׁ֤וּר אֲדֹנָיו֙ לְחָרֵף֙ אֱלֹהִ֣ים חַ֔י וְהוֹכִ֨יחַ֙ בַּדְּבָרִ֔ים אֲשֶׁ֥ר שָׁמַ֖ע יְהוָ֣ה אֱלֹהֶ֑יךָ וְנָשָׂ֣אתָ תְפִלָּ֔ה בְּעַ֥ד הַשְּׁאֵרִ֖ית הַנִּמְצָאָֽה׃",
+      "en": "It may be the LORD thy God will hear all the words of Rabshakeh, whom the king of Assyria his master hath sent to taunt the living God, and will rebuke the words which the LORD thy God hath heard; wherefore make prayer for the remnant that is left.’",
+      "highlight": null
+     }
+    },
+    {
+     "phrase": "השמים בשתי",
+     "count": 2,
+     "first": {
+      "ref": "2 Kings 21:5",
+      "he": "וַיִּ֥בֶן מִזְבְּח֖וֹת לְכָל־צְבָ֣א הַשָּׁמָ֑יִם בִּשְׁתֵּ֖י חַצְר֥וֹת בֵּית־יְהוָֽה׃",
+      "en": "And he built altars for all the host of heaven in the two courts of the house of the LORD.",
+      "highlight": null
+     }
+    },
+    {
+     "phrase": "ואת פרכת",
+     "count": 2,
+     "first": {
+      "ref": "Exodus 35:12",
+      "he": "אֶת־הָאָרֹ֥ן וְאֶת־בַּדָּ֖יו אֶת־הַכַּפֹּ֑רֶת וְאֵ֖ת פָּרֹ֥כֶת הַמָּסָֽךְ׃",
+      "en": "the ark, and the staves thereof, the ark-cover, and the veil of the screen;",
+      "highlight": null
+     }
+    }
+   ]
+  },
+  "verses": [
+   {
+    "ref": "Exodus 25:7",
+    "he": "אַבְנֵי־שֹׁ֕הַם וְאַבְנֵ֖י מִלֻּאִ֑ים לָאֵפֹ֖ד וְלַחֹֽשֶׁן׃",
+    "en": "onyx stones, and stones to be set, for the ephod, and for the breastplate.",
+    "highlight": null
+   },
+   {
+    "ref": "Isaiah 40:16",
+    "he": "וּלְבָנ֕וֹן אֵ֥ין דֵּ֖י בָּעֵ֑ר וְחַיָּת֔וֹ אֵ֥ין דֵּ֖י עוֹלָֽה׃",
+    "en": "And Lebanon is not sufficient fuel, Nor the beasts thereof sufficient for burnt-offerings.",
+    "highlight": null
+   },
+   {
+    "ref": "Psalms 113:1",
+    "he": "הַ֥לְלוּ יָ֨הּ הַ֭לְלוּ עַבְדֵ֣י יְהוָ֑ה הַֽ֝לְלוּ אֶת־שֵׁ֥ם יְהוָֽה׃",
+    "en": "Hallelujah. Praise, O ye servants of the LORD, Praise the name of the LORD.",
+    "highlight": null
+   },
+   {
+    "ref": "Psalms 135:1",
+    "he": "הַ֥לְלוּ יָ֨הּ הַֽ֭לְלוּ אֶת־שֵׁ֣ם יְהוָ֑ה הַֽ֝לְלוּ עַבְדֵ֥י יְהוָֽה׃",
+    "en": "Hallelujah. Praise ye the name of the LORD; Give praise, O ye servants of the LORD,",
+    "highlight": null
+   },
+   {
+    "ref": "Psalms 135:17",
+    "he": "אָזְנַ֣יִם לָ֭הֶם וְלֹ֣א יַאֲזִ֑ינוּ אַ֝֗ף אֵין־יֶשׁ־ר֥וּחַ בְּפִיהֶֽם׃",
+    "en": "They have ears, but they hear not; Neither is there any breath in their mouths.",
+    "highlight": null
+   },
+   {
+    "ref": "Daniel 1:6",
+    "he": "וַיְהִ֥י בָהֶ֖ם מִבְּנֵ֣י יְהוּדָ֑ה דָּנִיֵּ֣אל חֲנַנְיָ֔ה מִֽישָׁאֵ֖ל וַעֲזַרְיָֽה׃",
+    "en": "Now among these were, of the children of Judah, Daniel, Hananiah, Mishael, and Azariah.",
+    "highlight": null
+   }
+  ],
+  "versesCount": 6,
+  "initials": {
+   "letters": "ידעל",
+   "value": 114
+  },
+  "finals": {
+   "letters": "ודלץ",
+   "value": 130
+  }
+ },
+ "meta": {
+  "torahLetters": 304850,
+  "bookStarts": [
+   [
+    "Genesis",
+    0
+   ],
+   [
+    "Exodus",
+    78069
+   ],
+   [
+    "Leviticus",
+    141600
+   ],
+   [
+    "Numbers",
+    186395
+   ],
+   [
+    "Deuteronomy",
+    249940
+   ]
+  ],
+  "torahSource": "Westminster Leningrad Codex via openscriptures/morphhb (master), Ketiv (written) text",
+  "tanakhSource": "Westminster Leningrad Codex (Qere) + JPS 1917, via data/tanakh.json"
+ }
+}
