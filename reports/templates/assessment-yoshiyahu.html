@@ -1,0 +1,349 @@
+<title>The Lamp and the Name</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Frank+Ruhl+Libre:wght@400;500;700;900&family=Assistant:wght@400;500;600;700&display=swap">
+<style>
+/* Layout: a long read on one parchment sheet. The Tree of Life is the single bold visual; chapters are quiet, each opening with the source text it reads. Torahscope palette and faces. */
+:root {
+  --bg: #f6f1e4;
+  --sheet: #fffdf7;
+  --fg: #2a2013;
+  --muted: #716851;
+  --rule: #e2d6b8;
+  --accent: #c33b09;
+  --gold: #8a6400;
+  --shade: #efe7d3;
+  --display: "Frank Ruhl Libre", "Times New Roman", serif;
+  --body: "Assistant", "Segoe UI", system-ui, sans-serif;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #1b160f; --sheet: #241d13; --fg: #ece3cd; --muted: #a89a78; --rule: #3c3220;
+    --accent: #ff8c42; --gold: #e0b84a; --shade: #2c2418; color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #1b160f; --sheet: #241d13; --fg: #ece3cd; --muted: #a89a78; --rule: #3c3220;
+  --accent: #ff8c42; --gold: #e0b84a; --shade: #2c2418; color-scheme: dark;
+}
+* { box-sizing: border-box; }
+body {
+  background: var(--bg); color: var(--fg); font-family: var(--body);
+  font-size: 18px; line-height: 1.65;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+  padding-block: 32px 64px;
+}
+.sheet { max-width: 860px; margin: 0 auto; background: var(--sheet); border: 1px solid var(--rule); border-radius: 4px; padding-block: 8px 48px; padding-inline: clamp(18px, 6vw, 72px); }
+.he { font-family: var(--display); direction: rtl; unicode-bidi: isolate; }
+h1, h2, h3 { font-family: var(--display); text-wrap: balance; margin: 0; }
+h2 { font-size: clamp(28px, 4.4vw, 38px); line-height: 1.15; font-weight: 700; }
+h3 { font-size: 20px; font-weight: 700; }
+p { margin: 0; max-width: 64ch; }
+em { font-style: italic; }
+.eyebrow { font-size: 12px; letter-spacing: .14em; text-transform: uppercase; color: var(--muted); font-weight: 600; }
+.muted { color: var(--muted); }
+.small { font-size: 15px; }
+.num { font-variant-numeric: tabular-nums; }
+
+.hero { display: grid; gap: 16px; padding-block: 44px 36px; border-bottom: 1px solid var(--rule); }
+.hero h1 { font-size: clamp(46px, 9vw, 88px); line-height: 1; font-weight: 900; }
+.hero .who { font-family: var(--display); font-size: clamp(22px, 3.6vw, 30px); }
+.hero .who .he { font-size: 1.15em; }
+.lede { font-size: 20px; max-width: 60ch; }
+.facts { display: flex; flex-wrap: wrap; gap: 8px 32px; font-size: 14px; color: var(--muted); }
+.facts b { color: var(--fg); font-family: var(--display); font-size: 22px; font-weight: 700; margin-right: 4px; }
+
+section { display: grid; gap: 18px; padding-block: 44px; border-bottom: 1px solid var(--rule); }
+section:last-of-type { border-bottom: 0; }
+.chap { display: grid; gap: 6px; }
+.chap .mark { display: flex; gap: 14px; align-items: baseline; flex-wrap: wrap; }
+.chap .sef { font-family: var(--display); color: var(--accent); font-size: 20px; }
+.lens { display: grid; gap: 4px; padding-left: 16px; border-left: 2px solid var(--rule); }
+.lens .eyebrow { color: var(--accent); }
+
+.src { display: grid; gap: 6px; padding: 16px 20px; background: var(--shade); border-radius: 4px; }
+.src .t { font-family: var(--display); direction: rtl; text-align: right; font-size: 22px; line-height: 1.75; }
+.src .t mark { background: none; color: var(--accent); font-weight: 700; }
+.src .en { font-size: 16px; }
+.src .ref { font-size: 12px; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); font-weight: 600; }
+.srcs { display: grid; gap: 10px; }
+
+.q { font-family: var(--display); font-size: 21px; line-height: 1.45; color: var(--fg); padding-left: 18px; border-left: 3px solid var(--accent); max-width: 60ch; }
+
+/* Tree */
+.tree-wrap { display: grid; gap: 28px; }
+.tree { width: 100%; max-width: 600px; height: auto; display: block; margin: 0 auto; }
+.tree .path { stroke: var(--rule); stroke-width: 2.5; }
+.tree .node { fill: var(--sheet); stroke: var(--gold); stroke-width: 2; }
+.tree .node.self { stroke: var(--accent); stroke-width: 3; }
+.tree .nm { font-family: var(--display); font-size: 19px; fill: var(--fg); text-anchor: middle; font-weight: 700; }
+.tree .ph { font-family: var(--display); font-size: 21px; fill: var(--accent); text-anchor: middle; }
+.tree .en { font-family: var(--body); font-size: 12px; fill: var(--muted); text-anchor: middle; letter-spacing: .08em; text-transform: uppercase; }
+.key { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 12px 28px; font-size: 15px; }
+.key div { display: grid; grid-template-columns: 92px minmax(0, 1fr); gap: 10px; }
+.key b { font-weight: 700; }
+.key .he { color: var(--accent); }
+
+.cast { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 22px 28px; }
+.role { display: grid; gap: 6px; align-content: start; border-top: 2px solid var(--gold); padding-top: 10px; }
+.role .arch { font-family: var(--display); font-size: 22px; font-weight: 700; }
+.role .fig { font-size: 13px; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); font-weight: 600; }
+.role p { font-size: 16px; }
+
+ol.qs { margin: 0; padding-left: 1.4em; display: grid; gap: 12px; font-family: var(--display); font-size: 20px; line-height: 1.45; max-width: 62ch; }
+ol.qs li::marker { color: var(--accent); font-weight: 700; }
+
+footer { display: grid; gap: 10px; padding-top: 32px; font-size: 14px; color: var(--muted); }
+footer p { max-width: 82ch; }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+</style>
+
+<div class="sheet">
+
+<header class="hero">
+  <div class="eyebrow">Torahscope assessment · Samizdaat</div>
+  <h1>The Lamp and the Name</h1>
+  <div class="who"><span class="he">יאשיהו דוד עזריאל לישאביץ</span> · 1107</div>
+  <p class="lede">Your name adds up to 1107. The Torahscope search returned 264 places in the Tanakh, the Mishnah and the Mishneh Torah where words, phrases or whole verses share that number. This assessment reads those results together, the way a dream is read: as images that keep returning, set against the Kabbalistic Tree of Life and the psychology of Carl Jung.</p>
+  <div class="facts">
+    <span><b class="num">6</b>verses</span>
+    <span><b class="num">6</b>words</span>
+    <span><b class="num">252</b>phrases</span>
+    <span><b class="num">3</b>texts searched</span>
+  </div>
+  <p class="small muted">How to read this: every source quoted here is a real search result for 1107, cited so you can look it up. The connections between them are interpretation, not prediction. Treat it as a mirror to think with.</p>
+</header>
+
+<section id="method">
+  <div class="chap">
+    <div class="eyebrow">Method</div>
+    <h2>Three lenses on one list</h2>
+  </div>
+  <p>Jung called his way of reading a dream <em>amplification</em>: take each image, gather everything the tradition says about it, and watch which themes keep returning. The search results are treated the same way here. A phrase that turns up once is noise. A theme that turns up in the Torah, the Prophets, the Mishnah and Rambam is a signal about what your name gathers.</p>
+  <div class="srcs" style="gap: 14px">
+    <div class="lens"><div class="eyebrow">Torah</div><p class="small">What each passage actually says, in its own context. Every interpretation starts there.</p></div>
+    <div class="lens"><div class="eyebrow">Kabbalah</div><p class="small">Where each theme sits on the Tree of Life, the map of ten <i>sefirot</i> through which, in Kabbalistic thought, the divine flows into the world and into a person.</p></div>
+    <div class="lens"><div class="eyebrow">Jung</div><p class="small">What each theme says about the psyche: the Self at the centre, the persona we show, the shadow we don't, and the long work Jung called individuation.</p></div>
+  </div>
+  <p>Seven threads run through the results. Each chapter below follows one.</p>
+</section>
+
+<section id="tree">
+  <div class="chap">
+    <div class="eyebrow">The map</div>
+    <h2>Your results on the Tree of Life</h2>
+  </div>
+  <p>One result was placed on each of the ten <i>sefirot</i>, chosen because it speaks most directly to that sefirah's meaning. The centre of the Tree, <i>Tiferet</i>, is the only sefirah whose own name appears in your results, word for word.</p>
+  <div class="tree-wrap">
+    <svg class="tree" viewBox="0 0 560 650" role="img" aria-label="The Tree of Life with ten sefirot, each labelled with a phrase from your search results">
+      <g id="paths"></g>
+      <g id="nodes"></g>
+    </svg>
+    <div class="key">
+      <div><b>Keter</b><span>The crown, will beyond reach. <span class="he">אֵין דֵּי</span> "not sufficient": nothing offered is enough (Isaiah 40:16).</span></div>
+      <div><b>Chokhmah</b><span>The first flash of insight. <span class="he">וּמְסַתְּרָתָא</span> "and hidden things," which God reveals (Daniel 2:22).</span></div>
+      <div><b>Binah</b><span>Understanding that gives form. <span class="he">תּוֹרֹתָיו הוֹדַע</span> "make known its laws," the plan of the house (Ezekiel 43:11).</span></div>
+      <div><b>Chesed</b><span>Giving. <span class="he">הָרַבִּים תִּתֵּן</span> "Your great mercies You gave" (Nehemiah 9:27).</span></div>
+      <div><b>Gevurah</b><span>Restraint. <span class="he">עָרְלָתוֹ אֶת</span> fruit you must wait three years to eat (Leviticus 19:23).</span></div>
+      <div><b>Tiferet</b><span>Beauty and balance at the centre. <span class="he">וְתִפְאַרְתֶּךָ</span> "and Your glory" (Isaiah 63:15).</span></div>
+      <div><b>Netzach</b><span>Endurance. <span class="he">הַשְּׁאֵרִית הַנִּמְצָאָה</span> "the remnant that is left" (2 Kings 19:4).</span></div>
+      <div><b>Hod</b><span>Praise and acknowledgment. <span class="he">הַלְלוּ אֶת־שֵׁם</span> "praise the name" (Psalm 113:1).</span></div>
+      <div><b>Yesod</b><span>Foundation and channel. The stones for the breastplate, engraved with names (Exodus 25:7).</span></div>
+      <div><b>Malchut</b><span>Kingship, speech, presence. <span class="he">אֲשֶׁר תְּדַבֵּר</span> "what you shall speak" (Exodus 4:12).</span></div>
+    </div>
+  </div>
+  <p class="small muted">Two traditional details fit this map. The Tree has 22 paths, one for each Hebrew letter, and your full name is exactly 22 letters long. And 1107 reduces to 1 + 1 + 0 + 7 = 9, the number of Yesod, the foundation, which is where the verse about engraved names sits.</p>
+</section>
+
+<section id="ch1">
+  <div class="chap">
+    <div class="mark"><div class="eyebrow">Thread one · The Self</div><span class="sef">תִּפְאֶרֶת</span></div>
+    <h2>A centre you long for</h2>
+  </div>
+  <div class="srcs">
+    <div class="src"><div class="t">{{he:Isaiah 63:15|ותפארתך}}</div><div class="en">{{en:Isaiah 63:15}}</div><div class="ref">Isaiah 63:15 · word match</div></div>
+    <div class="src"><div class="t">יַעֲשֶׂה וְיִשְׁנֶה וִישַׁלֵּשׁ בְּמַעֲשִׂים שֶׁעוֹשֶׂה עַל פִּי <mark>הַדֵּעוֹת הָאֶמְצָעִיּוֹת</mark> … נִקְרֵאת דֶּרֶךְ זוֹ דֶּרֶךְ ה׳</div><div class="en">He should do, repeat, and do a third time the acts that follow the middle dispositions, until they come easily… This path is called the way of God.</div><div class="ref">Mishneh Torah, Human Dispositions 1:7 · phrase match</div></div>
+  </div>
+  <p><b>Torah.</b> Isaiah 63:15 is a cry, not a statement. The prophet asks God to look down from His "holy and glorious habitation," and asks where His yearning has gone: "now restrained toward me?" The glory is real and it feels far away.</p>
+  <p><b>Kabbalah.</b> <i>Tiferet</i> is the heart of the Tree. It holds <i>Chesed</i> (giving without limit) and <i>Gevurah</i> (limit and judgment) in balance, and it is associated with Jacob and with the Torah itself. Rambam's "middle dispositions," also in your results, are the ethical form of the same idea: neither extreme, and the middle path is called the way of God.</p>
+  <p><b>Jung.</b> The Self, in Jung's sense, is the centre of the whole personality, larger than the ego and holding its opposites together. People usually meet it first as a longing, a sense that there is a centre and you are not quite in it. Your results put that longing at the centre of the map. Rambam's advice for reaching it is practical: repeat the balanced act until it stops costing effort.</p>
+  <p class="q">Where in your life do you feel the "yearning restrained," a centre you can sense but not yet stand in?</p>
+</section>
+
+<section id="ch2">
+  <div class="chap">
+    <div class="mark"><div class="eyebrow">Thread two · Persona and Self</div><span class="sef">יְסוֹד</span></div>
+    <h2>The names you carry</h2>
+  </div>
+  <div class="srcs">
+    <div class="src"><div class="t">{{he:Daniel 1:6|}}</div><div class="en">{{en:Daniel 1:6}}</div><div class="ref">Daniel 1:6 · the whole verse equals 1107</div></div>
+    <div class="src"><div class="t">{{he:Daniel 1:7|}}</div><div class="en">{{en:Daniel 1:7}}</div><div class="ref">Daniel 1:7 · the next verse</div></div>
+  </div>
+  <p><b>Torah.</b> Four of your six whole-verse matches are about names. Daniel 1:6 lists four young men by their Hebrew names, one of them Azariah, a close cousin of your own Azriel. The very next verse takes those names away and gives them Babylonian ones. Exodus 25:7 lists the stones of the High Priest's breastplate, which Exodus 28:9 says were engraved with "the names of the children of Israel." Psalms 113:1 and 135:1 both call out "praise the name." Among the phrases, <span class="he">אַנְשֵׁי שֵׁמוֹת</span>, "men of names," appears in 1 Chronicles 5:24, in the same verse as a man named Azriel. And Ruth 4:14 has the women of Bethlehem blessing a newborn: "let his name be famous in Israel." Three verses later, that child is named as the grandfather of David.</p>
+  <p><b>Kabbalah.</b> In Jewish thought a person's Hebrew name is understood as a channel for their soul. <i>Yesod</i>, the foundation, is the sefirah of channels and connection, and it is where the engraved stones sit on your map.</p>
+  <p><b>Jung.</b> Jung's <i>persona</i> is the face we show the world, the role and the name it knows us by. It is necessary, not false. The danger is mistaking it for the whole person. Daniel served the Babylonian court for decades under the name Belteshazzar and stayed Daniel. Your name has the same shape: three Hebrew names, a king, a king and "God is my help," joined to a family name carried through the diaspora. The work your results point to is holding both, the name the world uses and the name that is engraved.</p>
+  <p class="q">Which of your four names do you live from most of the time, and which one is waiting to be lived?</p>
+</section>
+
+<section id="ch3">
+  <div class="chap">
+    <div class="mark"><div class="eyebrow">Thread three · The gift</div><span class="sef">מַלְכוּת</span></div>
+    <h2>A mouth that is taught</h2>
+  </div>
+  <div class="srcs">
+    <div class="src"><div class="t">{{he:Exodus 4:12|אשר תדבר}}</div><div class="en">{{en:Exodus 4:12}}</div><div class="ref">Exodus 4:12 · phrase match</div></div>
+    <div class="src"><div class="t">כּוֹתֵב לְעַצְמוֹ <mark>זִכְרוֹן בַּשְּׁמוּעוֹת</mark> שֶׁשָּׁמַע מֵרַבּוֹתָיו, וְהוּא מְלַמֵּד עַל פֶּה בָּרַבִּים</div><div class="en">[In each generation, the head of the court] writes for himself a record of the traditions he heard from his teachers, and teaches it aloud to the many.</div><div class="ref">Mishneh Torah, Introduction (Transmission of the Oral Law) · phrase match</div></div>
+  </div>
+  <p><b>Torah.</b> Speech is the most common thread in your Tanakh results: "that you have spoken" (first in Genesis 19:21, and 18 times across the Bible), "what you shall speak" (Exodus 4:12), "make known its laws… and write it in their sight" (Ezekiel 43:11). Exodus 4:12 comes right after Moses objects that he is "heavy of mouth." God's answer is not to fix the mouth. It is "I will be with your mouth."</p>
+  <p><b>Kabbalah.</b> The prayer <i>Patach Eliyahu</i>, from the Tikkunei Zohar, says "Malchut is the mouth, and we call it the Oral Torah." <i>Malchut</i>, kingship, is also the sefirah traditionally linked to King David, your second name. Rambam's line about each generation writing down what it heard and teaching it aloud is the Oral Torah in action, and it is close to what Torahscope itself does.</p>
+  <p><b>Jung.</b> Jung's figure of the <i>wounded healer</i> fits here: the gift arrives through the place that feels weakest. Moses' reluctance is part of his authority. If speaking, teaching or explaining feels like both your calling and your difficulty, your results suggest that is the normal shape of this gift, not a sign it isn't yours.</p>
+  <p class="q">What do you know that you have not yet said aloud to the people who need it?</p>
+</section>
+
+<section id="ch4">
+  <div class="chap">
+    <div class="mark"><div class="eyebrow">Thread four · The shadow</div><span class="sef">גְּבוּרָה</span></div>
+    <h2>The fire in the lips, the thorn in the eye</h2>
+  </div>
+  <div class="srcs">
+    <div class="src"><div class="t">{{he:Proverbs 16:27|שפתו כאש}}</div><div class="en">{{en:Proverbs 16:27}}</div><div class="ref">Proverbs 16:27 · phrase match</div></div>
+    <div class="src"><div class="t">{{he:Numbers 33:55|תותירו מהם}}</div><div class="en">{{en:Numbers 33:55}}</div><div class="ref">Numbers 33:55 · phrase match</div></div>
+    <div class="src"><div class="t">לָשׁוּב מִן הַכַּעַס וּמִן הָאֵיבָה וּמִן הַקִּנְאָה וּמִן הַהִתּוּל … וְאֵלּוּ הָעֲוֹנוֹת קָשִׁים <mark>מֵאוֹתָן שֶׁיֵּשׁ</mark> בָּהֶן מַעֲשֶׂה</div><div class="en">To turn back from anger, from enmity, from jealousy, from mockery… These sins are harder than those that involve a deed, because once a person is sunk in them it is hard to separate from them.</div><div class="ref">Mishneh Torah, Repentance 7:3 · phrase match</div></div>
+  </div>
+  <p><b>Torah.</b> Every gift in your results has a shadow beside it. Next to the taught mouth stands the mouth that burns: "in his lips there is as a burning fire." Next to the prophets stand those who "mocked the messengers of God… and scoffed at His prophets" (2 Chronicles 36:16). In Judges 15:2, a father gives his daughter away because "I verily thought that thou hadst utterly hated her": a whole tragedy built on a misread heart. And Psalm 141:4 is the prayer against it: "Incline not my heart to any evil thing."</p>
+  <p><b>Kabbalah.</b> <i>Gevurah</i>, strength and judgment, is necessary. Without it nothing has form. But in Kabbalah, judgment cut off from <i>Chesed</i> is where harshness begins. Speech is where Gevurah most easily turns harsh.</p>
+  <p><b>Jung.</b> The shadow is what we don't see in ourselves, and Jung wrote that what is not made conscious tends to arrive from outside, as fate. Numbers 33:55 says the same in the language of the land: whatever you let remain unaddressed will be "thorns in your eyes, and pricks in your sides." Rambam's line is the most precise of all: the inner traits (anger, jealousy, mockery) are harder to leave than wrong actions, because you are sunk in them. The Judges verse names the shadow's favourite tool, projection: deciding what another person feels and acting on your guess.</p>
+  <p class="q">When your words burn, what are you protecting? And what have you "let remain" that keeps returning as a thorn?</p>
+</section>
+
+<section id="ch5">
+  <div class="chap">
+    <div class="mark"><div class="eyebrow">Thread five · Transformation</div><span class="sef">תִּקּוּן</span></div>
+    <h2>Light from crushed olives</h2>
+  </div>
+  <div class="srcs">
+    <div class="src"><div class="t">{{he:Exodus 27:20|כתית למאור}}</div><div class="en">{{en:Exodus 27:20}}</div><div class="ref">Exodus 27:20 · the same phrase also matches in Mishnah Menachot 8:5 and Mishneh Torah, Things Forbidden on the Altar 7:10</div></div>
+    <div class="src"><div class="t">{{he:Exodus 34:1|הראשנים אשר}}</div><div class="en">{{en:Exodus 34:1}}</div><div class="ref">Exodus 34:1 · phrase match, 7 occurrences</div></div>
+  </div>
+  <p><b>Torah.</b> <span class="he">כָּתִית לַמָּאוֹר</span>, "beaten for the light," is the one phrase in your results found in all three texts: the Torah's command, the Mishnah's ruling on which oil is purest, and Rambam's law. The oil for the Temple's eternal lamp had to come from olives that were crushed, not pressed for volume. Beside it stands Exodus 34:1: "hew thee two tables of stone like unto the first… which thou didst break." The second tablets are carved by Moses' own hand, after the first were shattered.</p>
+  <p><b>Kabbalah.</b> Lurianic Kabbalah teaches that creation began with a breaking, <i>shevirat ha-kelim</i>, the shattering of vessels too small for the light. Human work is <i>tikkun</i>, repair. Your results even contain the phrase <span class="he">וְתַקָּנַת הָעוֹלָם</span>, "the repair of the world" (Mishneh Torah, Murderer 2:4). Light that passes through breaking is the oldest image in the system.</p>
+  <p><b>Jung.</b> Jung spent his last decades on alchemy because it described transformation in physical images: matter that has to be broken down before it can become gold. Crushed olives and recarved tablets are the same pattern. Your results suggest the clearest light in your life comes from what was pressed, not from what came easily, and that a broken first version is how the lasting one gets made.</p>
+  <p class="q">What in your life was broken and then rebuilt by your own hand? What light came out of it?</p>
+</section>
+
+<section id="ch6">
+  <div class="chap">
+    <div class="mark"><div class="eyebrow">Thread six · The unconscious</div><span class="sef">חָכְמָה</span></div>
+    <h2>The one who reveals hidden things</h2>
+  </div>
+  <div class="srcs">
+    <div class="src"><div class="t">{{he:Daniel 2:22|ומסתרתא}}</div><div class="en">{{en:Daniel 2:22}}</div><div class="ref">Daniel 2:22 · word match</div></div>
+    <div class="src"><div class="t">{{he:Deuteronomy 3:28|אשר תראה}}</div><div class="en">{{en:Deuteronomy 3:28}}</div><div class="ref">Deuteronomy 3:28 · phrase match</div></div>
+  </div>
+  <p><b>Torah.</b> Only three single words in the Tanakh equal 1107, and one of them is <span class="he">וּמְסַתְּרָתָא</span>, "and hidden things." It comes from Daniel's prayer of thanks after the king's dream is revealed to him in a night vision. Seeing runs all through your results: "now shalt thou see" (Exodus 6:1), "the land which thou shalt see" (Deuteronomy 3:28), and its opposite, "I am not able to look up" (Psalm 40:13). The Deuteronomy verse is about Moses seeing a land that Joshua, not he, will lead the people into.</p>
+  <p><b>Kabbalah.</b> <i>Chokhmah</i>, wisdom, is the first flash before anything has form. It is described as hidden, the point that becomes visible only when <i>Binah</i> gives it shape.</p>
+  <p><b>Jung.</b> Daniel is the Bible's interpreter of dreams, which makes him the closest biblical figure to Jung's own work. His prayer is close to Jung's whole psychology in one sentence: there is a depth that is hidden, it can be revealed, and light lives there. The Deuteronomy verse adds a mature note. Some visions are meant to be seen by you and carried by someone after you. Jung described the second half of life as having its own task: after building yourself comes finding what your life is for beyond you.</p>
+  <p class="q">What keeps returning in your dreams, or in the quiet moments before sleep? What have you seen that someone else may be the one to carry forward?</p>
+</section>
+
+<section id="ch7">
+  <div class="chap">
+    <div class="mark"><div class="eyebrow">Thread seven · The anima</div><span class="sef">עֶזְרָה</span></div>
+    <h2>Help, and the question at the well</h2>
+  </div>
+  <div class="srcs">
+    <div class="src"><div class="t">{{he:Psalms 63:8|היית עזרתה}}</div><div class="en">{{en:Psalms 63:8}}</div><div class="ref">Psalm 63:8 · phrase match</div></div>
+    <div class="src"><div class="t">{{he:Genesis 16:8|תלכי ותאמר}}</div><div class="en">{{en:Genesis 16:8}}</div><div class="ref">Genesis 16:8 · phrase match</div></div>
+  </div>
+  <p><b>Torah.</b> Your third name, Azriel, means "my help is God," and help keeps surfacing in your results. Psalm 63:8 reads "Thou hast been my help." The Mishnah's match <span class="he">לְעֶזְרַת נָשִׁים</span> names the Women's Court of the Temple, <i>Ezrat Nashim</i>, whose name shares its letters with <span class="he">עֶזְרָה</span>, help. There on Sukkot they lit golden lamps so bright that, the Mishnah says, every courtyard in Jerusalem shone (Sukkah 5:2–3). Women's voices carry several of the most important moments: the women who bless Naomi's grandson in Ruth 4:14, Bathsheba's request in 1 Kings 2:21, and the angel's question to Hagar by the spring in the wilderness.</p>
+  <p><b>Kabbalah.</b> In Genesis, the first woman is called <span class="he">עֵזֶר כְּנֶגְדּוֹ</span>, "a help opposite him." Kabbalah identifies <i>Malchut</i> with the <i>Shekhinah</i>, the feminine presence of God, the receiving side of the Tree.</p>
+  <p><b>Jung.</b> Jung's <i>anima</i> is the feminine inner figure in a man's psyche: the source of feeling, relationship and inspiration, and the guide toward the unconscious. In your results the feminine arrives as help and as a question. The angel asks Hagar, "Whence camest thou? and whither goest thou?" Jung could not have written a better summary of individuation: know where you came from, choose where you are going.</p>
+  <p class="q">Whose help have you refused because it came from an unexpected direction? Where did you come from, and where are you going?</p>
+</section>
+
+<section id="burden">
+  <div class="chap">
+    <div class="mark"><div class="eyebrow">Coda · Leadership</div><span class="sef">נֶצַח</span></div>
+    <h2>Not to bear it alone</h2>
+  </div>
+  <div class="src"><div class="t">{{he:Numbers 11:17|תשא אתה}}</div><div class="en">{{en:Numbers 11:17}}</div><div class="ref">Numbers 11:17 · phrase match</div></div>
+  <p>Your results end, fittingly for a name made of two kings, with leadership. Moses is exhausted, and God takes some of the spirit that is on him and places it on seventy elders "that thou bear it not thyself alone." Nearby are the remnant that endures (2 Kings 19:4), the saviours given in time of trouble (Nehemiah 9:27), and Zechariah 4:9: "the hands of Zerubbabel have laid the foundation of this house; his hands shall also finish it." Jung warned about <i>inflation</i>, the ego swelling to carry what belongs to something larger. The cure in your results is plain: share the spirit, finish what you founded, and wait for the fruit the way the Torah asks you to wait three years for a young tree (Leviticus 19:23).</p>
+</section>
+
+<section id="cast">
+  <div class="chap">
+    <div class="eyebrow">Your archetypal cast</div>
+    <h2>The figures in your results</h2>
+  </div>
+  <div class="cast">
+    <div class="role"><div class="fig">Moses</div><div class="arch">The Reluctant Teacher</div><p>Heavy of mouth and told "I will be with thy mouth." Breaks the first tablets and carves the second. Sees the land and hands it on.</p></div>
+    <div class="role"><div class="fig">Daniel</div><div class="arch">The Interpreter</div><p>Keeps his name inside a foreign one. Reads dreams and thanks the One who reveals hidden things.</p></div>
+    <div class="role"><div class="fig">Hagar</div><div class="arch">The Wanderer</div><p>Running from her mistress when the angel stops her with the two questions every life has to answer.</p></div>
+    <div class="role"><div class="fig">The Ruth women</div><div class="arch">The Namers</div><p>Bless a child and give him his name, the start of the line that leads to David.</p></div>
+    <div class="role"><div class="fig">Samson's father-in-law</div><div class="arch">The Shadow</div><p>Decides what another heart feels and acts on the guess. The cost of projection.</p></div>
+    <div class="role"><div class="fig">The seventy elders</div><div class="arch">The Companions</div><p>Receive part of the leader's spirit so that no one carries the people alone.</p></div>
+  </div>
+</section>
+
+<section id="practice">
+  <div class="chap">
+    <div class="eyebrow">To carry with you</div>
+    <h2>Seven questions and one practice</h2>
+  </div>
+  <ol class="qs">
+    <li>Where is the centre you long for, and what small balanced act, repeated, would move you toward it?</li>
+    <li>Which of your four names do you live from, and which is waiting?</li>
+    <li>What do you know that you have not yet said aloud?</li>
+    <li>What have you let remain that returns as a thorn?</li>
+    <li>What was broken and rebuilt by your own hand?</li>
+    <li>What vision are you meant to see, and whom are you meant to hand it to?</li>
+    <li>Where did you come from, and where are you going?</li>
+  </ol>
+  <div class="src">
+    <div class="t">כָּל הָעוֹלֶה לִקְרוֹת בַּתּוֹרָה <mark>פּוֹתֵחַ</mark> בְּדָבָר טוֹב וּמְסַיֵּם בְּדָבָר טוֹב</div>
+    <div class="en">Whoever goes up to read from the Torah opens with a good word and closes with a good word.</div>
+    <div class="ref">Mishneh Torah, Prayer and the Priestly Blessing 13:5 · phrase match</div>
+  </div>
+  <p>The practice comes from your own results. For one month, open and close each day, and each hard conversation, with a good word. It answers the shadow of the burning lip with the gift of the taught mouth, and it is the kind of small act Rambam says to repeat until it stops costing effort.</p>
+</section>
+
+<footer>
+  <div class="eyebrow">Sources and method</div>
+  <p>Raw material: the Torahscope search for <span class="he">יאשיהו דוד עזריאל לישאביץ</span> (standard gematria 1107), across the Tanakh (Westminster Leningrad Codex with the JPS 1917 translation), the Mishnah (Torat Emet, with Joshua Kulp's translation) and Rambam's Mishneh Torah. Mishneh Torah translations here are our own. Kabbalistic placements follow the classical ten-sefirot Tree; Jungian terms follow their standard use in his Collected Works. The selection of passages and every connection drawn between them is interpretation, offered for reflection.</p>
+  <p>Torahscope by Samizdaat. November 2026.</p>
+</footer>
+</div>
+
+<script>
+(function () {
+  const N = {
+    keter: [280, 44, "כֶּתֶר", "Keter", "אין די"],
+    chokhmah: [430, 124, "חָכְמָה", "Chokhmah", "ומסתרתא"],
+    binah: [130, 124, "בִּינָה", "Binah", "תורתיו הודע"],
+    chesed: [430, 254, "חֶסֶד", "Chesed", "הרבים תתן"],
+    gevurah: [130, 254, "גְּבוּרָה", "Gevurah", "ערלתו את"],
+    tiferet: [280, 320, "תִּפְאֶרֶת", "Tiferet", "ותפארתך"],
+    netzach: [430, 430, "נֶצַח", "Netzach", "השארית הנמצאה"],
+    hod: [130, 430, "הוֹד", "Hod", "הללו את שם"],
+    yesod: [280, 496, "יְסוֹד", "Yesod", "אבני שהם"],
+    malchut: [280, 592, "מַלְכוּת", "Malchut", "אשר תדבר"],
+  };
+  const P = [["keter","chokhmah"],["keter","binah"],["keter","tiferet"],["chokhmah","binah"],["chokhmah","tiferet"],["chokhmah","chesed"],["binah","tiferet"],["binah","gevurah"],["chesed","gevurah"],["chesed","tiferet"],["chesed","netzach"],["gevurah","tiferet"],["gevurah","hod"],["tiferet","netzach"],["tiferet","yesod"],["tiferet","hod"],["netzach","hod"],["netzach","yesod"],["netzach","malchut"],["hod","yesod"],["hod","malchut"],["yesod","malchut"]];
+  const ns = "http://www.w3.org/2000/svg";
+  const mk = (t, a, txt) => { const e = document.createElementNS(ns, t); for (const k in a) e.setAttribute(k, a[k]); if (txt) e.textContent = txt; return e; };
+  const gp = document.getElementById("paths"), gn = document.getElementById("nodes");
+  P.forEach(([a, b]) => gp.append(mk("line", { class: "path", x1: N[a][0], y1: N[a][1], x2: N[b][0], y2: N[b][1] })));
+  for (const k in N) {
+    const [x, y, he, en, ph] = N[k];
+    gn.append(mk("circle", { class: "node" + (k === "tiferet" ? " self" : ""), cx: x, cy: y, r: 30 }));
+    gn.append(mk("text", { class: "nm", x, y: y + 6 }, he));
+    const side = k === "keter" || k === "malchut" || k === "tiferet" || k === "yesod";
+    const ty = side ? y + 6 : y + 56;
+    const tx = side ? x + (k === "tiferet" || k === "yesod" ? -82 : 100) : x;
+    gn.append(mk("text", { class: "ph", x: tx, y: ty, direction: "rtl" }, ph));
+    gn.append(mk("text", { class: "en", x: tx, y: ty + 15 }, en));
+  }
+})();
+</script>
