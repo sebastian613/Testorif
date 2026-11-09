@@ -223,6 +223,7 @@ data/hebrew-phrases.json   # Tanakh two-word phrases, same shape
 data/mishnah.json          # all 63 tractates, {ref, he, text} per mishnah — no `en`, see Corpora above
 data/mishnah-words.json    # Mishnah words: [bareWord, [[passageIndex, heStart, heEnd], ...]] — own index, not Tanakh's
 data/mishnah-phrases.json  # Mishnah two-word phrases, same shape
+scripts/build_torah_letters.py  # fetches the WLC Torah (Ketiv), writes data/torah-string.txt (304,850 letters) + data/torah-letters.json (counts of all 27 letter forms, total and per book)
 scripts/build_mishnah.py   # fetches Sefaria's Torat Emet 357 Hebrew + Joshua Kulp English, builds the three mishnah-*.json files
 data/mishneh-torah.json           # all 88 treatises, {ref, text} per halacha — no `en`, and no `he` (unused; see below)
 data/mishneh-torah-sources.json   # which edition + license each treatise came from, so the licensing is auditable
